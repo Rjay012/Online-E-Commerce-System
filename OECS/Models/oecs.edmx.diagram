@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="58488ab084094aab8d916878237c7b9c" Name="Diagram1">
+        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="3" PointY="5.125" />
+        <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="3" PointY="7.75" />
+        <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="5.25" PointY="7.875" />
+        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="3" PointY="1.5" />
+        <AssociationConnector Association="oecsModel.FK_Administrator_Role" />
+        <AssociationConnector Association="oecsModel.FK_Customer_Role" />
+        <AssociationConnector Association="oecsModel.FK_Module_Role" />
+        <AssociationConnector Association="oecsModel.FK_SubModule_Module" />
+        <AssociationConnector Association="oecsModel.FK_Supplier_Role" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

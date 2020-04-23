@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="oecsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="50" />
+          <Property Name="mname" Type="varchar" MaxLength="50" />
+          <Property Name="lname" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="address" Type="varchar(max)" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="ModuleID" />
+          </Key>
+          <Property Name="ModuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="module" Type="varchar" MaxLength="100" />
+          <Property Name="controller" Type="varchar" MaxLength="100" />
+          <Property Name="action" Type="varchar" MaxLength="100" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="icon" Type="varchar(max)" />
+          <Property Name="hasArrow" Type="bit" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="varbinary" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SubModule">
+          <Key>
+            <PropertyRef Name="SubModuleID" />
+          </Key>
+          <Property Name="SubModuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subModule" Type="varchar" MaxLength="100" />
+          <Property Name="controller" Type="varchar" MaxLength="100" />
+          <Property Name="action" Type="varchar" MaxLength="100" />
+          <Property Name="ModuleID" Type="int" />
+          <Property Name="icon" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="SupplierID" />
+          </Key>
+          <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="50" />
+          <Property Name="mname" Type="varchar" MaxLength="50" />
+          <Property Name="lname" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="address" Type="varchar(max)" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+        </EntityType>
+        <Association Name="FK_Administrator_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Administrator">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Module_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Module" Type="Self.Module" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Module">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModule_Module">
+          <End Role="Module" Type="Self.Module" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubModule" Type="Self.SubModule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Module">
+              <PropertyRef Name="ModuleID" />
+            </Principal>
+            <Dependent Role="SubModule">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Supplier_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="oecsModelStoreContainer">
+          <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubModule" EntityType="Self.SubModule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Administrator_Role" Association="Self.FK_Administrator_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Administrator" EntitySet="Administrator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_Role" Association="Self.FK_Customer_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Module_Role" Association="Self.FK_Module_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Module" EntitySet="Module" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModule_Module" Association="Self.FK_SubModule_Module">
+            <End Role="Module" EntitySet="Module" />
+            <End Role="SubModule" EntitySet="SubModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Supplier_Role" Association="Self.FK_Supplier_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Supplier" EntitySet="Supplier" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="oecsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="oecsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Administrators" EntityType="oecsModel.Administrator" />
+          <EntitySet Name="Customers" EntityType="oecsModel.Customer" />
+          <EntitySet Name="Modules" EntityType="oecsModel.Module" />
+          <EntitySet Name="Roles" EntityType="oecsModel.Role" />
+          <EntitySet Name="SubModules" EntityType="oecsModel.SubModule" />
+          <EntitySet Name="Suppliers" EntityType="oecsModel.Supplier" />
+          <AssociationSet Name="FK_Administrator_Role" Association="oecsModel.FK_Administrator_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Administrator" EntitySet="Administrators" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_Role" Association="oecsModel.FK_Customer_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Module_Role" Association="oecsModel.FK_Module_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Module" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModule_Module" Association="oecsModel.FK_SubModule_Module">
+            <End Role="Module" EntitySet="Modules" />
+            <End Role="SubModule" EntitySet="SubModules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Supplier_Role" Association="oecsModel.FK_Supplier_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Supplier" EntitySet="Suppliers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="oecsModel.FK_Administrator_Role" FromRole="Administrator" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="oecsModel.FK_Customer_Role" FromRole="Customer" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="ModuleID" />
+          </Key>
+          <Property Name="ModuleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="module1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="controller" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="action" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="hasArrow" Type="Boolean" />
+          <NavigationProperty Name="Role" Relationship="oecsModel.FK_Module_Role" FromRole="Module" ToRole="Role" />
+          <NavigationProperty Name="SubModules" Relationship="oecsModel.FK_SubModule_Module" FromRole="Module" ToRole="SubModule" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role1" Type="Binary" MaxLength="50" FixedLength="false" />
+          <NavigationProperty Name="Administrators" Relationship="oecsModel.FK_Administrator_Role" FromRole="Role" ToRole="Administrator" />
+          <NavigationProperty Name="Customers" Relationship="oecsModel.FK_Customer_Role" FromRole="Role" ToRole="Customer" />
+          <NavigationProperty Name="Modules" Relationship="oecsModel.FK_Module_Role" FromRole="Role" ToRole="Module" />
+          <NavigationProperty Name="Suppliers" Relationship="oecsModel.FK_Supplier_Role" FromRole="Role" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="SubModule">
+          <Key>
+            <PropertyRef Name="SubModuleID" />
+          </Key>
+          <Property Name="SubModuleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subModule1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="controller" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="action" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModuleID" Type="Int32" />
+          <Property Name="icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Module" Relationship="oecsModel.FK_SubModule_Module" FromRole="SubModule" ToRole="Module" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="SupplierID" />
+          </Key>
+          <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="oecsModel.FK_Supplier_Role" FromRole="Supplier" ToRole="Role" />
+        </EntityType>
+        <Association Name="FK_Administrator_Role">
+          <End Type="oecsModel.Role" Role="Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Administrator" Role="Administrator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Administrator">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_Role">
+          <End Type="oecsModel.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Module_Role">
+          <End Type="oecsModel.Role" Role="Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Module" Role="Module" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Module">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModule_Module">
+          <End Type="oecsModel.Module" Role="Module" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.SubModule" Role="SubModule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Module">
+              <PropertyRef Name="ModuleID" />
+            </Principal>
+            <Dependent Role="SubModule">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Supplier_Role">
+          <End Type="oecsModel.Role" Role="Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Supplier" Role="Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="oecsModelStoreContainer" CdmEntityContainer="oecsEntities">
+          <EntitySetMapping Name="Administrators">
+            <EntityTypeMapping TypeName="oecsModel.Administrator">
+              <MappingFragment StoreEntitySet="Administrator">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="oecsModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Modules">
+            <EntityTypeMapping TypeName="oecsModel.Module">
+              <MappingFragment StoreEntitySet="Module">
+                <ScalarProperty Name="hasArrow" ColumnName="hasArrow" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="controller" ColumnName="controller" />
+                <ScalarProperty Name="module1" ColumnName="module" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="oecsModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Role1" ColumnName="Role" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubModules">
+            <EntityTypeMapping TypeName="oecsModel.SubModule">
+              <MappingFragment StoreEntitySet="SubModule">
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="controller" ColumnName="controller" />
+                <ScalarProperty Name="subModule1" ColumnName="subModule" />
+                <ScalarProperty Name="SubModuleID" ColumnName="SubModuleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="oecsModel.Supplier">
+              <MappingFragment StoreEntitySet="Supplier">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
