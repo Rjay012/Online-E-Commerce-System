@@ -1,0 +1,23 @@
+﻿@model OECS.Models.LoginModels.LoginModel
+
+@using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "" }, new { @class = "text-center border border-light p-5" }))
+{
+    @Html.AntiForgeryToken()
+    <p class="h4 mb-4">Login in</p>
+    @Html.TextBoxFor(l => l.Email, new { @class = "form-control mb-4", @placeholder = "E-mail" })
+    @Html.PasswordFor(l => l.Password, new { @class = "form-control mb-4", @placeholder = "Password" })
+
+    <div class="d-flex justify-content-around">
+        <div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
+            </div>
+        </div>
+        <div>
+            <a href="">Forgot password?</a>
+        </div>
+    </div>
+
+    <button class="btn btn-info btn-block my-4" type="submit">Log in</button>
+}

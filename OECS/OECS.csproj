@@ -140,6 +140,8 @@
     <Compile Include="Models\Customer.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoginModels\LoginModel.cs" />
+    <Compile Include="Models\LoginModels\RegisterModel.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -1959,11 +1961,15 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Custom_Scripts\Ajax.js" />
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
+    <Content Include="Scripts\Custom_Scripts\Login.js" />
+    <Content Include="Scripts\Custom_Scripts\Register.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1986,6 +1992,8 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\Partials\_SideMenu.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\Partials\_Login.cshtml" />
+    <Content Include="Views\Login\Partials\_Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

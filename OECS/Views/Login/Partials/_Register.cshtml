@@ -1,0 +1,32 @@
+﻿@model OECS.Models.LoginModels.RegisterModel
+
+@using (Ajax.BeginForm("Register", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Load(data)" }, new { @class = "text-center border border-light p-5" }))
+{
+    @Html.AntiForgeryToken()
+    <p class="h4 mb-4">Sign up</p>
+    @Html.TextBoxFor(r => r.Firstname, new { @class = "form-control mb-4", @placeholder = "Firstname" })
+    @Html.TextBoxFor(r => r.Middlename, new { @class = "form-control mb-4", @placeholder = "Middlename" })
+    @Html.TextBoxFor(r => r.Lastname, new { @class = "form-control mb-4", @placeholder = "Lastname" })
+    @Html.TextBoxFor(r => r.Address, new { @class = "form-control mb-4", @placeholder = "Address" })
+
+    <div class="form-row mb-4">
+        <div class="col">
+            @Html.TextBoxFor(r => r.Email, new { @class = "form-control mb-4", @placeholder = "E-mail" })
+        </div>
+        <div class="col">
+            @Html.TextBoxFor(r => r.Phone, new { @class = "form-control mb-4", @placeholder = "Phone" })
+        </div>
+    </div>
+
+    <div class="form-row mb-4">
+        <div class="col">
+            @Html.PasswordFor(r => r.Password, new { @class = "form-control mb-4", @placeholder = "Password" })
+        </div>
+        <div class="col">
+            @Html.PasswordFor(r => r.RetypePassword, new { @class = "form-control mb-4", @placeholder = "Retype Password" })
+        </div>
+    </div>
+    <!-- Sign up button -->
+    <button class="hidden" type="submit" id="BtnConfirmSignUp"></button>
+    <button class="btn btn-info my-4 btn-block" type="button" id="BtnSignUp">Sign Up</button>
+}

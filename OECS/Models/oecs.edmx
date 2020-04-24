@@ -44,7 +44,7 @@
             <PropertyRef Name="RoleID" />
           </Key>
           <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Role" Type="varbinary" MaxLength="50" />
+          <Property Name="Role" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SubModule">
           <Key>
@@ -244,7 +244,7 @@
             <PropertyRef Name="RoleID" />
           </Key>
           <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Role1" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="Role1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Administrators" Relationship="oecsModel.FK_Administrator_Role" FromRole="Role" ToRole="Administrator" />
           <NavigationProperty Name="Customers" Relationship="oecsModel.FK_Customer_Role" FromRole="Role" ToRole="Customer" />
           <NavigationProperty Name="Modules" Relationship="oecsModel.FK_Module_Role" FromRole="Role" ToRole="Module" />
@@ -347,7 +347,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
