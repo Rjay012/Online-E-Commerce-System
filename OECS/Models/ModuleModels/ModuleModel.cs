@@ -15,6 +15,8 @@ namespace OECS.Models.ModuleModels
         public string Icon { get; set; }
         public Nullable<bool> HasChild { get; set; }
         public Nullable<bool> HasArrow { get; set; }
-        public ICollection<RoleModuleModel> RoleModule { get; set; }
+
+        public string SubModule { get; set; }
+        public string SubIcon { get; set; }
     }
 }

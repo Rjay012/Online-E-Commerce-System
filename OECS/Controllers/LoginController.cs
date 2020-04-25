@@ -50,11 +50,12 @@ namespace OECS.Controllers
                     }).FirstOrDefault();
 
                     var module = (from m in dbContext.Module
-                                  join s in dbContext.SubModule on m.ModuleID equals s.ModuleID
-                                  select new ViewModuleModel
+                                  join s in dbContext.SubModule on m.ModuleID equals s.SubModuleID into gj
+                                  from sub in gj.DefaultIfEmpty()
+                                  select new ModuleModel
                                   {
-                                      Module = m,
-                                      SubModule = s,
+                                      ModuleID = m.ModuleID, Controller = (sub.controller != null ? sub.controller : null), Action = (sub.action != null ? sub.action : null), Icon = m.icon, HasArrow = m.hasArrow, HasChild = m.hasChild,
+                                      SubModule = (sub.subModule1 != null ? sub.subModule1 : null), SubIcon = (sub.icon != null ? sub.icon : null)
                                   }).ToList();
                     Session["Modules"] = module;
                 }
