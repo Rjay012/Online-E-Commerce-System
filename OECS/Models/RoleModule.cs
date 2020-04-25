@@ -12,17 +12,13 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SubModule
+    public partial class RoleModule
     {
-        public int SubModuleID { get; set; }
-        public string subModule1 { get; set; }
-        public string controller { get; set; }
-        public string action { get; set; }
+        public int RoleModID { get; set; }
         public Nullable<int> ModuleID { get; set; }
-        public string icon { get; set; }
-        public Nullable<bool> hasArrow { get; set; }
-        public Nullable<bool> hasParent { get; set; }
+        public Nullable<int> RoleID { get; set; }
     
         public virtual Module Module { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

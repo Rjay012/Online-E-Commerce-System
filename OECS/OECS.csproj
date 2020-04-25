@@ -137,14 +137,18 @@
     <Compile Include="Models\Administrator.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AdminModels\AdminModel.cs" />
     <Compile Include="Models\Customer.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerModels\CustomerModel.cs" />
     <Compile Include="Models\LoginModels\LoginModel.cs" />
     <Compile Include="Models\LoginModels\RegisterModel.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModuleModels\ModuleModel.cs" />
+    <Compile Include="Models\ModuleModels\SubModuleModel.cs" />
     <Compile Include="Models\oecs.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,12 +167,19 @@
     <Compile Include="Models\Role.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RoleModels\RoleModel.cs" />
+    <Compile Include="Models\RoleModels\RoleModuleModel.cs" />
+    <Compile Include="Models\RoleModule.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SubModule.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplierModels\SupplierModel.cs" />
+    <Compile Include="Models\ViewModuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

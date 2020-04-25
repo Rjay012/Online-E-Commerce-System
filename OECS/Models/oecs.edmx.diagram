@@ -5,16 +5,18 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="58488ab084094aab8d916878237c7b9c" Name="Diagram1">
-        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="3" PointY="8.625" />
-        <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="3" PointY="1.5" />
-        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="3" PointY="5.125" />
-        <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="5.25" PointY="5.375" />
-        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="3" PointY="9.75" />
+        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="0.75" PointY="8" />
+        <EntityTypeShape EntityType="oecsModel.RoleModule" Width="1.5" PointX="6" PointY="8.125" />
+        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="6" PointY="4.625" />
+        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="3" PointY="13.5" />
         <AssociationConnector Association="oecsModel.FK_Administrator_Role" />
         <AssociationConnector Association="oecsModel.FK_Customer_Role" />
-        <AssociationConnector Association="oecsModel.FK_Module_Role" />
+        <AssociationConnector Association="oecsModel.FK_RoleModule_Module" />
         <AssociationConnector Association="oecsModel.FK_SubModule_Module" />
+        <AssociationConnector Association="oecsModel.FK_RoleModule_Role" />
         <AssociationConnector Association="oecsModel.FK_Supplier_Role" />
       </Diagram>
     </edmx:Diagrams>

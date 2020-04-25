@@ -25,11 +25,12 @@ namespace OECS.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Administrator> Administrators { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Module> Modules { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<SubModule> SubModules { get; set; }
-        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<Administrator> Administrator { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Module> Module { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<RoleModule> RoleModule { get; set; }
+        public virtual DbSet<SubModule> SubModule { get; set; }
+        public virtual DbSet<Supplier> Supplier { get; set; }
     }
 }

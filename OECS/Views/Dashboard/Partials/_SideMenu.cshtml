@@ -1,102 +1,92 @@
-﻿<div id="slide-out" class="side-nav sn-bg-4 fixed">
-    <ul class="custom-scrollbar">
-        <!-- Logo -->
-        <li class="logo-sn waves-effect py-3">
-            <div class="text-center">
-                <strong class="text-danger">Online E-Commerce</strong>
-            </div>
-        </li>
-        <!-- Side navigation links -->
-        <li>
-            <ul class="collapsible collapsible-accordion">
-                <li>
-                    <a class="collapsible-header waves-effect arrow-r">
-                        <i class="w-fa fas fa-tachometer-alt"></i>Dashboards<i class="fas fa-angle-down rotate-icon"></i>
+﻿@if (this.Session["UserID"] != null && this.Session["Modules"] != null)
+{
+    var module = (IEnumerable<OECS.Models.ViewModuleModel>)Session["Modules"];
+    var groupByModule = module.GroupBy(m => m.Module).ToList();
+    <div id="slide-out" class="side-nav sn-bg-4 fixed">
+        <ul class="custom-scrollbar">
+            <!-- Logo -->
+            <li class="logo-sn waves-effect py-3">
+                <div class="text-center">
+                    <strong class="text-danger">Online E-Commerce</strong>
+                </div>
+            </li>
+            <!-- Side navigation links -->
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    @foreach (var mod in groupByModule)
+                    {
+                        <li>
+                            <a class="collapsible-header waves-effect">
+                                <i class="@mod.Key.icon"></i> @mod.Key.module1 <i class="@(mod.Key.hasArrow == true ? "fas fa-angle-down rotate-icon" : "")"></i>
+                            </a>
+                            @if (mod.Key.hasChild == true)
+                            {
+                                foreach (var sub in mod)
+                                {
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li>
+                                                <a href="../dashboards/v-1.html" class="waves-effect">@sub.SubModule.subModule1</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
+                            }
+                        </li>
+                    }
+                </ul>
+            </li>
+        </ul>
+        <div class="sidenav-bg mask-strong"></div>
+    </div>
+    <!-- Sidebar navigation -->
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+        <div class="float-left">
+            <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
+        </div>
+        <div class="breadcrumb-dn mr-auto">
+            <p>Dashboard</p>
+        </div>
+        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+            <li class="nav-item dropdown notifications-nav">
+                <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="badge red">3</span> <i class="fas fa-bell"></i>
+                    <span class="d-none d-md-inline-block">Notifications</span>
+                </a>
+                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">
+                        <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
+                        <span>New order received</span>
+                        <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 13 min</span>
                     </a>
-                    <div class="collapsible-body">
-                        <ul>
-                            <li>
-                                <a href="../dashboards/v-1.html" class="waves-effect">Version 1</a>
-                            </li>
-                            <li>
-                                <a href="../dashboards/v-2.html" class="waves-effect">Version 2</a>
-                            </li>
-                            <li>
-                                <a href="../dashboards/v-3.html" class="waves-effect">Version 3</a>
-                            </li>
-                            <li>
-                                <a href="../dashboards/v-4.html" class="waves-effect">Version 4</a>
-                            </li>
-                            <li>
-                                <a href="../dashboards/v-5.html" class="waves-effect">Version 5</a>
-                            </li>
-                            <li>
-                                <a href="../dashboards/v-6.html" class="waves-effect">Version 6</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <a href="../alerts/alerts.html" class="collapsible-header waves-effect"><i class="w-fa far fa-bell"></i>Alerts</a>
-                </li>
-                <li>
-                    <a href="../modals/modals.html" class="collapsible-header waves-effect"><i class="w-fa fas fa-bolt"></i>Modals</a>
-                </li>
-                <li>
-                    <a href="../charts/charts.html" class="collapsible-header waves-effect"><i class="w-fa fas fa-chart-pie"></i>Charts</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <div class="sidenav-bg mask-strong"></div>
-</div>
-<!-- Sidebar navigation -->
-<!-- Navbar -->
-<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
-    <div class="float-left">
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
-    </div>
-    <div class="breadcrumb-dn mr-auto">
-        <p>Dashboard</p>
-    </div>
-    <ul class="nav navbar-nav nav-flex-icons ml-auto">
-        <li class="nav-item dropdown notifications-nav">
-            <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="badge red">3</span> <i class="fas fa-bell"></i>
-                <span class="d-none d-md-inline-block">Notifications</span>
-            </a>
-            <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="#">
-                    <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
-                    <span>New order received</span>
-                    <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 13 min</span>
+                    <a class="dropdown-item" href="#">
+                        <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
+                        <span>New order received</span>
+                        <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 33 min</span>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-chart-line mr-2" aria-hidden="true"></i>
+                        <span>Your campaign is about to end</span>
+                        <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 53 min</span>
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span class="clearfix d-none d-sm-inline-block">Support</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Profile</span>
                 </a>
-                <a class="dropdown-item" href="#">
-                    <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
-                    <span>New order received</span>
-                    <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 33 min</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-chart-line mr-2" aria-hidden="true"></i>
-                    <span>Your campaign is about to end</span>
-                    <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 53 min</span>
-                </a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span class="clearfix d-none d-sm-inline-block">Support</span></a>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Profile</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Log Out</a>
-                <a class="dropdown-item" href="#">My account</a>
-            </div>
-        </li>
-    </ul> <!-- Navbar links -->
-</nav> <!-- Navbar -->
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Log Out</a>
+                    <a class="dropdown-item" href="#">My account</a>
+                </div>
+            </li>
+        </ul> <!-- Navbar links -->
+    </nav> <!-- Navbar -->
+}

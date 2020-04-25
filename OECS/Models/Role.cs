@@ -17,22 +17,22 @@ namespace OECS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Role()
         {
-            this.Administrators = new HashSet<Administrator>();
-            this.Customers = new HashSet<Customer>();
-            this.Modules = new HashSet<Module>();
-            this.Suppliers = new HashSet<Supplier>();
+            this.Administrator = new HashSet<Administrator>();
+            this.Customer = new HashSet<Customer>();
+            this.RoleModule = new HashSet<RoleModule>();
+            this.Supplier = new HashSet<Supplier>();
         }
     
         public int RoleID { get; set; }
         public string Role1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Administrator> Administrators { get; set; }
+        public virtual ICollection<Administrator> Administrator { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Customer> Customers { get; set; }
+        public virtual ICollection<Customer> Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Module> Modules { get; set; }
+        public virtual ICollection<RoleModule> RoleModule { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Supplier> Suppliers { get; set; }
+        public virtual ICollection<Supplier> Supplier { get; set; }
     }
 }

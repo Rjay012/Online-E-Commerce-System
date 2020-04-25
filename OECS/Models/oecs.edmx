@@ -33,11 +33,11 @@
           </Key>
           <Property Name="ModuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="module" Type="varchar" MaxLength="100" />
-          <Property Name="controller" Type="varchar" MaxLength="100" />
-          <Property Name="action" Type="varchar" MaxLength="100" />
-          <Property Name="RoleID" Type="int" />
+          <Property Name="controller" Type="varchar" MaxLength="50" />
+          <Property Name="action" Type="varchar" MaxLength="50" />
           <Property Name="icon" Type="varchar(max)" />
           <Property Name="hasArrow" Type="bit" />
+          <Property Name="hasChild" Type="bit" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -45,6 +45,14 @@
           </Key>
           <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Role" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RoleModule">
+          <Key>
+            <PropertyRef Name="RoleModID" />
+          </Key>
+          <Property Name="RoleModID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModuleID" Type="int" />
+          <Property Name="RoleID" Type="int" />
         </EntityType>
         <EntityType Name="SubModule">
           <Key>
@@ -56,6 +64,8 @@
           <Property Name="action" Type="varchar" MaxLength="100" />
           <Property Name="ModuleID" Type="int" />
           <Property Name="icon" Type="varchar(max)" />
+          <Property Name="hasArrow" Type="bit" />
+          <Property Name="hasParent" Type="bit" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -99,16 +109,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Module_Role">
+        <Association Name="FK_RoleModule_Module">
+          <End Role="Module" Type="Self.Module" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoleModule" Type="Self.RoleModule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Module">
+              <PropertyRef Name="ModuleID" />
+            </Principal>
+            <Dependent Role="RoleModule">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleModule_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Module" Type="Self.Module" Multiplicity="*" />
+          <End Role="RoleModule" Type="Self.RoleModule" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="RoleID" />
             </Principal>
-            <Dependent Role="Module">
+            <Dependent Role="RoleModule">
               <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
@@ -146,6 +170,7 @@
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleModule" EntityType="Self.RoleModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubModule" EntityType="Self.SubModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Administrator_Role" Association="Self.FK_Administrator_Role">
@@ -156,9 +181,13 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_Module_Role" Association="Self.FK_Module_Role">
-            <End Role="Role" EntitySet="Role" />
+          <AssociationSet Name="FK_RoleModule_Module" Association="Self.FK_RoleModule_Module">
             <End Role="Module" EntitySet="Module" />
+            <End Role="RoleModule" EntitySet="RoleModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleModule_Role" Association="Self.FK_RoleModule_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="RoleModule" EntitySet="RoleModule" />
           </AssociationSet>
           <AssociationSet Name="FK_SubModule_Module" Association="Self.FK_SubModule_Module">
             <End Role="Module" EntitySet="Module" />
@@ -174,31 +203,36 @@
     <edmx:ConceptualModels>
       <Schema Namespace="oecsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="oecsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Administrators" EntityType="oecsModel.Administrator" />
-          <EntitySet Name="Customers" EntityType="oecsModel.Customer" />
-          <EntitySet Name="Modules" EntityType="oecsModel.Module" />
-          <EntitySet Name="Roles" EntityType="oecsModel.Role" />
-          <EntitySet Name="SubModules" EntityType="oecsModel.SubModule" />
-          <EntitySet Name="Suppliers" EntityType="oecsModel.Supplier" />
+          <EntitySet Name="Administrator" EntityType="oecsModel.Administrator" />
+          <EntitySet Name="Customer" EntityType="oecsModel.Customer" />
+          <EntitySet Name="Module" EntityType="oecsModel.Module" />
+          <EntitySet Name="Role" EntityType="oecsModel.Role" />
+          <EntitySet Name="RoleModule" EntityType="oecsModel.RoleModule" />
+          <EntitySet Name="SubModule" EntityType="oecsModel.SubModule" />
+          <EntitySet Name="Supplier" EntityType="oecsModel.Supplier" />
           <AssociationSet Name="FK_Administrator_Role" Association="oecsModel.FK_Administrator_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Administrator" EntitySet="Administrators" />
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
           <AssociationSet Name="FK_Customer_Role" Association="oecsModel.FK_Customer_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_Module_Role" Association="oecsModel.FK_Module_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Module" EntitySet="Modules" />
+          <AssociationSet Name="FK_RoleModule_Module" Association="oecsModel.FK_RoleModule_Module">
+            <End Role="Module" EntitySet="Module" />
+            <End Role="RoleModule" EntitySet="RoleModule" />
           </AssociationSet>
           <AssociationSet Name="FK_SubModule_Module" Association="oecsModel.FK_SubModule_Module">
-            <End Role="Module" EntitySet="Modules" />
-            <End Role="SubModule" EntitySet="SubModules" />
+            <End Role="Module" EntitySet="Module" />
+            <End Role="SubModule" EntitySet="SubModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleModule_Role" Association="oecsModel.FK_RoleModule_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="RoleModule" EntitySet="RoleModule" />
           </AssociationSet>
           <AssociationSet Name="FK_Supplier_Role" Association="oecsModel.FK_Supplier_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Supplier" EntitySet="Supplier" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Administrator">
@@ -231,13 +265,13 @@
           </Key>
           <Property Name="ModuleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="module1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="controller" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="action" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="RoleID" Type="Int32" />
+          <Property Name="controller" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="hasArrow" Type="Boolean" />
-          <NavigationProperty Name="Role" Relationship="oecsModel.FK_Module_Role" FromRole="Module" ToRole="Role" />
-          <NavigationProperty Name="SubModules" Relationship="oecsModel.FK_SubModule_Module" FromRole="Module" ToRole="SubModule" />
+          <Property Name="hasChild" Type="Boolean" />
+          <NavigationProperty Name="RoleModule" Relationship="oecsModel.FK_RoleModule_Module" FromRole="Module" ToRole="RoleModule" />
+          <NavigationProperty Name="SubModule" Relationship="oecsModel.FK_SubModule_Module" FromRole="Module" ToRole="SubModule" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -245,10 +279,20 @@
           </Key>
           <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Role1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Administrators" Relationship="oecsModel.FK_Administrator_Role" FromRole="Role" ToRole="Administrator" />
-          <NavigationProperty Name="Customers" Relationship="oecsModel.FK_Customer_Role" FromRole="Role" ToRole="Customer" />
-          <NavigationProperty Name="Modules" Relationship="oecsModel.FK_Module_Role" FromRole="Role" ToRole="Module" />
-          <NavigationProperty Name="Suppliers" Relationship="oecsModel.FK_Supplier_Role" FromRole="Role" ToRole="Supplier" />
+          <NavigationProperty Name="Administrator" Relationship="oecsModel.FK_Administrator_Role" FromRole="Role" ToRole="Administrator" />
+          <NavigationProperty Name="Customer" Relationship="oecsModel.FK_Customer_Role" FromRole="Role" ToRole="Customer" />
+          <NavigationProperty Name="RoleModule" Relationship="oecsModel.FK_RoleModule_Role" FromRole="Role" ToRole="RoleModule" />
+          <NavigationProperty Name="Supplier" Relationship="oecsModel.FK_Supplier_Role" FromRole="Role" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="RoleModule">
+          <Key>
+            <PropertyRef Name="RoleModID" />
+          </Key>
+          <Property Name="RoleModID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModuleID" Type="Int32" />
+          <Property Name="RoleID" Type="Int32" />
+          <NavigationProperty Name="Module" Relationship="oecsModel.FK_RoleModule_Module" FromRole="RoleModule" ToRole="Module" />
+          <NavigationProperty Name="Role" Relationship="oecsModel.FK_RoleModule_Role" FromRole="RoleModule" ToRole="Role" />
         </EntityType>
         <EntityType Name="SubModule">
           <Key>
@@ -260,6 +304,8 @@
           <Property Name="action" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ModuleID" Type="Int32" />
           <Property Name="icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="hasArrow" Type="Boolean" />
+          <Property Name="hasParent" Type="Boolean" />
           <NavigationProperty Name="Module" Relationship="oecsModel.FK_SubModule_Module" FromRole="SubModule" ToRole="Module" />
         </EntityType>
         <EntityType Name="Supplier">
@@ -305,17 +351,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Module_Role">
-          <End Type="oecsModel.Role" Role="Role" Multiplicity="0..1">
+        <Association Name="FK_RoleModule_Module">
+          <End Type="oecsModel.Module" Role="Module" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.Module" Role="Module" Multiplicity="*" />
+          <End Type="oecsModel.RoleModule" Role="RoleModule" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="RoleID" />
+            <Principal Role="Module">
+              <PropertyRef Name="ModuleID" />
             </Principal>
-            <Dependent Role="Module">
-              <PropertyRef Name="RoleID" />
+            <Dependent Role="RoleModule">
+              <PropertyRef Name="ModuleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -330,6 +376,20 @@
             </Principal>
             <Dependent Role="SubModule">
               <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleModule_Role">
+          <End Type="oecsModel.Role" Role="Role" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.RoleModule" Role="RoleModule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="RoleModule">
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -353,7 +413,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="oecsModelStoreContainer" CdmEntityContainer="oecsEntities">
-          <EntitySetMapping Name="Administrators">
+          <EntitySetMapping Name="Administrator">
             <EntityTypeMapping TypeName="oecsModel.Administrator">
               <MappingFragment StoreEntitySet="Administrator">
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -362,7 +422,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
+          <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="oecsModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -377,12 +437,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Modules">
+          <EntitySetMapping Name="Module">
             <EntityTypeMapping TypeName="oecsModel.Module">
               <MappingFragment StoreEntitySet="Module">
+                <ScalarProperty Name="hasChild" ColumnName="hasChild" />
                 <ScalarProperty Name="hasArrow" ColumnName="hasArrow" />
                 <ScalarProperty Name="icon" ColumnName="icon" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="action" ColumnName="action" />
                 <ScalarProperty Name="controller" ColumnName="controller" />
                 <ScalarProperty Name="module1" ColumnName="module" />
@@ -390,7 +450,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
+          <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="oecsModel.Role">
               <MappingFragment StoreEntitySet="Role">
                 <ScalarProperty Name="Role1" ColumnName="Role" />
@@ -398,9 +458,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SubModules">
+          <EntitySetMapping Name="RoleModule">
+            <EntityTypeMapping TypeName="oecsModel.RoleModule">
+              <MappingFragment StoreEntitySet="RoleModule">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="RoleModID" ColumnName="RoleModID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubModule">
             <EntityTypeMapping TypeName="oecsModel.SubModule">
               <MappingFragment StoreEntitySet="SubModule">
+                <ScalarProperty Name="hasParent" ColumnName="hasParent" />
+                <ScalarProperty Name="hasArrow" ColumnName="hasArrow" />
                 <ScalarProperty Name="icon" ColumnName="icon" />
                 <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
                 <ScalarProperty Name="action" ColumnName="action" />
@@ -410,7 +481,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Suppliers">
+          <EntitySetMapping Name="Supplier">
             <EntityTypeMapping TypeName="oecsModel.Supplier">
               <MappingFragment StoreEntitySet="Supplier">
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -439,8 +510,8 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

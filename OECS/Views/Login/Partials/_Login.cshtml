@@ -1,10 +1,13 @@
 ﻿@model OECS.Models.LoginModels.LoginModel
 
-@using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "" }, new { @class = "text-center border border-light p-5" }))
+@using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "RedirectToLandingPage(data)" }, new { @class = "text-center border border-light p-5" }))
 {
     @Html.AntiForgeryToken()
-    <p class="h4 mb-4">Login in</p>
-    @Html.TextBoxFor(l => l.Email, new { @class = "form-control mb-4", @placeholder = "E-mail" })
+    <p class="h4 mb-4">Log in</p>
+
+    @Html.DropDownListFor(l => l.RoleID, Model.RoleList, "Select Role", new { @class = "mdb-select form-control mb-4" })
+    
+    @Html.TextBoxFor(l => l.UserID, new { @class = "form-control mb-4", @placeholder = "AdminID/E-mail" })
     @Html.PasswordFor(l => l.Password, new { @class = "form-control mb-4", @placeholder = "Password" })
 
     <div class="d-flex justify-content-around">
@@ -18,6 +21,6 @@
             <a href="">Forgot password?</a>
         </div>
     </div>
-
-    <button class="btn btn-info btn-block my-4" type="submit">Log in</button>
+    <button class="hidden" type="submit" id="BtnConfirmLogin"></button>
+    <button class="btn btn-info btn-block my-4" type="button" id="BtnLogin">Log in</button>
 }
