@@ -15,7 +15,7 @@ namespace OECS.Models.ModuleModels
         public Nullable<int> RolModID { get; set; }
         public string Icon { get; set; }
         public Nullable<bool> HasArrow { get; set; }
-        public Nullable<bool> HasParent { get; set; }        
+        public Nullable<bool> HasParent { get; set; }
 
         public RoleModuleModel RoleModule { get; set; }
     }

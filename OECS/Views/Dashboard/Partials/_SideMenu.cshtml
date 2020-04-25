@@ -1,7 +1,7 @@
 ﻿@if (this.Session["UserID"] != null && this.Session["Modules"] != null)
 {
-    var module = (IEnumerable<OECS.Models.ModuleModels.ModuleModel>)Session["Modules"];
-    //var groupByModule = module.GroupBy(m => m.Module).ToList();
+    var module = (IEnumerable<OECS.Models.ViewModuleModel>)Session["Modules"];
+    var groupByModule = module.GroupBy(m => m.Module).ToList();
     <div id="slide-out" class="side-nav sn-bg-4 fixed">
         <ul class="custom-scrollbar">
             <!-- Logo -->
@@ -13,12 +13,25 @@
             <!-- Side navigation links -->
             <li>
                 <ul class="collapsible collapsible-accordion">
-                    @foreach (var mod in module)
+                    @foreach (var mod in groupByModule)
                     {
                         <li>
                             <a class="collapsible-header waves-effect">
-                                @mod.Module
+                                <i class="@mod.Key.icon"></i> @mod.Key.module1 <i class="@(mod.Key.hasArrow == true ? "fas fa-angle-down rotate-icon" : "")"></i>
                             </a>
+                            @if (mod.Key.hasChild == true)
+                            {
+                                foreach (var sub in mod)
+                                {
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li>
+                                                <a href="../dashboards/v-1.html" class="waves-effect">@sub.SubModule.subModule1</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
+                            }
                         </li>
                     }
                 </ul>
