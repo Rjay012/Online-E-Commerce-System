@@ -6,8 +6,10 @@ using System.Web.Mvc;
 
 namespace OECS.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
+        [Authorize(Roles = "1, 2, 3")]
         // GET: Dashboard
         public ActionResult Index()
         {

@@ -1,12 +1,4 @@
-﻿using OECS.Models.AdminModels;
-using OECS.Models.ModuleModels;
-using OECS.Models.RoleModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace OECS.Models
+﻿namespace OECS.Models
 {
     public class ViewModuleModel
     {

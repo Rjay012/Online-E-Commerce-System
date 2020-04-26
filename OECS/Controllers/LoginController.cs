@@ -1,10 +1,13 @@
-﻿using OECS.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using OECS.Models;
 using OECS.Models.LoginModels;
 using OECS.Models.ModuleModels;
 using OECS.Models.RoleModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -21,11 +24,13 @@ namespace OECS.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel loginModel)
         {
             if (ModelState.IsValid)
             {
+                List<Claim> claims  = new List<Claim>();
                 bool isExist = false;
                 switch (loginModel.RoleID)
                 {
@@ -40,35 +45,25 @@ namespace OECS.Controllers
                         break;
                 }
 
-                LoginModel loginCredentials = new LoginModel();
-                if (isExist == true && loginModel.RoleID == 1) //logged in as administrator
-                {
-                    loginCredentials = dbContext.Administrator.Select(x => new LoginModel
-                    {
-                        UserID = x.AdminID,
-                        RoleID = x.RoleID
-                    }).FirstOrDefault();
+                List<ViewModuleModel> module = (from m in dbContext.Module
+                                                join r in dbContext.RoleModule on m.ModuleID equals r.ModuleID
+                                                join s in dbContext.SubModule on m.ModuleID equals s.ModuleID into g
+                                                from sub in g.DefaultIfEmpty()  //left join
+                                                select new ViewModuleModel
+                                                {
+                                                    Module = m,
+                                                    SubModule = sub != null ? sub : null,
+                                                    RoleModule = r
+                                                }).Where(r => r.RoleModule.RoleID == loginModel.RoleID).ToList();
+                Session["Modules"] = module;  //store modules
 
-                    var module = (from m in dbContext.Module
-                                  join r in dbContext.RoleModule on m.ModuleID equals r.ModuleID
-                                  join s in dbContext.SubModule on m.ModuleID equals s.ModuleID into gj
-                                  from sub in gj.DefaultIfEmpty()
-                                  select new ViewModuleModel
-                                  {
-                                      Module = m,
-                                      SubModule = sub != null ? sub : null,
-                                      RoleModule = r
-                                  }).Where(r => r.RoleModule.RoleID == 1).ToList();
-                    Session["Modules"] = module;
-                }
-                else  //logged in as customer/supplier
-                {
+                claims.Add(new Claim(ClaimTypes.Name, loginModel.UserID));
+                claims.Add(new Claim(ClaimTypes.Role, loginModel.RoleID.ToString()));
+                var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+                var ctx = Request.GetOwinContext();
+                var authenticationManager = ctx.Authentication;
+                authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
 
-                }
-
-                FormsAuthentication.SetAuthCookie(loginCredentials.UserID, false);
-                Session["UserID"] = loginCredentials.UserID;
-                Session["LoginCredentials"] = loginCredentials;
                 if (isExist == true)
                 {
                     return Json(new { action = "Index", controller = "Dashboard" }, JsonRequestBehavior.AllowGet);

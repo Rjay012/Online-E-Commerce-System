@@ -1,4 +1,4 @@
-﻿@if (this.Session["UserID"] != null && this.Session["Modules"] != null)
+﻿@if (this.Session["Modules"] != null)
 {
     var module = (IEnumerable<OECS.Models.ViewModuleModel>)Session["Modules"];
     var groupByModule = module.GroupBy(m => m.Module);
