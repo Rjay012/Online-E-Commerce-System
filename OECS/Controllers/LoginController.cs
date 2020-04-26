@@ -50,13 +50,15 @@ namespace OECS.Controllers
                     }).FirstOrDefault();
 
                     var module = (from m in dbContext.Module
+                                  join r in dbContext.RoleModule on m.ModuleID equals r.ModuleID
                                   join s in dbContext.SubModule on m.ModuleID equals s.ModuleID into gj
                                   from sub in gj.DefaultIfEmpty()
                                   select new ViewModuleModel
                                   {
                                       Module = m,
-                                      SubModule = sub != null ? sub : null
-                                  }).ToList();
+                                      SubModule = sub != null ? sub : null,
+                                      RoleModule = r
+                                  }).Where(r => r.RoleModule.RoleID == 1).ToList();
                     Session["Modules"] = module;
                 }
                 else  //logged in as customer/supplier

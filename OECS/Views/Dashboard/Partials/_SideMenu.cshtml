@@ -1,7 +1,7 @@
 ﻿@if (this.Session["UserID"] != null && this.Session["Modules"] != null)
 {
     var module = (IEnumerable<OECS.Models.ViewModuleModel>)Session["Modules"];
-    var groupByModule = module.GroupBy(m => m.Module).ToList();
+    var groupByModule = module.GroupBy(m => m.Module);
     <div id="slide-out" class="side-nav sn-bg-4 fixed">
         <ul class="custom-scrollbar">
             <!-- Logo -->
@@ -15,22 +15,26 @@
                 <ul class="collapsible collapsible-accordion">
                     @foreach (var mod in groupByModule)
                     {
+                        var navLink = "#";
+                        if(mod.Key.action != null & mod.Key.controller != null)
+                        {
+                            navLink = Url.Action(mod.Key.action, mod.Key.controller);
+                        }
                         <li>
-                            <a class="collapsible-header waves-effect">
+                            <a href="@navLink" class="collapsible-header waves-effect">
                                 <i class="@mod.Key.icon"></i> @mod.Key.module1 <i class="@(mod.Key.hasArrow == true ? "fas fa-angle-down rotate-icon" : "")"></i>
                             </a>
-                            @if (mod.Key.hasChild == true)
+                            @foreach (var sub in mod.Where(m => m.Module.hasChild == true))
                             {
-                                foreach (var sub in mod)
-                                {
-                                    <div class="collapsible-body">
-                                        <ul>
-                                            <li>
-                                                <a href="../dashboards/v-1.html" class="waves-effect">@sub.SubModule.subModule1</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                }
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="@Url.Action(sub.SubModule.action, sub.SubModule.controller)" class="waves-effect">
+                                                <i class="@sub.SubModule.icon"></i> @sub.SubModule.subModule1
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             }
                         </li>
                     }
