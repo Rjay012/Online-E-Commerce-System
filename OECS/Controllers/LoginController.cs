@@ -52,11 +52,12 @@ namespace OECS.Controllers
                                                 select new ViewModuleModel
                                                 {
                                                     Module = m,
-                                                    SubModule = sub != null ? sub : null,
+                                                    SubModule = sub ?? null,
                                                     RoleModule = r
                                                 }).Where(r => r.RoleModule.RoleID == loginModel.RoleID).ToList();
                 Session["Modules"] = module;  //store modules
 
+                //user login credentials
                 claims.Add(new Claim(ClaimTypes.Name, loginModel.UserID));
                 claims.Add(new Claim(ClaimTypes.Role, loginModel.RoleID.ToString()));
                 var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
