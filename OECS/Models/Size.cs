@@ -12,26 +12,18 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Supplier
+    public partial class Size
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Supplier()
+        public Size()
         {
-            this.Supply = new HashSet<Supply>();
+            this.ProductSize = new HashSet<ProductSize>();
         }
     
-        public int SupplierID { get; set; }
-        public string fname { get; set; }
-        public string mname { get; set; }
-        public string lname { get; set; }
-        public string email { get; set; }
-        public string address { get; set; }
-        public string phone { get; set; }
-        public string password { get; set; }
-        public Nullable<int> RoleID { get; set; }
+        public int SideID { get; set; }
+        public string size1 { get; set; }
     
-        public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Supply> Supply { get; set; }
+        public virtual ICollection<ProductSize> ProductSize { get; set; }
     }
 }

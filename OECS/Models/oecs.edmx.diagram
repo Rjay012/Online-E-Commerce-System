@@ -5,19 +5,37 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="58488ab084094aab8d916878237c7b9c" Name="Diagram1">
-        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="3" PointY="11" />
-        <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="3" PointY="13.5" />
-        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="0.75" PointY="8" />
-        <EntityTypeShape EntityType="oecsModel.RoleModule" Width="1.5" PointX="6" PointY="8.125" />
-        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="6" PointY="4.625" />
-        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="3" PointY="16.875" />
+        <EntityTypeShape EntityType="oecsModel.Category" Width="1.5" PointX="0.75" PointY="7.125" />
+        <EntityTypeShape EntityType="oecsModel.Color" Width="1.5" PointX="3" PointY="11.125" />
+        <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="3" PointY="19.5" />
+        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="3.75" PointY="23.375" />
+        <EntityTypeShape EntityType="oecsModel.Product" Width="1.5" PointX="3" PointY="6.25" />
+        <EntityTypeShape EntityType="oecsModel.ProductColor" Width="1.5" PointX="5.25" PointY="6.875" />
+        <EntityTypeShape EntityType="oecsModel.ProductImage" Width="1.5" PointX="5.25" PointY="14.375" />
+        <EntityTypeShape EntityType="oecsModel.ProductSize" Width="1.5" PointX="5.25" PointY="9.875" />
+        <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="0.75" PointY="2.875" />
+        <EntityTypeShape EntityType="oecsModel.RoleModule" Width="1.5" PointX="6" PointY="0.875" />
+        <EntityTypeShape EntityType="oecsModel.Size" Width="1.5" PointX="3" PointY="14.125" />
+        <EntityTypeShape EntityType="oecsModel.Stock" Width="1.5" PointX="5.25" PointY="16.875" />
+        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="6" PointY="23.375" />
+        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="3" PointY="2.375" />
+        <EntityTypeShape EntityType="oecsModel.Supply" Width="1.5" PointX="5.25" PointY="3.875" />
         <AssociationConnector Association="oecsModel.FK_Administrator_Role" />
+        <AssociationConnector Association="oecsModel.FK_Product_Category" />
+        <AssociationConnector Association="oecsModel.FK_ProductColor_Color" />
         <AssociationConnector Association="oecsModel.FK_Customer_Role" />
         <AssociationConnector Association="oecsModel.FK_RoleModule_Module" />
         <AssociationConnector Association="oecsModel.FK_SubModule_Module" />
+        <AssociationConnector Association="oecsModel.FK_ProductColor_Product" />
+        <AssociationConnector Association="oecsModel.FK_ProductImage_Product" />
+        <AssociationConnector Association="oecsModel.FK_ProductSize_Product" />
+        <AssociationConnector Association="oecsModel.FK_Stock_Product" />
+        <AssociationConnector Association="oecsModel.FK_Supply_Product" />
+        <AssociationConnector Association="oecsModel.FK_ProductSize_Size" />
         <AssociationConnector Association="oecsModel.FK_RoleModule_Role" />
         <AssociationConnector Association="oecsModel.FK_Supplier_Role" />
+        <AssociationConnector Association="oecsModel.FK_Supply_Supplier" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

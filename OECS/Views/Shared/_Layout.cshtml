@@ -14,7 +14,8 @@
     <!--END MD BOOTSTRAP CSS-->
 </head>
 <body class="fixed-sn white-skin">
-    @Html.Partial("~/Views/Shared/_SideMenu.cshtml")
+    @Html.Partial("~/Views/Shared/_SideMenu.cshtml")  @* side menu *@
+    @Html.Partial("~/Views/Shared/_Navbar.cshtml")  @* top navigation bar *@
 
     <div class="container-fluid body-content">
         @RenderBody()

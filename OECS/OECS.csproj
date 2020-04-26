@@ -165,6 +165,12 @@
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminModels\AdminModel.cs" />
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Color.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Customer.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -191,12 +197,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>oecs.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Product.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductColor.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductImage.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductSize.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RoleModels\RoleModel.cs" />
     <Compile Include="Models\RoleModels\RoleModuleModel.cs" />
     <Compile Include="Models\RoleModule.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Size.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Stock.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SubModule.cs">
@@ -206,6 +230,9 @@
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SupplierModels\SupplierModel.cs" />
+    <Compile Include="Models\Supply.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -2034,6 +2061,7 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Login\Partials\_Login.cshtml" />
     <Content Include="Views\Login\Partials\_Register.cshtml" />
+    <Content Include="Views\Shared\_Navbar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
