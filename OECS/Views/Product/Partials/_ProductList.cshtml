@@ -1,0 +1,46 @@
+﻿@model IEnumerable<OECS.Models.Product>
+
+@{
+    int modelC = Model.Count();
+    decimal row = decimal.Divide(modelC, 4);  //divide product list to 4 columns only
+
+    row = (row % 1 == 0 ? row : (int)(row + 1));  //validate row count if remainder exists, then add 1
+
+    //for (int r = 1; r <= (int)row; r++)
+    //{
+    <div class="row wow fadeIn">
+        @foreach (var product in Model)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                    <div class="view overlay">
+                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top"
+                             alt="">
+                        <a>
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <a href="" class="grey-text">
+                            <h5>@product.Category.category1</h5>
+                        </a>
+                        <h5>
+                            <strong>
+                                <a href="" class="dark-grey-text">
+                                    @product.productName
+                                    @*<span class="badge badge-pill danger-color">NEW</span>*@
+                                </a>
+                            </strong>
+                        </h5>
+
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>@product.price$</strong>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    //}
+}

@@ -155,9 +155,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -169,6 +171,7 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CategoryModels\CategoryModel.cs" />
     <Compile Include="Models\Color.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -2172,8 +2175,10 @@
     <Content Include="MDB\MDB Shop\Ecommerce-Template\Useful_Resources.pdf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Custom_Scripts\Ajax.js" />
+    <Content Include="Scripts\Custom_Scripts\Category.js" />
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
+    <Content Include="Scripts\Custom_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Register.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2209,6 +2214,10 @@
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Shared\_NavbarShop.cshtml" />
     <Content Include="Views\Shared\_LayoutShop.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Category\Partials\_NavbarCategory.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Partials\_ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
