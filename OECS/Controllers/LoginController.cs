@@ -28,6 +28,11 @@ namespace OECS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel loginModel)
         {
+            if(loginModel.UserID == null)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 List<Claim> claims  = new List<Claim>();
@@ -45,28 +50,29 @@ namespace OECS.Controllers
                         break;
                 }
 
-                List<ViewModuleModel> module = (from m in dbContext.Module
-                                                join r in dbContext.RoleModule on m.ModuleID equals r.ModuleID
-                                                join s in dbContext.SubModule on m.ModuleID equals s.ModuleID into g
-                                                from sub in g.DefaultIfEmpty()  //left join
-                                                select new ViewModuleModel
-                                                {
-                                                    Module = m,
-                                                    SubModule = sub ?? null,
-                                                    RoleModule = r
-                                                }).Where(r => r.RoleModule.RoleID == loginModel.RoleID).ToList();
-                Session["Modules"] = module;  //store modules
-
-                //user login credentials
-                claims.Add(new Claim(ClaimTypes.Name, loginModel.UserID));
-                claims.Add(new Claim(ClaimTypes.Role, loginModel.RoleID.ToString()));
-                var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
-                var ctx = Request.GetOwinContext();
-                var authenticationManager = ctx.Authentication;
-                authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
-
+                
                 if (isExist == true)
                 {
+                    List<ViewModuleModel> module = (from m in dbContext.Module
+                                                    join r in dbContext.RoleModule on m.ModuleID equals r.ModuleID
+                                                    join s in dbContext.SubModule on m.ModuleID equals s.ModuleID into g
+                                                    from sub in g.DefaultIfEmpty()  //left join
+                                                    select new ViewModuleModel
+                                                    {
+                                                        Module = m,
+                                                        SubModule = sub ?? null,
+                                                        RoleModule = r
+                                                    }).Where(r => r.RoleModule.RoleID == loginModel.RoleID).ToList();
+                    Session["Modules"] = module;  //store modules
+
+                    //user login credentials
+                    claims.Add(new Claim(ClaimTypes.Name, loginModel.UserID));
+                    claims.Add(new Claim(ClaimTypes.Role, loginModel.RoleID.ToString()));
+                    var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+                    var ctx = Request.GetOwinContext();
+                    var authenticationManager = ctx.Authentication;
+                    authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
+
                     return Json(new { action = "Index", controller = "Dashboard" }, JsonRequestBehavior.AllowGet);
                 }
             }

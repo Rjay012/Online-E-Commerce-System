@@ -1,32 +1,44 @@
 ﻿@model OECS.Models.LoginModels.RegisterModel
 
-@using (Ajax.BeginForm("Register", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Load(data)" }, new { @class = "text-center border border-light p-5" }))
+@using (Ajax.BeginForm("Register", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Load(data)" }))
 {
-    @Html.AntiForgeryToken()
-    <p class="h4 mb-4">Sign up</p>
-    @Html.TextBoxFor(r => r.Firstname, new { @class = "form-control mb-4", @placeholder = "Firstname" })
-    @Html.TextBoxFor(r => r.Middlename, new { @class = "form-control mb-4", @placeholder = "Middlename" })
-    @Html.TextBoxFor(r => r.Lastname, new { @class = "form-control mb-4", @placeholder = "Lastname" })
-    @Html.TextBoxFor(r => r.Address, new { @class = "form-control mb-4", @placeholder = "Address" })
-
-    <div class="form-row mb-4">
-        <div class="col">
-            @Html.TextBoxFor(r => r.Email, new { @class = "form-control mb-4", @placeholder = "E-mail" })
-        </div>
-        <div class="col">
-            @Html.TextBoxFor(r => r.Phone, new { @class = "form-control mb-4", @placeholder = "Phone" })
-        </div>
+    <div class="modal-header">
+        <h5 class="modal-title">Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
 
-    <div class="form-row mb-4">
-        <div class="col">
-            @Html.PasswordFor(r => r.Password, new { @class = "form-control mb-4", @placeholder = "Password" })
+        @Html.TextBoxFor(r => r.Firstname, new { @class = "form-control mb-4", @placeholder = "Firstname" })
+        @Html.TextBoxFor(r => r.Middlename, new { @class = "form-control mb-4", @placeholder = "Middlename" })
+        @Html.TextBoxFor(r => r.Lastname, new { @class = "form-control mb-4", @placeholder = "Lastname" })
+        @Html.TextBoxFor(r => r.Address, new { @class = "form-control mb-4", @placeholder = "Address" })
+
+        <div class="form-row">
+            <div class="col">
+                @Html.TextBoxFor(r => r.Email, new { @class = "form-control mb-4", @placeholder = "E-mail" })
+            </div>
+            <div class="col">
+                @Html.TextBoxFor(r => r.Phone, new { @class = "form-control mb-4", @placeholder = "Phone" })
+            </div>
         </div>
-        <div class="col">
-            @Html.PasswordFor(r => r.RetypePassword, new { @class = "form-control mb-4", @placeholder = "Retype Password" })
+
+        <div class="form-row">
+            <div class="col">
+                @Html.PasswordFor(r => r.Password, new { @class = "form-control mb-4", @placeholder = "Password" })
+            </div>
+            <div class="col">
+                @Html.PasswordFor(r => r.RetypePassword, new { @class = "form-control mb-4", @placeholder = "Retype Password" })
+            </div>
         </div>
-    </div>
-    <!-- Sign up button -->
-    <button class="hidden" type="submit" id="BtnConfirmSignUp"></button>
-    <button class="btn btn-info my-4 btn-block" type="button" id="BtnSignUp">Sign Up</button>
+        <!-- Sign up button -->
+        <div class="invisible example text-center">
+            <button type="submit" id="BtnConfirmSignUp"></button>
+        </div>
+        <div class="visible example text-center">
+            <button class="btn btn-info my-4 btn-block" type="button" id="BtnSignUp">Sign Up</button>
+        </div>
+    </div>    
 }

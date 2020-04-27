@@ -12,10 +12,28 @@
     <link href="~/MDB/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/MDB/css/mdb.min.css" rel="stylesheet" />
     <!--END MD BOOTSTRAP CSS-->
+
+    <link href="~/MDB/MDB Shop/Ecommerce-Template/css/style.min.css" rel="stylesheet" />
+    <style type="text/css">
+        html,
+        body,
+        header,
+        .carousel {
+            height: 60vh;
+        }
+    </style>
 </head>
 <body class="fixed-sn white-skin">
-    @Html.Partial("~/Views/Shared/_SideMenu.cshtml")  @* side menu *@
-    @Html.Partial("~/Views/Shared/_Navbar.cshtml")  @* top navigation bar *@
+    @if (Request.IsAuthenticated)
+    {
+        @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
+        @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
+    }
+    else
+    {
+        @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
+    }
+
 
     <div class="container-fluid body-content">
         @RenderBody()
@@ -41,6 +59,9 @@
     <!--END CUSTOM JS-->
 
     <script>
+        // Animations initialization
+        new WOW().init();
+
         // SideNav Initialization
         $(".button-collapse").sideNav();
 

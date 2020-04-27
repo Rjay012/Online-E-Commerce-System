@@ -1,15 +1,4 @@
-﻿$(document).ready(function () {
-    ReadyLoginForm();  //first to appear in navigation tabs
-});
-
-function ReadyLoginForm() {
-    FetchData("/Login/LoginForm", "").done(function (loginForm) {
-        $("#panel555").html(loginForm);
-        $('.mdb-select').material_select();
-    });
-}
-
-$(document).on("click", "#BtnLogin", function () {
+﻿$(document).on("click", "#BtnLogin", function () {
     $("#BtnConfirmLogin").click();
 });
 
@@ -18,3 +7,17 @@ function RedirectToLandingPage(data) {
         window.location.href = "/" + data.controller + "/" + data.action;
     }
 }
+
+$(document).on("click", "#BtnLoginViewForm", function () {
+    FetchData("/Login/LoginForm", "").done(function (loginForm) {
+        $("#RegisterOrLoginFormContent").html(loginForm);
+        $('.mdb-select').material_select();
+    });
+});
+
+$(document).on("click", "#BtnRegisterViewForm", function () {
+    FetchData("/Login/RegisterForm", "").done(function (loginForm) {
+        $("#RegisterOrLoginFormContent").html(loginForm);
+        $('.mdb-select').material_select();
+    });
+});
