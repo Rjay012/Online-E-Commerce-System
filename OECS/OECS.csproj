@@ -79,6 +79,12 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -156,6 +162,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -210,6 +217,7 @@
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\ProductSize.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -246,6 +254,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome\css\all.css" />
     <Content Include="fonts\font-awesome\css\fontawesome.css" />
@@ -1935,6 +1944,9 @@
     <Content Include="MDB\MDB Shop\Ecommerce-Template\js\popper.min.js" />
     <Content Include="MDB\MDB Shop\Ecommerce-Template\product-page.html" />
     <Content Include="MDB\MDB Shop\Ecommerce-Template\README.txt" />
+    <Content Include="MDB\Pagination\css\pagination.css" />
+    <Content Include="MDB\Pagination\js\Pagination.js" />
+    <Content Include="MDB\Pagination\js\Pagination.min.js" />
     <Content Include="MDB\README.txt" />
     <Content Include="MDB\src\js\free\forms-free.js" />
     <Content Include="MDB\src\js\free\scrolling-navbar.js" />
@@ -2176,6 +2188,7 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Custom_Scripts\Ajax.js" />
     <Content Include="Scripts\Custom_Scripts\Category.js" />
+    <Content Include="Scripts\Custom_Scripts\Color.js" />
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
     <Content Include="Scripts\Custom_Scripts\Product.js" />
@@ -2218,6 +2231,8 @@
     <Content Include="Views\Category\Partials\_NavbarCategory.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Partials\_ProductList.cshtml" />
+    <Content Include="Views\Color\Index.cshtml" />
+    <Content Include="Views\Color\Partials\_ProductColor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

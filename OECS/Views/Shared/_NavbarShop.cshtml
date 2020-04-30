@@ -188,11 +188,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="basicExampleNav">
-            <ul class="navbar-nav mr-auto" id="NavChooseCategory">
-            </ul>
+            <ul class="navbar-nav mr-auto" id="NavChooseCategory"></ul>
             <form class="form-inline">
                 <div class="md-form my-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                    <input class="form-control mr-sm-2" id="txtSearchProduct" type="text" placeholder="Search" aria-label="Search">
                 </div>
             </form>
         </div>
@@ -254,7 +253,9 @@
 
                     <div id="collapseUnfiled2" class="collapse" role="tabpanel" aria-labelledby="headingUnfiled" data-parent="#accordionEx80">
                         <div class="card-body">
-
+                            <div class="container">
+                                <div class="row" id="ProductColorList"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -268,10 +269,9 @@
             </section>
             <!--Section: Products v.3-->
             <!--Pagination-->
-            <nav class="d-flex justify-content-center wow fadeIn">
+            @*<nav class="d-flex justify-content-center wow fadeIn">
                 <ul class="pagination pg-blue">
 
-                    <!--Arrow left-->
                     <li class="page-item disabled">
                         <a class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
@@ -305,7 +305,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>*@
             <!--Pagination-->
         </div>
     </div>

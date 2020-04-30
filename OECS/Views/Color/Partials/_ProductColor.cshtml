@@ -1,0 +1,10 @@
+﻿@model IEnumerable<OECS.Models.ProductModels.ViewProductModel>
+
+@foreach (var color in Model)
+{
+    <div class="col-xs-3">
+        <div class="card">
+            <div class="card-body" style="cursor: pointer; background-color: @color.Color.color1;" onclick="SortByColor(@color.Color.ColorID)"></div> @* please refactor css code here... *@
+        </div>
+    </div>@:&nbsp;&nbsp;&nbsp;
+}

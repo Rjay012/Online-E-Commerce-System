@@ -3,7 +3,7 @@
 @if (Model.Count() > 0)
 {
     <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a class="nav-link category" categoryID="0">
             All
             <span class="sr-only">(current)</span>
         </a>
@@ -12,13 +12,13 @@
     foreach (var category in Model)
     {
         <li class="nav-item">
-            <a class="nav-link" href="#" onclick="choose()">@category.category1</a>
+            <a class="nav-link category" categoryID="@category.CategoryID">@category.category1</a>
         </li>
     }
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" href="#" onclick="choose()">No Category Available</a>
+        <a class="nav-link" href="#">No Category Available</a>
     </li>
 }
