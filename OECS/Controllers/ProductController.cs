@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using PagedList;
 using OECS.Models.ProductModels;
 using System.Security.Cryptography;
+using Microsoft.Ajax.Utilities;
 
 namespace OECS.Controllers
 {
@@ -22,14 +23,23 @@ namespace OECS.Controllers
         public ActionResult Show(int categoryID, int colorID, string searchString)
         {
             List<ViewProductModel> product = (from p in dbContext.Product
+                                              join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
                                               join pi in dbContext.ProductImage on p.ProductID equals pi.ProductID
-                                              join pr in dbContext.ProductColor on p.ProductID equals pr.ProductID into k
-                                              from l in k.DefaultIfEmpty()
+                                              group new { p, pc, pi } by new
+                                              {
+                                                  product = p,
+                                                  productImage = pi,
+                                                  productColor = pc
+                                              } into grp
                                               select new ViewProductModel
                                               {
-                                                  Product = p, ProductImage = pi, ProductColor = l ?? null, Category = p.Category, Color = l.Color
+                                                  Product = grp.Key.product,
+                                                  Category = grp.Key.product.Category,
+                                                  ProductColor = grp.Key.productColor,
+                                                  Color = grp.Key.productColor.Color,
+                                                  ProductImage = grp.Key.productImage
                                               }).ToList();
-
+            
             if (!String.IsNullOrEmpty(searchString)) //search string
             {
                 product = product.Where(p => p.Category.category1.Contains(searchString) ||
