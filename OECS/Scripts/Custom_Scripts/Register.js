@@ -1,16 +1,9 @@
-﻿$(document).ready(function () {
-    ReadyRegisterForm();
-});
-
-function ReadyRegisterForm() {
-    FetchData("/Login/RegisterForm", null).done(function (registerForm) {
-        $("#panel666").html(registerForm);
+﻿$(document).on("click", "#BtnRegisterViewForm", function () {
+    FetchData("/Account/RegisterForm", "").done(function (loginForm) {
+        $("#RegisterOrLoginFormContent").html(loginForm);
+        $('.mdb-select').material_select();
     });
-}
-
-function Load(data) {
-    alert(JSON.stringify(data));
-}
+});
 
 $(document).on("click", "#BtnSignUp", function () {
     $("#BtnConfirmSignUp").click();

@@ -1,6 +1,6 @@
 ﻿@model OECS.Models.LoginModels.LoginModel
 
-@using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "RedirectToLandingPage(data)" }))
+@using (Ajax.BeginForm("Login", "Account", new AjaxOptions { HttpMethod = "POST", OnSuccess = "RedirectToLandingPage(data)" }))
 {
     <div class="modal-header">
         <h5 class="modal-title">Login</h5>

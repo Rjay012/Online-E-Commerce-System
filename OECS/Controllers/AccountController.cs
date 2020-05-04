@@ -2,40 +2,38 @@
 using Microsoft.Owin.Security;
 using OECS.Models;
 using OECS.Models.LoginModels;
-using OECS.Models.ModuleModels;
-using OECS.Models.RoleModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace OECS.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
         oecsEntities dbContext = new oecsEntities();
-        // GET: Login
+        // GET: Account
         public ActionResult Index()
         {
             return View();
         }
 
+        #region("USER LOGIN")
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel loginModel)
         {
-            if(loginModel.UserID == null)
+            if (loginModel.UserID == null)
             {
                 return HttpNotFound();
             }
 
             if (ModelState.IsValid)
             {
-                List<Claim> claims  = new List<Claim>();
+                List<Claim> claims = new List<Claim>();
                 bool isExist = false;
                 switch (loginModel.RoleID)
                 {
@@ -50,7 +48,7 @@ namespace OECS.Controllers
                         break;
                 }
 
-                
+
                 if (isExist == true)
                 {
                     List<ViewModuleModel> module = (from m in dbContext.Module
@@ -84,11 +82,7 @@ namespace OECS.Controllers
             loginModel.RoleList = GetRoleListItems();
             return PartialView("Partials/_Login", loginModel);
         }
-
-        public ActionResult RegisterForm()
-        {
-            return PartialView("Partials/_Register");
-        }
+        #endregion("/USER LOGIN")
 
         private IEnumerable<SelectListItem> GetRoleListItems()
         {
@@ -104,6 +98,12 @@ namespace OECS.Controllers
             }
 
             return RoleListTempStorage;
+        }
+
+        #region("REGISTER")
+        public ActionResult RegisterForm()
+        {
+            return PartialView("Partials/_Register");
         }
 
         [HttpPost]
@@ -127,5 +127,6 @@ namespace OECS.Controllers
             }
             return Json(customer, JsonRequestBehavior.AllowGet);
         }
+        #endregion("/REGISTER")
     }
 }

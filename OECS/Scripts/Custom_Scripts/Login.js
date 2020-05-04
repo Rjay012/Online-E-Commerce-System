@@ -9,14 +9,7 @@ function RedirectToLandingPage(data) {
 }
 
 $(document).on("click", "#BtnLoginViewForm", function () {
-    FetchData("/Login/LoginForm", "").done(function (loginForm) {
-        $("#RegisterOrLoginFormContent").html(loginForm);
-        $('.mdb-select').material_select();
-    });
-});
-
-$(document).on("click", "#BtnRegisterViewForm", function () {
-    FetchData("/Login/RegisterForm", "").done(function (loginForm) {
+    FetchData("/Account/LoginForm", "").done(function (loginForm) {
         $("#RegisterOrLoginFormContent").html(loginForm);
         $('.mdb-select').material_select();
     });

@@ -1,6 +1,6 @@
 ﻿@model OECS.Models.LoginModels.RegisterModel
 
-@using (Ajax.BeginForm("Register", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Load(data)" }))
+@using (Ajax.BeginForm("Register", "Account", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Load(data)" }))
 {
     <div class="modal-header">
         <h5 class="modal-title">Register</h5>

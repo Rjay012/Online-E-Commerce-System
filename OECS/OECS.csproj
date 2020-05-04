@@ -161,11 +161,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Global.asax.cs">
@@ -2221,9 +2221,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_SideMenu.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\Login\Partials\_Login.cshtml" />
-    <Content Include="Views\Login\Partials\_Register.cshtml" />
+    <Content Include="Views\Account\Partials\_Login.cshtml" />
+    <Content Include="Views\Account\Partials\_Register.cshtml" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Shared\_NavbarShop.cshtml" />
     <Content Include="Views\Shared\_LayoutShop.cshtml" />
@@ -2233,6 +2232,7 @@
     <Content Include="Views\Product\Partials\_ProductList.cshtml" />
     <Content Include="Views\Color\Index.cshtml" />
     <Content Include="Views\Color\Partials\_ProductColor.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
