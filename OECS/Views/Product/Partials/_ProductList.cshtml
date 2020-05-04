@@ -23,7 +23,7 @@
                                 <div class="col-sm-12">
                                     @foreach (var color in p.Key.Product.ProductColor)
                                     {
-                                        <a class="colors" color="@color.Color.color1">@color.Color.color1</a>
+                                        <a class="@color.Color.ColorID" color="@color.Color.color1">@color.Color.color1</a>
                                     }
                                 </div>
                             </div>

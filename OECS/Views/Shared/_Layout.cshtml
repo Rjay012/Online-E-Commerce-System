@@ -25,7 +25,7 @@
     </style>
 </head>
 <body class="fixed-sn white-skin">
-    @if (Request.IsAuthenticated)
+    @if (Session["Modules"] != null && Request.IsAuthenticated)
     {
         @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
         @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
