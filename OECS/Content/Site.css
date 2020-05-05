@@ -22,3 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.color-dot-wrapper {
+    padding: 10px;
+}
+
+.color-dot {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}

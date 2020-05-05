@@ -18,6 +18,7 @@ namespace OECS.Models
         public Nullable<int> ProductID { get; set; }
         public Nullable<int> ColorID { get; set; }
         public Nullable<bool> isDisplay { get; set; }
+        public string path { get; set; }
     
         public virtual Color Color { get; set; }
         public virtual Product Product { get; set; }

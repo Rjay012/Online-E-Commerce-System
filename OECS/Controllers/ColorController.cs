@@ -28,7 +28,7 @@ namespace OECS.Controllers
                                                    select new ViewProductModel
                                                    {
                                                        Color = c, 
-                                                       Category = (productCategoryID != 0 ? cat : null)
+                                                       Category = (productCategoryID != 0 ? cat : null),
                                                    }).Distinct().ToList();
 
             if(productCategoryID != 0)

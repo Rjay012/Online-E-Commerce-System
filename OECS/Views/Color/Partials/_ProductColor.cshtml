@@ -2,9 +2,9 @@
 
 @foreach (var color in Model)
 {
-    <div class="col-xs-3">
+    <div class="col-xs-3 color-dot-wrapper" style="padding: 10px">
         <div class="card">
-            <div class="card-body" style="cursor: pointer; background-color: @color.Color.color1;" onclick="SortByColor(@color.Color.ColorID)"></div> @* please refactor css code here... *@
+            <span class="color-dot" style="background-color: @color.Color.color1; cursor: pointer" onclick="SortByColor(@color.Color.ColorID)"></span>
         </div>
-    </div>@:&nbsp;&nbsp;&nbsp;
+    </div>
 }

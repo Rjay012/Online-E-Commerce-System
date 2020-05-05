@@ -48,7 +48,6 @@ namespace OECS.Controllers
                         break;
                 }
 
-
                 if (isExist == true)
                 {
                     List<ViewModuleModel> module = (from m in dbContext.Module
@@ -83,7 +82,7 @@ namespace OECS.Controllers
             return PartialView("Partials/_Login", loginModel);
         }
         #endregion("/USER LOGIN")
-
+         
         private IEnumerable<SelectListItem> GetRoleListItems()
         {
             List<SelectListItem> RoleListTempStorage = new List<SelectListItem>();

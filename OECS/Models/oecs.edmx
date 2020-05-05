@@ -72,6 +72,7 @@
           <Property Name="ProductID" Type="int" />
           <Property Name="ColorID" Type="int" />
           <Property Name="isDisplay" Type="bit" />
+          <Property Name="path" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
@@ -606,6 +607,7 @@
           <Property Name="ProductID" Type="Int32" />
           <Property Name="ColorID" Type="Int32" />
           <Property Name="isDisplay" Type="Boolean" />
+          <Property Name="path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Color" Relationship="oecsModel.FK_ProductColor_Color" FromRole="ProductColor" ToRole="Color" />
           <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductColor_Product" FromRole="ProductColor" ToRole="Product" />
         </EntityType>
@@ -993,6 +995,7 @@
           <EntitySetMapping Name="ProductColor">
             <EntityTypeMapping TypeName="oecsModel.ProductColor">
               <MappingFragment StoreEntitySet="ProductColor">
+                <ScalarProperty Name="path" ColumnName="path" />
                 <ScalarProperty Name="isDisplay" ColumnName="isDisplay" />
                 <ScalarProperty Name="ColorID" ColumnName="ColorID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />

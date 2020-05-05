@@ -1,63 +1,65 @@
 ﻿@model IEnumerable<OECS.Models.ProductModels.ViewProductModel>
 @*@model PagedList.IPagedList<OECS.Models.Product>
     @using PagedList.Mvc;*@
-    <div class="row wow fadeIn">
-        @{
-            var product = Model.GroupBy(c => new { c.ProductColor, c.ProductImage, c.Product });
+<div class="row wow fadeIn">
+    @{
+        var product = Model.GroupBy(c => new { c.ProductColor, c.ProductImage, c.Product });
 
-            foreach (var p in product)
-            {
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="card">
-                        <div class="view overlay">
-                            <img src="@p.Key.ProductImage.path" class="card-img-top" alt="">
-                            <a>
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-                        <div class="col-sm-6">
-                            <a class="badge badge-light float-left myPopover" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
-                                @p.Key.Product.ProductColor.Count() colour(s)
-                            </a>
-                            <div class="d-none" id="popover-@p.Key.Product.ProductID" role="tooltip">
-                                <div class="col-sm-12">
-                                    @foreach (var color in p.Key.Product.ProductColor)
-                                    {
-                                        <a class="@color.Color.ColorID" color="@color.Color.color1">@color.Color.color1</a>
-                                    }
-                                </div>
+        foreach (var p in product)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                    <div class="view overlay">
+                        <img src="@p.Key.ProductImage.path" class="card-img-top" alt="">
+                        <a>
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a class="badge badge-light float-left myPopover" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
+                            @p.Key.Product.ProductColor.Count() colour(s)
+                        </a>
+                        <div class="d-none" id="popover-@p.Key.Product.ProductID" role="tooltip">
+                            <div class="col-sm-12">
+                                @foreach (var color in p.Key.Product.ProductColor)
+                                {
+                                    <a>
+                                        <img src="@color.path" class="img-fluid z-depth-1 rounded-circle" alt="@color.Color.color1">
+                                    </a>
+                                }
                             </div>
                         </div>
-                        <hr />
-                        <div class="card-body text-center">
-                            <a href="" class="grey-text">
-                                <h5>@p.Key.Product.Category.category1</h5>
-                            </a>
-                            <h5>
-                                <strong>
-                                    <a href="" class="dark-grey-text">
-                                        @p.Key.Product.productName
-                                    </a>
-                                </strong>
-                            </h5>
+                    </div>
+                    <hr />
+                    <div class="card-body text-center">
+                        <a href="" class="grey-text">
+                            <h5>@p.Key.Product.Category.category1</h5>
+                        </a>
+                        <h5>
+                            <strong>
+                                <a href="" class="dark-grey-text">
+                                    @p.Key.Product.productName
+                                </a>
+                            </strong>
+                        </h5>
 
-                            <h4 class="font-weight-bold blue-text">
-                                <strong>@p.Key.Product.price</strong>
-                            </h4>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>@p.Key.Product.price</strong>
+                        </h4>
 
-                            <div class="container-fluid">
-                                <div class="col-xs-6">
-                                    <button class="btn btn-primary btn-sm" type="button">Buy Now</button>
-                                </div>
-                                <div class="col-xs-6">
-                                    <button class="btn btn-warning btn-sm" type="button">Add to Cart</button>
-                                </div>
+                        <div class="container-fluid">
+                            <div class="col-xs-6">
+                                <button class="btn btn-primary btn-sm" type="button">Buy Now</button>
+                            </div>
+                            <div class="col-xs-6">
+                                <button class="btn btn-warning btn-sm" type="button">Add to Cart</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         }
-    </div>
+    }
+</div>
 @*@Html.PagedListPager(Model, page => Url.Action("Show", new { page, pageSize = Model.PageSize }))
     Showing @Model.FirstItemOnPage to @Model.LastItemOnPage of @Model.TotalItemCount Products*@

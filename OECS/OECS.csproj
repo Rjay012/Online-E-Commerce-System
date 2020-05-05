@@ -1817,6 +1817,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Black\15.jpg" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Black\Icon\15.jpg" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Lightblue\12.jpg" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Lightblue\Icon\12.jpg" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Red\13.jpg" />
+    <Content Include="Images\Category\Denim\Denim Shirt\Red\Icon\13.jpg" />
     <Content Include="MDB\css\addons\datatables-select.min.css" />
     <Content Include="MDB\css\addons\datatables-select2.min.css" />
     <Content Include="MDB\css\addons\datatables.min.css" />
