@@ -12,5 +12,6 @@ namespace OECS.Models.ProductModels
         public Color Color { get; set; }
         public ProductColor ProductColor { get; set; }
         public Category Category { get; set; }
+        public Icon Icon { get; set; }
     }
 }

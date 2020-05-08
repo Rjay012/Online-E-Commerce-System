@@ -1,30 +1,34 @@
 ﻿@model IEnumerable<OECS.Models.ProductModels.ViewProductModel>
+@using OECS.Models;
 @*@model PagedList.IPagedList<OECS.Models.Product>
     @using PagedList.Mvc;*@
 <div class="row wow fadeIn">
     @{
-        var product = Model.GroupBy(c => new { c.ProductColor, c.ProductImage, c.Product });
+        oecsEntities dbContext = new oecsEntities();
+        var product = Model.GroupBy(c => new { c.ProductColor, c.Icon, c.Product });
 
         foreach (var p in product)
         {
+            List<Icon> icon = dbContext.Icon
+                                       .Where(i => i.ProductColor.ProductID == p.Key.Product.ProductID).ToList();
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card">
                     <div class="view overlay">
-                        <img src="@p.Key.ProductImage.path" class="card-img-top" alt="">
+                        <img src="@p.Key.ProductColor.path" class="card-img-top" id="card-img-@p.Key.Product.ProductID" alt="">
                         <a>
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
                     <div class="col-sm-6">
                         <a class="badge badge-light float-left myPopover" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
-                            @p.Key.Product.ProductColor.Count() colour(s)
+                            @p.Key.Product.ProductColor.Where(pc => pc.isDisplay == true).Count() colour(s)
                         </a>
                         <div class="d-none" id="popover-@p.Key.Product.ProductID" role="tooltip">
                             <div class="col-sm-12">
-                                @foreach (var color in p.Key.Product.ProductColor)
+                                @foreach (var i in icon)
                                 {
-                                    <a>
-                                        <img src="@color.path" class="img-fluid z-depth-1 rounded-circle" alt="@color.Color.color1">
+                                    <a class="product-icon" id="@i.ProductColor.path-@p.Key.Product.ProductID">
+                                        <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle" alt="">
                                     </a>
                                 }
                             </div>

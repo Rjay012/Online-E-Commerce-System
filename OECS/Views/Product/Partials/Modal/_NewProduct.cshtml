@@ -1,0 +1,33 @@
+﻿@model OECS.Models.ProductModels.ProductModel
+@using (Ajax.BeginForm("Create", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "success(data)" }))
+{
+    <div class="modal-header">
+        <h5 class="modal-title">New Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        @Html.LabelFor(p => p.ProductName)
+        @Html.TextBoxFor(p => p.ProductName, new { @class = "form-control mb-4", @placeholder = "Product Name" })
+
+        @Html.LabelFor(p => p.Category.Category)
+        @Html.DropDownListFor(p => p.Category.CategoryID, Model.CategoryList, "Select Category", new { @class = "browser-default mdb-select form-control mb-4" })
+
+        @Html.LabelFor(p => p.Date)
+        @Html.TextBoxFor(p => p.Date, new { @class = "form-control mb-4", @placeholder = "Date" })
+
+        @Html.LabelFor(p => p.Price)
+        @Html.TextBoxFor(p => p.Price, new { @class = "form-control mb-4", @placeholder = "Price" })
+
+        @Html.LabelFor(p => p.Description)
+        @Html.TextBoxFor(p => p.Description, new { @class = "form-control mb-4", @placeholder = "Description" })
+    </div>
+    <div class="modal-footer">
+        <button class="d-none" type="submit" id="BtnConfirmSaveNew"></button>
+        <button class="btn btn-primary" type="button" id="BtnSaveNew">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+}

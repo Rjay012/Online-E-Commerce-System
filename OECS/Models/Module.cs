@@ -28,6 +28,7 @@ namespace OECS.Models
         public string icon { get; set; }
         public Nullable<bool> hasArrow { get; set; }
         public Nullable<bool> hasChild { get; set; }
+        public Nullable<int> orderBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleModule> RoleModule { get; set; }

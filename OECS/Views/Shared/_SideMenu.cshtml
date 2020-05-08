@@ -1,7 +1,7 @@
 ﻿@if (this.Session["Modules"] != null && Request.IsAuthenticated)
 {
     var module = (IEnumerable<OECS.Models.ViewModuleModel>)Session["Modules"];
-    var groupByModule = module.GroupBy(m => m.Module);
+    var groupByModule = module.GroupBy(m => m.Module).OrderBy(m => m.Key.orderBy);
     <div id="slide-out" class="side-nav sn-bg-4 fixed">
         <ul class="custom-scrollbar">
             <li class="logo-sn waves-effect py-3">
@@ -23,7 +23,7 @@
                             <a href="@navLink" class="collapsible-header waves-effect">
                                 <i class="@mod.Key.icon"></i> @mod.Key.module1 <i class="@(mod.Key.hasArrow == true ? "fas fa-angle-down rotate-icon" : "")"></i>
                             </a>
-                            @foreach (var sub in mod.Where(m => m.Module.hasChild == true))
+                            @foreach (var sub in mod.Where(m => m.Module.hasChild == true).OrderBy(m => m.SubModule.orderBy))
                             {
                                 <div class="collapsible-body">
                                     <ul>

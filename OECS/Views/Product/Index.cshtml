@@ -1,10 +1,82 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="container-fluid">
+    <button class="btn btn-success" type="button" id="BtnTriggerModalForm" data-toggle="modal" data-target="#modalNewProduct">NEW PRODUCT</button>
+    <table id="ShowProductList" class="table table-bordered" width="100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="th-sm text-center">Product Name</th>
+                <th class="th-sm text-center">Category</th>
+                <th></th>
+                <th class="th-sm text-center">Date</th>
+                <th class="th-sm text-center">Price</th>
+                <th class="th-sm text-center">Additional</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Add New Product -->
+<div class="modal fade" id="modalNewProduct" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="NewProductForm">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Product Image Gallery -->
+<div class="modal fade" id="modalProductImageGallery" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="ProductImageGalleryForm">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add New Product Color -->
+<div class="modal fade" id="modalNewProductColor" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="NewProductColorForm">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add New Product Size -->
+<div class="modal fade" id="modalNewProductSize" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="NewProductSizeForm">
+
+        </div>
+    </div>
+</div>
 
 @section scripts{
+    <script>
+        //Photo Gallery
+        $(document).ready(function () {
+            $(document).on("click", 'a', function () {
+                var largeImage = $(this).attr('data-full');
+                $('.selected').removeClass();
+                $(this).addClass('selected');
+                $('.full img').hide();
+                $('.full img').attr('src', largeImage);
+                $('.full img').fadeIn();
+            }); // closing the listening on a click
 
+            $(document).on('click', '.full img', function () {
+                var modalImage = $(this).attr('src');
+                $.fancybox.open(modalImage);
+            });
+        }); //closing our doc ready
+    </script>
+    <script src="~/Scripts/Custom_Scripts/Main_Scripts/Product.js"></script>
 }

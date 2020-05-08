@@ -186,6 +186,10 @@
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerModels\CustomerModel.cs" />
+    <Compile Include="Models\DataTableParam.cs" />
+    <Compile Include="Models\Icon.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginModels\LoginModel.cs" />
     <Compile Include="Models\LoginModels\RegisterModel.cs" />
     <Compile Include="Models\Module.cs">
@@ -217,6 +221,7 @@
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductModels\ProductModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\ProductSize.cs">
       <DependentUpon>oecs.tt</DependentUpon>
@@ -1823,6 +1828,11 @@
     <Content Include="Images\Category\Denim\Denim Shirt\Lightblue\Icon\12.jpg" />
     <Content Include="Images\Category\Denim\Denim Shirt\Red\13.jpg" />
     <Content Include="Images\Category\Denim\Denim Shirt\Red\Icon\13.jpg" />
+    <Content Include="Images\top1large.jpg" />
+    <Content Include="Images\top2large.jpg" />
+    <Content Include="Images\top3large.jpg" />
+    <Content Include="Images\top4large.jpg" />
+    <Content Include="Images\top5large.jpg" />
     <Content Include="MDB\css\addons\datatables-select.min.css" />
     <Content Include="MDB\css\addons\datatables-select2.min.css" />
     <Content Include="MDB\css\addons\datatables.min.css" />
@@ -1839,6 +1849,81 @@
     <Content Include="MDB\css\mdb.min.css" />
     <Content Include="MDB\css\modules\animations-extended.min.css" />
     <Content Include="MDB\css\style.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables-1.10.20.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.bootstrap.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.bootstrap.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.bootstrap4.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.bootstrap4.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.foundation.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.foundation.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.jqueryui.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.jqueryui.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.responsive-2.2.3.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.rowReorder-1.2.6.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.semanticui.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\dataTables.semanticui.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\jquery.dataTables.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\css\jquery.dataTables.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\datatables.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\datatables.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\datatables.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\datatables.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\images\sort_asc.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\images\sort_asc_disabled.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\images\sort_both.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\images\sort_desc.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\images\sort_desc_disabled.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\jQuery-3.3.1\jquery-3.3.1.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\jQuery-3.3.1\jquery-3.3.1.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.bootstrap.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.bootstrap.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.bootstrap4.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.bootstrap4.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.foundation.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.foundation.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.jquery-1.10.20.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.jquery-3.3.1.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.jqueryui.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.jqueryui.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.responsive-2.2.3.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.rowReorder.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.semanticui.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\dataTables.semanticui.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\jquery.dataTables.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.18\js\jquery.dataTables.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.bootstrap.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.bootstrap.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.bootstrap4.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.bootstrap4.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.foundation.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.foundation.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.jqueryui.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.jqueryui.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.semanticui.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\dataTables.semanticui.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\jquery.dataTables.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\css\jquery.dataTables.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\datatables.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\datatables.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\datatables.min.css" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\datatables.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\images\sort_asc.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\images\sort_asc_disabled.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\images\sort_both.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\images\sort_desc.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\images\sort_desc_disabled.png" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.bootstrap.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.bootstrap.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.bootstrap4.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.bootstrap4.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.foundation.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.foundation.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.jqueryui.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.jqueryui.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.semanticui.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\dataTables.semanticui.min.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\jquery.dataTables.js" />
+    <Content Include="MDB\DataTables\DataTables-1.10.20\js\jquery.dataTables.min.js" />
     <Content Include="MDB\exclusive-templates\unlock-exclusive-freebies.html" />
     <Content Include="MDB\img\mdb-favicon.ico" />
     <Content Include="MDB\img\overlays\01.png" />
@@ -1973,6 +2058,19 @@
     <Content Include="MDB\src\js\vendor\free\jquery.easing.js" />
     <Content Include="MDB\src\js\vendor\free\velocity.js" />
     <Content Include="MDB\src\js\vendor\free\waves.js" />
+    <Content Include="MDB\VerticalGallery\css\jquery.fancybox.css" />
+    <Content Include="MDB\VerticalGallery\css\stylesheet.css" />
+    <Content Include="MDB\VerticalGallery\images\top1large.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top1small.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top2large.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top2small.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top3large.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top3small.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top4large.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top4small.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top5large.jpg" />
+    <Content Include="MDB\VerticalGallery\images\top5small.jpg" />
+    <Content Include="MDB\VerticalGallery\js\jquery.fancybox.js" />
     <Content Include="Models\oecs.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>oecs.Context.cs</LastGenOutput>
@@ -2197,6 +2295,8 @@
     <Content Include="Scripts\Custom_Scripts\Color.js" />
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Register.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2239,6 +2339,9 @@
     <Content Include="Views\Color\Index.cshtml" />
     <Content Include="Views\Color\Partials\_ProductColor.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Product\Partials\Modal\_NewProduct.cshtml" />
+    <Content Include="Views\Product\Partials\Modal\_NewProductColor.cshtml" />
+    <Content Include="Views\Product\Partials\Modal\_ProductImageGallery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

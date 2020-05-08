@@ -22,6 +22,7 @@ namespace OECS.Models
         public string icon { get; set; }
         public Nullable<bool> hasArrow { get; set; }
         public Nullable<bool> hasParent { get; set; }
+        public Nullable<int> orderBy { get; set; }
     
         public virtual Module Module { get; set; }
     }

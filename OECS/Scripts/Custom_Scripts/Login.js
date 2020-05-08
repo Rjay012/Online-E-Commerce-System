@@ -11,6 +11,6 @@ function RedirectToLandingPage(data) {
 $(document).on("click", "#BtnLoginViewForm", function () {
     FetchData("/Account/LoginForm", "").done(function (loginForm) {
         $("#RegisterOrLoginFormContent").html(loginForm);
-        $('.mdb-select').material_select();
+        $("select").addClass("browser-default");
     });
 });

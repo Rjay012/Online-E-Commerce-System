@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    ShowProduct(0, 0);
+    ShowProduct(0, 0, "");
 });
 
 function ShowProduct(categoryID, colorID, searchString) {
@@ -21,10 +21,9 @@ $(document).on("click", ".myPopover", function () {
         content: $("#popover-" + item).html(),
         placement: "auto"
     });
-    
-    $("#popover-" + item).children(".col-sm-12").children().each(function () {
-        var color = $(this).attr("color");
-        var myClass = $(this).attr("class");
-        $("." + myClass).css("background-color", color);
-    });
+});
+
+$(document).on("click", ".product-icon", function () {
+    var id = $(this).attr("id").split("-");  //id as path and productID
+    $("#card-img-" + id[1]).attr("src", id[0]);
 });
