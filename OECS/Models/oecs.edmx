@@ -27,6 +27,14 @@
           <Property Name="ColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="color" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="ColorImage">
+          <Key>
+            <PropertyRef Name="ColorImageID" />
+          </Key>
+          <Property Name="ColorImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ColorID" Type="int" />
+          <Property Name="ImageID" Type="int" />
+        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="CustomerID" />
@@ -47,7 +55,6 @@
           </Key>
           <Property Name="IconID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="icon" Type="varchar(max)" />
-          <Property Name="ProductColorID" Type="int" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -83,6 +90,7 @@
           <Property Name="isDisplay" Type="bit" />
           <Property Name="path" Type="varchar(max)" />
           <Property Name="isMainDisplay" Type="bit" />
+          <Property Name="IconID" Type="int" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
@@ -197,20 +205,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Icon_ProductColor">
-          <End Role="ProductColor" Type="Self.ProductColor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Icon" Type="Self.Icon" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductColor">
-              <PropertyRef Name="ProductColorID" />
-            </Principal>
-            <Dependent Role="Icon">
-              <PropertyRef Name="ProductColorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -236,6 +230,20 @@
             </Principal>
             <Dependent Role="ProductColor">
               <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductColor_Icon">
+          <End Role="Icon" Type="Self.Icon" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductColor" Type="Self.ProductColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Icon">
+              <PropertyRef Name="IconID" />
+            </Principal>
+            <Dependent Role="ProductColor">
+              <PropertyRef Name="IconID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -397,6 +405,7 @@
           <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Color" EntityType="Self.Color" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ColorImage" EntityType="Self.ColorImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Icon" EntityType="Self.Icon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
@@ -419,16 +428,16 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_Icon_ProductColor" Association="Self.FK_Icon_ProductColor">
-            <End Role="ProductColor" EntitySet="ProductColor" />
-            <End Role="Icon" EntitySet="Icon" />
-          </AssociationSet>
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Color" Association="Self.FK_ProductColor_Color">
             <End Role="Color" EntitySet="Color" />
+            <End Role="ProductColor" EntitySet="ProductColor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductColor_Icon" Association="Self.FK_ProductColor_Icon">
+            <End Role="Icon" EntitySet="Icon" />
             <End Role="ProductColor" EntitySet="ProductColor" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Product" Association="Self.FK_ProductColor_Product">
@@ -484,6 +493,7 @@
           <EntitySet Name="Administrator" EntityType="oecsModel.Administrator" />
           <EntitySet Name="Category" EntityType="oecsModel.Category" />
           <EntitySet Name="Color" EntityType="oecsModel.Color" />
+          <EntitySet Name="ColorImage" EntityType="oecsModel.ColorImage" />
           <EntitySet Name="Customer" EntityType="oecsModel.Customer" />
           <EntitySet Name="Icon" EntityType="oecsModel.Icon" />
           <EntitySet Name="Module" EntityType="oecsModel.Module" />
@@ -514,9 +524,9 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_Icon_ProductColor" Association="oecsModel.FK_Icon_ProductColor">
-            <End Role="ProductColor" EntitySet="ProductColor" />
+          <AssociationSet Name="FK_ProductColor_Icon" Association="oecsModel.FK_ProductColor_Icon">
             <End Role="Icon" EntitySet="Icon" />
+            <End Role="ProductColor" EntitySet="ProductColor" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleModule_Module" Association="oecsModel.FK_RoleModule_Module">
             <End Role="Module" EntitySet="Module" />
@@ -588,6 +598,14 @@
           <Property Name="color1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductColor_Color" FromRole="Color" ToRole="ProductColor" />
         </EntityType>
+        <EntityType Name="ColorImage">
+          <Key>
+            <PropertyRef Name="ColorImageID" />
+          </Key>
+          <Property Name="ColorImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ColorID" Type="Int32" />
+          <Property Name="ImageID" Type="Int32" />
+        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="CustomerID" />
@@ -609,8 +627,7 @@
           </Key>
           <Property Name="IconID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="icon1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ProductColorID" Type="Int32" />
-          <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_Icon_ProductColor" FromRole="Icon" ToRole="ProductColor" />
+          <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductColor_Icon" FromRole="Icon" ToRole="ProductColor" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -654,8 +671,9 @@
           <Property Name="isDisplay" Type="Boolean" />
           <Property Name="path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="isMainDisplay" Type="Boolean" />
+          <Property Name="IconID" Type="Int32" />
           <NavigationProperty Name="Color" Relationship="oecsModel.FK_ProductColor_Color" FromRole="ProductColor" ToRole="Color" />
-          <NavigationProperty Name="Icon" Relationship="oecsModel.FK_Icon_ProductColor" FromRole="ProductColor" ToRole="Icon" />
+          <NavigationProperty Name="Icon" Relationship="oecsModel.FK_ProductColor_Icon" FromRole="ProductColor" ToRole="Icon" />
           <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductColor_Product" FromRole="ProductColor" ToRole="Product" />
         </EntityType>
         <EntityType Name="ProductImage">
@@ -815,17 +833,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Icon_ProductColor">
-          <End Type="oecsModel.ProductColor" Role="ProductColor" Multiplicity="0..1">
+        <Association Name="FK_ProductColor_Icon">
+          <End Type="oecsModel.Icon" Role="Icon" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.Icon" Role="Icon" Multiplicity="*" />
+          <End Type="oecsModel.ProductColor" Role="ProductColor" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ProductColor">
-              <PropertyRef Name="ProductColorID" />
+            <Principal Role="Icon">
+              <PropertyRef Name="IconID" />
             </Principal>
-            <Dependent Role="Icon">
-              <PropertyRef Name="ProductColorID" />
+            <Dependent Role="ProductColor">
+              <PropertyRef Name="IconID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1014,6 +1032,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ColorImage">
+            <EntityTypeMapping TypeName="oecsModel.ColorImage">
+              <MappingFragment StoreEntitySet="ColorImage">
+                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="ColorImageID" ColumnName="ColorImageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="oecsModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
@@ -1032,7 +1059,6 @@
           <EntitySetMapping Name="Icon">
             <EntityTypeMapping TypeName="oecsModel.Icon">
               <MappingFragment StoreEntitySet="Icon">
-                <ScalarProperty Name="ProductColorID" ColumnName="ProductColorID" />
                 <ScalarProperty Name="icon1" ColumnName="icon" />
                 <ScalarProperty Name="IconID" ColumnName="IconID" />
               </MappingFragment>
@@ -1067,6 +1093,7 @@
           <EntitySetMapping Name="ProductColor">
             <EntityTypeMapping TypeName="oecsModel.ProductColor">
               <MappingFragment StoreEntitySet="ProductColor">
+                <ScalarProperty Name="IconID" ColumnName="IconID" />
                 <ScalarProperty Name="isMainDisplay" ColumnName="isMainDisplay" />
                 <ScalarProperty Name="path" ColumnName="path" />
                 <ScalarProperty Name="isDisplay" ColumnName="isDisplay" />

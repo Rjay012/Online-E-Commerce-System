@@ -14,10 +14,16 @@ namespace OECS.Models
     
     public partial class Icon
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Icon()
+        {
+            this.ProductColor = new HashSet<ProductColor>();
+        }
+    
         public int IconID { get; set; }
         public string icon1 { get; set; }
-        public Nullable<int> ProductColorID { get; set; }
     
-        public virtual ProductColor ProductColor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductColor> ProductColor { get; set; }
     }
 }

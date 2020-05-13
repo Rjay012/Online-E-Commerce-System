@@ -21,6 +21,7 @@ $(document).on("click", ".myPopover", function () {
         content: $("#popover-" + item).html(),
         placement: "auto"
     });
+    $(".img-thumbnail").css("height", "28px");
 });
 
 $(document).on("click", ".product-icon", function () {

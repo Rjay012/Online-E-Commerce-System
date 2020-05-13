@@ -1,0 +1,142 @@
+﻿@*@model OECS.Models.ProductModels.ProductColorModel
+@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "RedirectToLandingPage(data)" }, new { enctype = "multipart/form-data" }))
+{*@
+    <div class="modal-header">
+        <h5 class="modal-title">New Color</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @*@Html.AntiForgeryToken()*@
+        <input type="hidden" id="txtHidProductID" />
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <select class="browser-default form-control" id="sColor">
+                            <option>Select Color</option>
+                            @foreach(var color in ViewBag.ColorList as IEnumerable<SelectListItem>)
+                            {
+                                <option value="@Convert.ToInt32(color.Value)" style="color: @color.Text">@color.Text</option>
+                            }
+                        </select>
+                    </th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Images</td>
+                    <td class="text-center">
+                        <label>
+                            @*@Html.TextBoxFor(i => i.File, new { type = "file", @class = "file-img-input d-none" })*@
+                            <input class="file-img-input" type="file" id="file1" style="display: none" />
+                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img1" style="height: 50px; width: 50px; cursor: pointer" />
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label>
+                            <input class="file-img-input" type="file" id="file2" style="display: none" />
+                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img2" style="height: 50px; width: 50px; cursor: pointer" />
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label>
+                            <input class="file-img-input" type="file" id="file3" style="display: none" />
+                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img3" style="height: 50px; width: 50px; cursor: pointer" />
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label>
+                            <input class="file-img-input" type="file" id="file4" style="display: none" />
+                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img4" style="height: 50px; width: 50px; cursor: pointer" />
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label>
+                            <input class="file-img-input" type="file" id="file5" style="display: none" />
+                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img5" style="height: 50px; width: 50px; cursor: pointer" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Is Display</td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isDisplayImg1" name="isDisplayImg" />
+                            <label class="custom-control-label" for="isDisplayImg1"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isDisplayImg2" name="isDisplayImg" />
+                            <label class="custom-control-label" for="isDisplayImg2"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isDisplayImg3" name="isDisplayImg" />
+                            <label class="custom-control-label" for="isDisplayImg3"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isDisplayImg4" name="isDisplayImg" />
+                            <label class="custom-control-label" for="isDisplayImg4"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isDisplayImg5" name="isDisplayImg" />
+                            <label class="custom-control-label" for="isDisplayImg5"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Is Main Display</td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg1" name="isMainDisplayImg" />
+                            <label class="custom-control-label" for="isMainDisplayImg1"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg2" name="isMainDisplayImg" />
+                            <label class="custom-control-label" for="isMainDisplayImg2"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg3" name="isMainDisplayImg" />
+                            <label class="custom-control-label" for="isMainDisplayImg3"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg4" name="isMainDisplayImg" />
+                            <label class="custom-control-label" for="isMainDisplayImg4"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg5" name="isMainDisplayImg" />
+                            <label class="custom-control-label" for="isMainDisplayImg5"></label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        @*<button class="d-none" type="button" id="BtnConfirmSaveNewProductColor"></button>*@
+        <button class="btn btn-primary" type="button" id="BtnSaveNewProductColor">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+@*}*@

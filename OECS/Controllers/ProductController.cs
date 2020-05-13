@@ -10,6 +10,8 @@ using System.Security.Cryptography;
 using Microsoft.Ajax.Utilities;
 using OECS.Models.CategoryModels;
 using System.IO;
+using System.Drawing;
+using System.Data.Entity;
 
 namespace OECS.Controllers
 {
@@ -26,22 +28,19 @@ namespace OECS.Controllers
         {
             List<ViewProductModel> product = (from p in dbContext.Product
                                               join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
-                                              join i in dbContext.Icon on pc.ProductColorID equals i.ProductColorID
-                                              group new { p, pc, i } by new
+                                              group new { p, pc } by new
                                               {
                                                   product = p,
-                                                  productColor = pc,
-                                                  icon = i
+                                                  productColor = pc
                                               } into grp
                                               select new ViewProductModel
                                               {
                                                   Product = grp.Key.product,
                                                   Category = grp.Key.product.Category,
                                                   ProductColor = grp.Key.productColor,
-                                                  Color = grp.Key.productColor.Color,
-                                                  Icon = grp.Key.icon
+                                                  Color = grp.Key.productColor.Color
                                               }).ToList();
-            
+
             if (!String.IsNullOrEmpty(searchString)) //search string
             {
                 product = product.Where(p => p.Category.category1.Contains(searchString) ||
@@ -50,7 +49,7 @@ namespace OECS.Controllers
 
             if (categoryID != 0 && colorID != 0)  //sort combination
             {
-                product = product.Where(p => p.Product.Category.CategoryID == categoryID && p.ProductColor.ColorID == colorID && p.ProductColor.isDisplay == true).ToList();
+                product = product.Where(p => p.Product.Category.CategoryID == categoryID && p.ProductColor.Color.ColorID == colorID && p.ProductColor.isMainDisplay == true).ToList();
                 return PartialView("Partials/_ProductList", product);
             }
             else if (categoryID != 0 && colorID == 0)
@@ -59,7 +58,7 @@ namespace OECS.Controllers
             }
             else if (categoryID == 0 && colorID != 0)
             {
-                product = product.Where(c => c.ProductColor.ColorID == colorID && c.ProductColor.isDisplay == true).ToList();
+                product = product.Where(c => c.ProductColor.Color.ColorID == colorID && c.ProductColor.isMainDisplay == true).ToList();
                 return PartialView("Partials/_ProductList", product);
             }
 
@@ -70,7 +69,13 @@ namespace OECS.Controllers
         public ActionResult NewProductModalForm(ProductModel productModel)
         {
             productModel.CategoryList = GetCategoryListItems();
-            return PartialView("Partials/Modal/_NewProduct", productModel);
+            return PartialView("Partials/Modals/_NewProduct", productModel);
+        }
+
+        public ActionResult NewColorModalForm()
+        {
+            ViewBag.ColorList = GetColorListItems();
+            return PartialView("Partials/Modals/_NewProductColor");
         }
 
         [Authorize(Roles = "1")]
@@ -80,24 +85,77 @@ namespace OECS.Controllers
             return Json(productModel, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ViewPhotoGallery(int? productID, int? colorID)
+        private IEnumerable<SelectListItem> GetColorListItems()
         {
-            if(productID == null && colorID == null)
+            List<SelectListItem> ColorListTempStorage = new List<SelectListItem>();
+            var color = dbContext.Color.ToList();
+            foreach (var item in color)
+            {
+                ColorListTempStorage.Add(new SelectListItem
+                {
+                    Value = item.ColorID.ToString(),
+                    Text = item.color1
+                });
+            }
+
+            return ColorListTempStorage;
+        }
+
+        [Authorize(Roles = "1")]
+        public ActionResult CreateNewProductColor(ProductColorModel productColorModel)
+        {
+            ProductColor productColor = new ProductColor();
+            if(ModelState.IsValid)
+            {
+                if (Request.Files.Count > 0)
+                {
+                    HttpFileCollectionBase files = Request.Files;
+                    string fname = "", extension = "";
+
+                    HttpPostedFileBase file = files[0];
+
+                    fname = Path.GetFileNameWithoutExtension(file.FileName);
+                    extension = Path.GetExtension(file.FileName);
+                    fname = fname + DateTime.Now.ToString("yymmssff") + extension;
+                    file.SaveAs(Path.Combine(Server.MapPath("/Images"), fname));
+
+                    productColor.ProductID = productColorModel.ProductID;
+                    productColor.ColorID = productColorModel.ColorID;
+                    productColor.isDisplay = productColorModel.IsDisplay;
+                    productColor.isMainDisplay = productColorModel.IsMainDisplay;
+                    productColor.path = "Images\\" + fname;
+
+                    dbContext.ProductColor.Add(productColor);
+                    dbContext.SaveChanges();
+                    return Json(productColorModel, JsonRequestBehavior.AllowGet);
+                }
+            }
+           
+            return Json(productColorModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ViewPhotoGallery(int? productID, int? colorID, int? iconID)
+        {
+            if (productID == null && colorID == null)
             {
                 return HttpNotFound();
             }
 
-            List<ViewProductModel> productImage = (from pc in dbContext.ProductColor
-                                                   join i in dbContext.Icon on pc.ProductColorID equals i.ProductColorID into l
-                                                   from n in l.DefaultIfEmpty()
-                                                   select new ViewProductModel
-                                                   {
-                                                       ProductColor = pc,
-                                                       Icon = n ?? null
-                                                   }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID).ToList();
-
+            //List<ViewProductModel> productImage = (from pc in dbContext.ProductColor
+            //                                       join i in dbContext.Icon on pc.ProductColorID equals i.ProductColorID into l
+            //                                       from n in l.DefaultIfEmpty()
+            //                                       select new ViewProductModel
+            //                                       {
+            //                                           ProductColor = pc,
+            //                                           Icon = n ?? null
+            //                                       }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID).ToList();
+            List<ViewProductModel> productImage = dbContext.ProductColor
+                                                           .Select(pc => new ViewProductModel { 
+                                                                ProductColor = pc,
+                                                                Icon = pc.Icon
+                                                           }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID && p.ProductColor.IconID == iconID).ToList();
             ViewBag.ProductID = productID;
-            return PartialView("Partials/Modal/_ProductImageGallery", productImage);
+            return PartialView("Partials/Modals/_ProductImageGallery", productImage);
         }
 
         private IEnumerable<SelectListItem> GetCategoryListItems()
@@ -121,8 +179,16 @@ namespace OECS.Controllers
         {
             var product = dbContext.Product
                                    .Join(dbContext.ProductColor, p => p.ProductID, pi => pi.ProductID,
-                                   (p, pi) => new {
-                                       p.ProductID, pi.ColorID, pi.isMainDisplay, p.productName, p.Category.category1, p.date, p.price
+                                   (p, pi) => new
+                                   {
+                                       p.ProductID,
+                                       pi.ColorID,
+                                       pi.isMainDisplay,
+                                       pi.IconID,
+                                       p.productName,
+                                       p.Category.category1,
+                                       p.date,
+                                       p.price
                                    }).Where(pi => pi.isMainDisplay == true).ToList();
 
             switch (param.iSortCol_0)  //column sorting
@@ -144,12 +210,30 @@ namespace OECS.Controllers
             //pagination
             var displayResult = product.Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList();
 
-            return Json(new {
+            return Json(new
+            {
                 aaData = displayResult,
                 param.sEcho,
                 iTotalRecords = product.Count(),
                 iTotalDisplayRecords = product.Count()
             }, JsonRequestBehavior.AllowGet);
         }
+
+        #region ("START SET IMAGE DISPLAY")
+        [Authorize(Roles = "1")]
+        public ActionResult SetUsDisplay(int? defaultID, int? selectedID)
+        {
+            UpdateDisplay(new ProductColor() { ProductColorID = (int)defaultID, isDisplay = false });  //remove previous display
+            UpdateDisplay(new ProductColor() { ProductColorID = (int)selectedID, isDisplay = true });  //set new display
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        private void UpdateDisplay(ProductColor productColor)
+        {
+            dbContext.ProductColor.Attach(productColor);
+            dbContext.Entry(productColor).Property(i => i.isDisplay).IsModified = true;  //modify and update only 1 property
+            dbContext.SaveChanges();
+        }
+        #endregion ("END SET IMAGE DISPLAY")
     }
 }

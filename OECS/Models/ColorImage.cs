@@ -12,18 +12,10 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductColor
+    public partial class ColorImage
     {
-        public int ProductColorID { get; set; }
-        public Nullable<int> ProductID { get; set; }
+        public int ColorImageID { get; set; }
         public Nullable<int> ColorID { get; set; }
-        public Nullable<bool> isDisplay { get; set; }
-        public string path { get; set; }
-        public Nullable<bool> isMainDisplay { get; set; }
-        public Nullable<int> IconID { get; set; }
-    
-        public virtual Color Color { get; set; }
-        public virtual Icon Icon { get; set; }
-        public virtual Product Product { get; set; }
+        public Nullable<int> ImageID { get; set; }
     }
 }

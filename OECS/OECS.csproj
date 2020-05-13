@@ -182,6 +182,9 @@
     <Compile Include="Models\Color.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ColorImage.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Customer.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -221,6 +224,7 @@
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductModels\ProductColorModel.cs" />
     <Compile Include="Models\ProductModels\ProductModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\ProductSize.cs">
@@ -1822,6 +1826,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\AddImageIcon\add-image-icon.png" />
     <Content Include="Images\Category\Denim\Denim Shirt\Black\15.jpg" />
     <Content Include="Images\Category\Denim\Denim Shirt\Black\Icon\15.jpg" />
     <Content Include="Images\Category\Denim\Denim Shirt\Lightblue\12.jpg" />
@@ -2339,12 +2344,13 @@
     <Content Include="Views\Color\Index.cshtml" />
     <Content Include="Views\Color\Partials\_ProductColor.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Product\Partials\Modal\_NewProduct.cshtml" />
-    <Content Include="Views\Product\Partials\Modal\_NewProductColor.cshtml" />
-    <Content Include="Views\Product\Partials\Modal\_ProductImageGallery.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_NewProduct.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_NewProductColor.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_ProductImageGallery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Icons\" />
     <Folder Include="Views\Dashboard\Partials\" />
     <Folder Include="Views\Supplier\" />
   </ItemGroup>

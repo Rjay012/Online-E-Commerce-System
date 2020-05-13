@@ -5,12 +5,16 @@
 <div class="row wow fadeIn">
     @{
         oecsEntities dbContext = new oecsEntities();
-        var product = Model.GroupBy(c => new { c.ProductColor, c.Icon, c.Product });
+        var product = Model.GroupBy(c => new { c.ProductColor, c.Product });
 
         foreach (var p in product)
         {
-            List<Icon> icon = dbContext.Icon
-                                       .Where(i => i.ProductColor.ProductID == p.Key.Product.ProductID).ToList();
+            var icon = dbContext.ProductColor
+                                .Where(i => i.ProductID == p.Key.Product.ProductID && i.isDisplay == true)
+                                .Select(i => new {
+                                    i.path,
+                                    i.Icon.icon1
+                                }).ToList();
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card">
                     <div class="view overlay">
@@ -27,8 +31,8 @@
                             <div class="col-sm-12">
                                 @foreach (var i in icon)
                                 {
-                                    <a class="product-icon" id="@i.ProductColor.path-@p.Key.Product.ProductID">
-                                        <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle" alt="">
+                                    <a class="product-icon" id="@i.path-@p.Key.Product.ProductID">
+                                        <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail" alt="">
                                     </a>
                                 }
                             </div>
