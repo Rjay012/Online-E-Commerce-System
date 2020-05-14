@@ -18,7 +18,6 @@ namespace OECS.Models
         public Product()
         {
             this.ProductColor = new HashSet<ProductColor>();
-            this.ProductImage = new HashSet<ProductImage>();
             this.ProductSize = new HashSet<ProductSize>();
             this.Stock = new HashSet<Stock>();
             this.Supply = new HashSet<Supply>();
@@ -34,8 +33,6 @@ namespace OECS.Models
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductColor> ProductColor { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductImage> ProductImage { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductSize> ProductSize { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

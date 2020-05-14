@@ -16,9 +16,11 @@ namespace OECS.Models
     {
         public int ImageID { get; set; }
         public string path { get; set; }
-        public Nullable<int> ProductID { get; set; }
-        public Nullable<bool> isDisplay { get; set; }
+        public Nullable<int> ProductColorID { get; set; }
+        public Nullable<bool> isMainDisplay { get; set; }
+        public Nullable<int> IconID { get; set; }
     
-        public virtual Product Product { get; set; }
+        public virtual Icon Icon { get; set; }
+        public virtual ProductColor ProductColor { get; set; }
     }
 }

@@ -9,17 +9,18 @@
 <div class="modal-body">
     <div class="container-fluid clearfix">
         <div class="gallery text-center">
+            <input type="hidden" id="txtHidProductID" value="@ViewBag.ProductID" />
             <div class="previews">
                 @{
                     oecsEntities dbContext = new oecsEntities();
                     int productID = Convert.ToInt32(ViewBag.ProductID);
-                    var icon = dbContext.ProductColor
-                                        .Where(i => i.ProductID == productID)
+                    var icon = dbContext.ProductImage
+                                        .Where(i => i.ProductColor.ProductID == productID)
                                         .Select(i => new
                                         {
                                             i.IconID,
-                                            i.ProductID,
-                                            i.ColorID,
+                                            i.ProductColor.ProductID,
+                                            i.ProductColor.ColorID,
                                             i.Icon.icon1
                                         }).Distinct().ToList();
 
@@ -27,20 +28,19 @@
                     var isMainDisplay = "";
                     foreach (var img in Model)
                     {
-                        isMainDisplay = (img.ProductColor.isMainDisplay == true ? "main-display" : "");
+                        isMainDisplay = (img.ProductImage.isMainDisplay == true ? "main-display" : "");
 
-                        <div>@*@img.ProductColor.isDisplay ~ @img.ProductColor.isMainDisplay*@</div>
                         if (img.ProductColor.isDisplay == true)
                         {
-                            defaultImg = img.ProductColor.path;
+                            defaultImg = img.ProductImage.path;
                             <a class="selected default-img @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@defaultImg">
                                 <img src="@defaultImg" style="height: 100px; width: 100px;" />
                             </a>
                         }
                         else
                         {
-                            <a class="img-link-wrapper @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@img.ProductColor.path">
-                                <img src="@img.ProductColor.path" style="height: 100px; width: 100px;" />
+                            <a class="img-link-wrapper @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@img.ProductImage.path">
+                                <img src="@img.ProductImage.path" style="height: 100px; width: 100px;" />
                             </a>
                         }
                     }

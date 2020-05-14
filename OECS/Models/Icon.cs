@@ -17,13 +17,13 @@ namespace OECS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Icon()
         {
-            this.ProductColor = new HashSet<ProductColor>();
+            this.ProductImage = new HashSet<ProductImage>();
         }
     
         public int IconID { get; set; }
         public string icon1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductColor> ProductColor { get; set; }
+        public virtual ICollection<ProductImage> ProductImage { get; set; }
     }
 }

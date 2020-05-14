@@ -56,7 +56,7 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
             contentType: false,
             processData: false,
             success: function (result) {
-                alert(JSON.stringify(result));
+                //alert(JSON.stringify(result));
             }
         });
 
@@ -68,15 +68,18 @@ $(document).on("click", "#BtnSetUsDisplay", function () {
     var defaultID = $(".default-img").attr("productColorID");
     var selectedID = $(".selected").attr("productColorID");
 
-    FetchData("/Product/SetUsDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
+    FetchData("/Product/SetDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
         alert();
     });
 });
 
 $(document).on("click", "#BtnSetUsMainDisplay", function () {
-    var mainDisplayID = $(".main-display").attr("productColorID");
+    //var mainDisplayID = $(".main-display").attr("productColorID");
     var selectedID = $(".selected").attr("productColorID");
-    alert(mainDisplayID + "~" + selectedID);
+
+    FetchData("/Product/SetMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedID: selectedID }).done(function (result) {
+        alert();
+    });
 });
 
 function ReadUrl(input, img) {

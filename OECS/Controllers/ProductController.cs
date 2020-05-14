@@ -12,6 +12,7 @@ using OECS.Models.CategoryModels;
 using System.IO;
 using System.Drawing;
 using System.Data.Entity;
+using EntityFramework.Extensions;
 
 namespace OECS.Controllers
 {
@@ -26,20 +27,30 @@ namespace OECS.Controllers
 
         public ActionResult Show(int categoryID, int colorID, string searchString)
         {
-            List<ViewProductModel> product = (from p in dbContext.Product
-                                              join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
-                                              group new { p, pc } by new
-                                              {
-                                                  product = p,
-                                                  productColor = pc
-                                              } into grp
-                                              select new ViewProductModel
-                                              {
-                                                  Product = grp.Key.product,
-                                                  Category = grp.Key.product.Category,
-                                                  ProductColor = grp.Key.productColor,
-                                                  Color = grp.Key.productColor.Color
-                                              }).ToList();
+            //List<ViewProductModel> product = (from p in dbContext.Product
+            //                                  join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
+            //                                  join pi in dbContext.ProductImage on pc.ProductColorID equals pi.ProductColorID
+            //                                  group new { p, pc, pi } by new
+            //                                  {
+            //                                      product = p,
+            //                                      productColor = pc,
+            //                                      productImage = pi
+            //                                  } into grp
+            //                                  select new ViewProductModel
+            //                                  {
+            //                                      Product = grp.Key.product,
+            //                                      Category = grp.Key.product.Category,
+            //                                      ProductColor = grp.Key.productColor,
+            //                                      ProductImage = grp.Key.productImage,
+            //                                      Color = grp.Key.productColor.Color
+            //                                  }).ToList();
+            List<ViewProductModel> product = dbContext.Product
+                                                      .Join(dbContext.ProductImage)
+                                                      .Select(p => new ViewProductModel
+                                                      {
+                                                          Product = p.ProductColor.ProductImage,
+                                                          ProductImage = p.ProductColor
+                                                      }).ToList();
 
             if (!String.IsNullOrEmpty(searchString)) //search string
             {
@@ -49,7 +60,7 @@ namespace OECS.Controllers
 
             if (categoryID != 0 && colorID != 0)  //sort combination
             {
-                product = product.Where(p => p.Product.Category.CategoryID == categoryID && p.ProductColor.Color.ColorID == colorID && p.ProductColor.isMainDisplay == true).ToList();
+                product = product.Where(p => p.Product.Category.CategoryID == categoryID && p.ProductColor.Color.ColorID == colorID && p.ProductColor.toDisplay == true).ToList();
                 return PartialView("Partials/_ProductList", product);
             }
             else if (categoryID != 0 && colorID == 0)
@@ -58,12 +69,12 @@ namespace OECS.Controllers
             }
             else if (categoryID == 0 && colorID != 0)
             {
-                product = product.Where(c => c.ProductColor.Color.ColorID == colorID && c.ProductColor.isMainDisplay == true).ToList();
+                product = product.Where(c => c.ProductColor.Color.ColorID == colorID && c.ProductColor.toDisplay == true).ToList();
                 return PartialView("Partials/_ProductList", product);
             }
 
             //PagedList<Product> newProduct = new PagedList<Product>(product, page, pageSize);
-            return PartialView("Partials/_ProductList", product.Where(i => i.ProductColor.isMainDisplay == true).ToList());
+            return PartialView("Partials/_ProductList", product.Where(i => i.ProductImage.isMainDisplay == true).ToList());
         }
 
         public ActionResult NewProductModalForm(ProductModel productModel)
@@ -104,30 +115,37 @@ namespace OECS.Controllers
         [Authorize(Roles = "1")]
         public ActionResult CreateNewProductColor(ProductColorModel productColorModel)
         {
-            ProductColor productColor = new ProductColor();
+            ProductImage productImage = new ProductImage();
             if(ModelState.IsValid)
             {
                 if (Request.Files.Count > 0)
                 {
                     HttpFileCollectionBase files = Request.Files;
-                    string fname = "", extension = "";
-
                     HttpPostedFileBase file = files[0];
 
-                    fname = Path.GetFileNameWithoutExtension(file.FileName);
-                    extension = Path.GetExtension(file.FileName);
+                    var fname = Path.GetFileNameWithoutExtension(file.FileName);
+                    var extension = Path.GetExtension(file.FileName);
                     fname = fname + DateTime.Now.ToString("yymmssff") + extension;
                     file.SaveAs(Path.Combine(Server.MapPath("/Images"), fname));
 
-                    productColor.ProductID = productColorModel.ProductID;
-                    productColor.ColorID = productColorModel.ColorID;
-                    productColor.isDisplay = productColorModel.IsDisplay;
-                    productColor.isMainDisplay = productColorModel.IsMainDisplay;
-                    productColor.path = "Images\\" + fname;
+                    var noOfDuplicateInColor = dbContext.ProductColor
+                                                        .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Count();
 
-                    dbContext.ProductColor.Add(productColor);
+                    bool toDisplay = noOfDuplicateInColor == 0 ? true : false;
+
+                    productImage.isMainDisplay = productColorModel.IsMainDisplay;
+                    productImage.path = "Images\\" + fname;
+                    productImage.ProductColor = new ProductColor
+                    {
+                        ProductID = productColorModel.ProductID,
+                        ColorID = productColorModel.ColorID,
+                        isDisplay = productColorModel.IsDisplay,
+                        toDisplay = toDisplay
+                    };
+
+                    dbContext.ProductImage.Add(productImage);
                     dbContext.SaveChanges();
-                    return Json(productColorModel, JsonRequestBehavior.AllowGet);
+                    return Json(productImage, JsonRequestBehavior.AllowGet);
                 }
             }
            
@@ -141,19 +159,13 @@ namespace OECS.Controllers
                 return HttpNotFound();
             }
 
-            //List<ViewProductModel> productImage = (from pc in dbContext.ProductColor
-            //                                       join i in dbContext.Icon on pc.ProductColorID equals i.ProductColorID into l
-            //                                       from n in l.DefaultIfEmpty()
-            //                                       select new ViewProductModel
-            //                                       {
-            //                                           ProductColor = pc,
-            //                                           Icon = n ?? null
-            //                                       }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID).ToList();
-            List<ViewProductModel> productImage = dbContext.ProductColor
-                                                           .Select(pc => new ViewProductModel { 
-                                                                ProductColor = pc,
-                                                                Icon = pc.Icon
-                                                           }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID && p.ProductColor.IconID == iconID).ToList();
+            List<ViewProductModel> productImage = dbContext.ProductImage
+                                                           .Select(pi => new ViewProductModel
+                                                           {
+                                                               ProductImage = pi,
+                                                               ProductColor = pi.ProductColor,
+                                                               Icon = pi.Icon
+                                                           }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID && p.ProductImage.IconID == iconID).ToList();
             ViewBag.ProductID = productID;
             return PartialView("Partials/Modals/_ProductImageGallery", productImage);
         }
@@ -177,18 +189,16 @@ namespace OECS.Controllers
         [Authorize(Roles = "1")]
         public ActionResult ShowProduct(DataTableParam param)
         {
-            var product = dbContext.Product
-                                   .Join(dbContext.ProductColor, p => p.ProductID, pi => pi.ProductID,
-                                   (p, pi) => new
-                                   {
-                                       p.ProductID,
-                                       pi.ColorID,
+            var product = dbContext.ProductImage
+                                   .Select(pi => new {
+                                       pi.ProductColor.Product.ProductID,
+                                       pi.ProductColor.ColorID,
                                        pi.isMainDisplay,
                                        pi.IconID,
-                                       p.productName,
-                                       p.Category.category1,
-                                       p.date,
-                                       p.price
+                                       pi.ProductColor.Product.productName,
+                                       pi.ProductColor.Product.Category.category1,
+                                       pi.ProductColor.Product.date,
+                                       pi.ProductColor.Product.price
                                    }).Where(pi => pi.isMainDisplay == true).ToList();
 
             switch (param.iSortCol_0)  //column sorting
@@ -221,18 +231,59 @@ namespace OECS.Controllers
 
         #region ("START SET IMAGE DISPLAY")
         [Authorize(Roles = "1")]
-        public ActionResult SetUsDisplay(int? defaultID, int? selectedID)
+        public ActionResult SetDisplay(int? defaultID, int? selectedID)
         {
+            if(defaultID == null && selectedID == null)
+            {
+                return HttpNotFound();
+            }
+
             UpdateDisplay(new ProductColor() { ProductColorID = (int)defaultID, isDisplay = false });  //remove previous display
             UpdateDisplay(new ProductColor() { ProductColorID = (int)selectedID, isDisplay = true });  //set new display
+
             return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SetMainDisplay(int? productID, int? selectedID)
+        {
+            if(productID == null && selectedID == null)
+            {
+                return HttpNotFound();
+            }
+
+            //UpdateMainDisplay(new ProductColor() { ProductID = (int)productID }, true);  //remove previous  main display
+            //UpdateMainDisplay(new ProductImage() { ProductColorID = (int)selectedID }, false);  //set new main display
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        private void UpdateMainDisplay(ProductImage productImageModel, bool isMainDisplay) //this update uses (ENTITY FRAMEWORK.EXTENDED) for more info see https://www.seguetech.com/performing-bulk-updatesentity-framework-6-1/
+        {
+            if (ModelState.IsValid)
+            {
+                if (isMainDisplay == true)
+                {
+                    dbContext.ProductImage
+                             .Where(i => i.ProductColor.ProductID == productImageModel.ProductColor.ProductID && i.isMainDisplay == true)
+                             .Update(i => new ProductImage() { isMainDisplay = false });
+                }
+                else
+                {
+                    dbContext.ProductImage
+                             .Where(i => i.ProductColorID == productImageModel.ProductColorID)
+                             .Update(i => new ProductImage() { isMainDisplay = true });
+                }
+            }
         }
 
         private void UpdateDisplay(ProductColor productColor)
         {
-            dbContext.ProductColor.Attach(productColor);
-            dbContext.Entry(productColor).Property(i => i.isDisplay).IsModified = true;  //modify and update only 1 property
-            dbContext.SaveChanges();
+            if(ModelState.IsValid)
+            {
+                dbContext.ProductColor.Attach(productColor);
+                dbContext.Entry(productColor).Property(i => i.isDisplay).IsModified = true;  //modify and update only 1 property
+                dbContext.SaveChanges();
+            }
         }
         #endregion ("END SET IMAGE DISPLAY")
     }
