@@ -27,34 +27,19 @@ namespace OECS.Controllers
 
         public ActionResult Show(int categoryID, int colorID, string searchString)
         {
-            //List<ViewProductModel> product = (from p in dbContext.Product
-            //                                  join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
-            //                                  join pi in dbContext.ProductImage on pc.ProductColorID equals pi.ProductColorID
-            //                                  group new { p, pc, pi } by new
-            //                                  {
-            //                                      product = p,
-            //                                      productColor = pc,
-            //                                      productImage = pi
-            //                                  } into grp
-            //                                  select new ViewProductModel
-            //                                  {
-            //                                      Product = grp.Key.product,
-            //                                      Category = grp.Key.product.Category,
-            //                                      ProductColor = grp.Key.productColor,
-            //                                      ProductImage = grp.Key.productImage,
-            //                                      Color = grp.Key.productColor.Color
-            //                                  }).ToList();
-            List<ViewProductModel> product = dbContext.Product
-                                                      .Join(dbContext.ProductImage)
-                                                      .Select(p => new ViewProductModel
-                                                      {
-                                                          Product = p.ProductColor.ProductImage,
-                                                          ProductImage = p.ProductColor
-                                                      }).ToList();
+            List<ViewProductModel> product = (from p in dbContext.Product
+                                              join pc in dbContext.ProductColor on p.ProductID equals pc.ProductID
+                                              join pi in dbContext.ProductImage on pc.ProductColorID equals pi.ProductColorID
+                                              select new ViewProductModel
+                                              {
+                                                  Product = p,
+                                                  ProductImage = pi,
+                                                  ProductColor = pc
+                                              }).ToList();
 
             if (!String.IsNullOrEmpty(searchString)) //search string
             {
-                product = product.Where(p => p.Category.category1.Contains(searchString) ||
+                product = product.Where(p => p.Product.Category.category1.Contains(searchString) ||
                                              p.Product.productName.Contains(searchString)).ToList();  //you removed color searching
             }
 
@@ -128,10 +113,14 @@ namespace OECS.Controllers
                     fname = fname + DateTime.Now.ToString("yymmssff") + extension;
                     file.SaveAs(Path.Combine(Server.MapPath("/Images"), fname));
 
+                    /*
+                     * this code might be a little bit tricky, if the product has duplicate color e.g 2 greens, set 1 color to (toDisplay) to avoid product duplication
+                     * count the number of product with duplicate color, if none set each 1 to true
+                     */
                     var noOfDuplicateInColor = dbContext.ProductColor
                                                         .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Count();
 
-                    bool toDisplay = noOfDuplicateInColor == 0 ? true : false;
+                    bool toDisplay = noOfDuplicateInColor == 0 ? true : false;  //set to Display
 
                     productImage.isMainDisplay = productColorModel.IsMainDisplay;
                     productImage.path = "Images\\" + fname;
@@ -251,26 +240,26 @@ namespace OECS.Controllers
                 return HttpNotFound();
             }
 
-            //UpdateMainDisplay(new ProductColor() { ProductID = (int)productID }, true);  //remove previous  main display
-            //UpdateMainDisplay(new ProductImage() { ProductColorID = (int)selectedID }, false);  //set new main display
+            UpdateMainDisplay(new ProductColorModel() { ProductID = (int)productID }, true);  //remove previous  main display
+            UpdateMainDisplay(new ProductColorModel() { ProductColorID = (int)selectedID }, false);  //set new main display
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        private void UpdateMainDisplay(ProductImage productImageModel, bool isMainDisplay) //this update uses (ENTITY FRAMEWORK.EXTENDED) for more info see https://www.seguetech.com/performing-bulk-updatesentity-framework-6-1/
+        private void UpdateMainDisplay(ProductColorModel productColorModel, bool isMainDisplay) //this update uses (ENTITY FRAMEWORK.EXTENDED) for more info see https://www.seguetech.com/performing-bulk-updatesentity-framework-6-1/
         {
             if (ModelState.IsValid)
             {
                 if (isMainDisplay == true)
                 {
                     dbContext.ProductImage
-                             .Where(i => i.ProductColor.ProductID == productImageModel.ProductColor.ProductID && i.isMainDisplay == true)
+                             .Where(i => i.ProductColor.ProductID == productColorModel.ProductID && i.isMainDisplay == true)
                              .Update(i => new ProductImage() { isMainDisplay = false });
                 }
                 else
                 {
                     dbContext.ProductImage
-                             .Where(i => i.ProductColorID == productImageModel.ProductColorID)
+                             .Where(i => i.ProductColorID == productColorModel.ProductColorID)
                              .Update(i => new ProductImage() { isMainDisplay = true });
                 }
             }

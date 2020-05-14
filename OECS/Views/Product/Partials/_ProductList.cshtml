@@ -24,7 +24,7 @@
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-                    @if(p.Key.Product.ProductColor.Where(pc => pc.isDisplay == true).Count() > 1)
+                    @if (p.Key.Product.ProductColor.Where(pc => pc.isDisplay == true).Count() > 1)
                     {
                         <div class="col-sm-6">
                             <a class="badge badge-light float-left myPopover" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">

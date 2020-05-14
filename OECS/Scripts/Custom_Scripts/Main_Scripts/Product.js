@@ -68,18 +68,25 @@ $(document).on("click", "#BtnSetUsDisplay", function () {
     var defaultID = $(".default-img").attr("productColorID");
     var selectedID = $(".selected").attr("productColorID");
 
-    FetchData("/Product/SetDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
-        alert();
-    });
+    if (confirm("Sure you want to set this image us default color display?") == true) {
+        FetchData("/Product/SetDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
+            alert("Image Setup");
+        });
+    }
 });
 
 $(document).on("click", "#BtnSetUsMainDisplay", function () {
-    //var mainDisplayID = $(".main-display").attr("productColorID");
     var selectedID = $(".selected").attr("productColorID");
 
-    FetchData("/Product/SetMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedID: selectedID }).done(function (result) {
-        alert();
-    });
+    if (confirm("Sure you want to set this image us default display?") == true) {
+        FetchData("/Product/SetMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedID: selectedID }).done(function (result) {
+            alert("Image Setup");
+        });
+    }
+});
+
+$(document).on("click", "#BtnSetUsBothDisplay", function () {
+    $("#BtnSetUsDisplay, #BtnSetUsMainDisplay").trigger("click");
 });
 
 function ReadUrl(input, img) {
