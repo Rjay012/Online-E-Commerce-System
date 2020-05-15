@@ -7,10 +7,12 @@ font-family: 'Calibri', 'CalibriRegular', Verdana, Arial, Helvetica, sans-serif;
 }*/
 .gallery {
 }
+
 .gallery .previews, .gallery .full, .gallery .desc {
-float: left;
-margin-right: 10px;
+    float: left;
+    margin-right: 10px;
 }
+
 .gallery .desc, .gallery .full {
 width: 400px;
 font-size: 12px;
@@ -41,4 +43,14 @@ visibility: hidden;
 display: block;
 height: 0;
 clear: both;
+}
+
+.full img {
+    height: 100%;
+    width: 100%;
+}
+
+.gallery .previews a img {
+    height: 100px;
+    width: 100px;
 }

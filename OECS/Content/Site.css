@@ -22,6 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }*/
+html, body, header, .carousel {
+    height: 60vh;
+}
+
+.card-img-top {
+    height: 300px;
+}
 
 .color-dot-wrapper {
     padding: 10px;

@@ -1,0 +1,134 @@
+﻿<div class="modal-header">
+    <h5 class="modal-title">Edit Color</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    <select class="browser-default form-control" id="sColor">
+                        <option>Select Color</option>
+                        @*@foreach (var color in ViewBag.ColorList as IEnumerable<SelectListItem>)
+                        {
+                            <option value="@Convert.ToInt32(color.Value)" style="color: @color.Text">@color.Text</option>
+                        }*@
+                    </select>
+                </th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Images</td>
+                <td class="text-center">
+                    <label>
+                        <input class="edit-img-input" type="file" id="fileEdit1" style="display: none" />
+                        <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="imgEdit1" />
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label>
+                        <input class="edit-img-input" type="file" id="fileEdit2" style="display: none" />
+                        <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="imgEdit2" />
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label>
+                        <input class="edit-img-input" type="file" id="fileEdit3" style="display: none" />
+                        <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="imgEdit3" />
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label>
+                        <input class="edit-img-input" type="file" id="fileEdit4" style="display: none" />
+                        <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="imgEdit4" />
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label>
+                        <input class="edit-img-input" type="file" id="fileEdit5" style="display: none" />
+                        <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="imgEdit5" />
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Set Us Color Display</td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isDisplayEditImg1" name="isDisplayEditImg" />
+                        <label class="custom-control-label" for="isDisplayEditImg1"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isDisplayEditImg2" name="isDisplayEditImg" />
+                        <label class="custom-control-label" for="isDisplayEditImg2"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isDisplayEditImg3" name="isDisplayEditImg" />
+                        <label class="custom-control-label" for="isDisplayEditImg3"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isDisplayEditImg4" name="isDisplayEditImg" />
+                        <label class="custom-control-label" for="isDisplayEditImg4"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isDisplayEditImg5" name="isDisplayEditImg" />
+                        <label class="custom-control-label" for="isDisplayEditImg5"></label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Set Us Main Display</td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isMainDisplayEditImg1" name="isMainDisplayEditImg" />
+                        <label class="custom-control-label" for="isMainDisplayEditImg1"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isMainDisplayEditImg2" name="isMainDisplayEditImg" />
+                        <label class="custom-control-label" for="isMainDisplayEditImg2"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isMainDisplayEditImg3" name="isMainDisplayEditImg" />
+                        <label class="custom-control-label" for="isMainDisplayEditImg3"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isMainDisplayEditImg4" name="isMainDisplayEditImg" />
+                        <label class="custom-control-label" for="isMainDisplayEditImg4"></label>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="isMainDisplayEditImg5" name="isMainDisplayEditImg" />
+                        <label class="custom-control-label" for="isMainDisplayEditImg5"></label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" id="BtnSaveEditProductColor">Save</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+</div>

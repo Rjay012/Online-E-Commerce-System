@@ -5,14 +5,18 @@
             return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>View Gallery</button>";
         }
     },
-    { 'data': 'date' }, { 'data': 'price' },
+    { 'data': 'date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'price' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-info btn-sm' type='button' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'>Add Colors</button>" +
+            return "<button class='btn btn-info btn-sm dropdown-toggle mr-4' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Color</button>" +
+                "<div class='dropdown-menu'>" +
+                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'>Add</a>" +
+                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ")'>Edit</a>" +
+                "</div>" +
                 "<button class='btn btn-warning btn-sm' type='button' data-toggle='modal' data-target='#myModal' onclick=''>Add Sizes</button>";
         }
-    }
-    ];
+    }];
+
     var columnDefs = [{
         targets: [0, 1, 2],
         visible: false,
@@ -103,6 +107,12 @@ function AddColorImages(productID) {
     FetchData("/Product/NewColorModalForm", null).done(function (content) {
         $("#NewProductColorForm").html(content);
         $("#txtHidProductID").val(productID);
+    });
+}
+
+function EditColorImages(productID) {
+    FetchData("/Product/EditColorModalForm", null).done(function (content) {
+        $("#EditProductColorForm").html(content);
     });
 }
 

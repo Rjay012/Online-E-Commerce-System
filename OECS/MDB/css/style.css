@@ -1,0 +1,10 @@
+.icon {
+    height: 30px;
+    width: 30px;
+}
+
+.img-display {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}

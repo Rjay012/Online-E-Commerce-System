@@ -23,7 +23,7 @@ namespace OECS
                 LoginPath = new PathString("/Account/Index"),
                 LogoutPath = new PathString("/Account/Index"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(5.0),
-                ReturnUrlParameter = "/Home/Index"
+                ReturnUrlParameter = "/Account"
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);

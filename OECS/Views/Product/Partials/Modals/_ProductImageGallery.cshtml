@@ -34,20 +34,20 @@
                         {
                             defaultImg = img.ProductImage.path;
                             <a class="selected default-img @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@defaultImg">
-                                <img src="@defaultImg" style="height: 100px; width: 100px;" />
+                                <img src="@defaultImg" />
                             </a>
                         }
                         else
                         {
                             <a class="img-link-wrapper @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@img.ProductImage.path">
-                                <img src="@img.ProductImage.path" style="height: 100px; width: 100px;" />
+                                <img src="@img.ProductImage.path" />
                             </a>
                         }
                     }
                 }
             </div>
             <div class="full">
-                <img src="@defaultImg" style="height: 100%; width: 100%;" />
+                <img src="@defaultImg" />
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
         @foreach (var i in icon)
         {
             <a onclick="ViewProductPhotoGallery(parseInt(@i.ProductID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                <img src="@i.icon1" style="height: 30px; width: 30px;" class="img-fluid z-depth-1 rounded-circle img-thumbnail">
+                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon">
             </a>
         }
     </div>

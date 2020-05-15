@@ -20,6 +20,7 @@ namespace OECS.Controllers
     {
         oecsEntities dbContext = new oecsEntities();
         // GET: Product
+        [Authorize(Roles = "1,2,3")]
         public ActionResult Index()
         {
             return View();
@@ -62,6 +63,7 @@ namespace OECS.Controllers
             return PartialView("Partials/_ProductList", product.Where(i => i.ProductImage.isMainDisplay == true).ToList());
         }
 
+        #region ("START MODAL FORMS")
         public ActionResult NewProductModalForm(ProductModel productModel)
         {
             productModel.CategoryList = GetCategoryListItems();
@@ -73,6 +75,12 @@ namespace OECS.Controllers
             ViewBag.ColorList = GetColorListItems();
             return PartialView("Partials/Modals/_NewProductColor");
         }
+
+        public ActionResult EditColorModalForm()
+        {
+            return PartialView("Partials/Modals/_EditProductColor");
+        }
+        #endregion ("END MODAL FORMS")
 
         [Authorize(Roles = "1")]
         public ActionResult Create(ProductModel productModel)
@@ -141,6 +149,8 @@ namespace OECS.Controllers
             return Json(productColorModel, JsonRequestBehavior.AllowGet);
         }
 
+        
+
         public ActionResult ViewPhotoGallery(int? productID, int? colorID, int? iconID)
         {
             if (productID == null && colorID == null)
@@ -190,18 +200,24 @@ namespace OECS.Controllers
                                        pi.ProductColor.Product.price
                                    }).Where(pi => pi.isMainDisplay == true).ToList();
 
+            if(!String.IsNullOrEmpty(param.sSearch))
+            {
+                product = product.Where(p => p.productName.ToLower().Contains(param.sSearch) ||
+                                             p.category1.ToLower().Contains(param.sSearch)).ToList();
+            }
+
             switch (param.iSortCol_0)  //column sorting
             {
-                case 1:
+                case 3:
                     product = param.sSortDir_0 == "asc" ? product.OrderBy(c => c.productName).ToList() : product.OrderByDescending(c => c.productName).ToList();
                     break;
-                case 2:
+                case 4:
                     product = param.sSortDir_0 == "asc" ? product.OrderBy(c => c.category1).ToList() : product.OrderByDescending(c => c.category1).ToList();
                     break;
-                case 4:
+                case 6:
                     product = param.sSortDir_0 == "asc" ? product.OrderBy(c => c.date).ToList() : product.OrderByDescending(c => c.date).ToList();
                     break;
-                case 5:
+                case 7:
                     product = param.sSortDir_0 == "asc" ? product.OrderBy(c => c.price).ToList() : product.OrderByDescending(c => c.price).ToList();
                     break;
             }
@@ -253,13 +269,13 @@ namespace OECS.Controllers
                 if (isMainDisplay == true)
                 {
                     dbContext.ProductImage
-                             .Where(i => i.ProductColor.ProductID == productColorModel.ProductID && i.isMainDisplay == true)
+                             .Where(i => i.ProductColor.ProductID == productColorModel.ProductID && i.isMainDisplay == true)  //remove old main display
                              .Update(i => new ProductImage() { isMainDisplay = false });
                 }
                 else
                 {
                     dbContext.ProductImage
-                             .Where(i => i.ProductColorID == productColorModel.ProductColorID)
+                             .Where(i => i.ProductColorID == productColorModel.ProductColorID)  //set new main display
                              .Update(i => new ProductImage() { isMainDisplay = true });
                 }
             }
