@@ -13,7 +13,7 @@ namespace OECS.Models.ProductModels
         public int ColorID { get; set; }
         public bool IsDisplay { get; set; }
         public bool IsMainDisplay { get; set; }
-
+        public string Path { get; set; }
         public IEnumerable<SelectListItem> ColorList { get; set; }
     }
 }

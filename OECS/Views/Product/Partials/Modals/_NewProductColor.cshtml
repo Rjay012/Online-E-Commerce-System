@@ -36,31 +36,31 @@
                     <td class="text-center">
                         <label>
                             @*@Html.TextBoxFor(i => i.File, new { type = "file", @class = "file-img-input d-none" })*@
-                            <input class="file-img-input" type="file" id="file1" style="display: none" />
+                            <input class="file-img-input" type="file" id="file-1" style="display: none" />
                             <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img1" />
                         </label>
                     </td>
                     <td class="text-center">
                         <label>
-                            <input class="file-img-input" type="file" id="file2" style="display: none" />
+                            <input class="file-img-input" type="file" id="file-2" style="display: none" />
                             <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img2" />
                         </label>
                     </td>
                     <td class="text-center">
                         <label>
-                            <input class="file-img-input" type="file" id="file3" style="display: none" />
+                            <input class="file-img-input" type="file" id="file-3" style="display: none" />
                             <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img3" />
                         </label>
                     </td>
                     <td class="text-center">
                         <label>
-                            <input class="file-img-input" type="file" id="file4" style="display: none" />
+                            <input class="file-img-input" type="file" id="file-4" style="display: none" />
                             <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img4" />
                         </label>
                     </td>
                     <td class="text-center">
                         <label>
-                            <input class="file-img-input" type="file" id="file5" style="display: none" />
+                            <input class="file-img-input" type="file" id="file-5" style="display: none" />
                             <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img5" />
                         </label>
                     </td>
@@ -69,32 +69,32 @@
                     <td>Set Us Color Display</td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg1" name="isDisplayImg" />
-                            <label class="custom-control-label" for="isDisplayImg1"></label>
+                            <input type="radio" class="custom-control-input" id="isDisplayImg-1" name="isDisplayImg" disabled />
+                            <label class="custom-control-label" for="isDisplayImg-1"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg2" name="isDisplayImg" />
-                            <label class="custom-control-label" for="isDisplayImg2"></label>
+                            <input type="radio" class="custom-control-input" id="isDisplayImg-2" name="isDisplayImg" disabled />
+                            <label class="custom-control-label" for="isDisplayImg-2"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg3" name="isDisplayImg" />
-                            <label class="custom-control-label" for="isDisplayImg3"></label>
+                            <input type="radio" class="custom-control-input" id="isDisplayImg-3" name="isDisplayImg" disabled />
+                            <label class="custom-control-label" for="isDisplayImg-3"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg4" name="isDisplayImg" />
-                            <label class="custom-control-label" for="isDisplayImg4"></label>
+                            <input type="radio" class="custom-control-input" id="isDisplayImg-4" name="isDisplayImg" disabled />
+                            <label class="custom-control-label" for="isDisplayImg-4"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg5" name="isDisplayImg" />
-                            <label class="custom-control-label" for="isDisplayImg5"></label>
+                            <input type="radio" class="custom-control-input" id="isDisplayImg-5" name="isDisplayImg" disabled />
+                            <label class="custom-control-label" for="isDisplayImg-5"></label>
                         </div>
                     </td>
                 </tr>
@@ -102,37 +102,42 @@
                     <td>Set Us Main Display</td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg1" name="isMainDisplayImg" />
-                            <label class="custom-control-label" for="isMainDisplayImg1"></label>
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-1" name="isMainDisplayImg" disabled />
+                            <label class="custom-control-label" for="isMainDisplayImg-1"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg2" name="isMainDisplayImg" />
-                            <label class="custom-control-label" for="isMainDisplayImg2"></label>
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-2" name="isMainDisplayImg" disabled />
+                            <label class="custom-control-label" for="isMainDisplayImg-2"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg3" name="isMainDisplayImg" />
-                            <label class="custom-control-label" for="isMainDisplayImg3"></label>
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-3" name="isMainDisplayImg" disabled />
+                            <label class="custom-control-label" for="isMainDisplayImg-3"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg4" name="isMainDisplayImg" />
-                            <label class="custom-control-label" for="isMainDisplayImg4"></label>
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-4" name="isMainDisplayImg" disabled />
+                            <label class="custom-control-label" for="isMainDisplayImg-4"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg5" name="isMainDisplayImg" />
-                            <label class="custom-control-label" for="isMainDisplayImg5"></label>
+                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-5" name="isMainDisplayImg" disabled />
+                            <label class="custom-control-label" for="isMainDisplayImg-5"></label>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <strong>Set Icon:</strong>
+        <label>
+            <input type="file" id="file-add-icon" style="display: none" />
+            <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="~/Images/AddImageIcon/add-image-icon.png" id="imgAddIcon" />
+        </label>
     </div>
     <div class="modal-footer">
         @*<button class="d-none" type="button" id="BtnConfirmSaveNewProductColor"></button>*@

@@ -26,7 +26,7 @@
 
                     var defaultImg = "";
                     var isMainDisplay = "";
-                    foreach (var img in Model)
+                    foreach (var img in Model.Where(p => p.ProductImage.path != "Images\\AddImageIcon\\add-image-icon.png"))
                     {
                         isMainDisplay = (img.ProductImage.isMainDisplay == true ? "main-display" : "");
 

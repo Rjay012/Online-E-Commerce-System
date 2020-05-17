@@ -10,8 +10,8 @@
         'data': 'ProductID', render: function (productID, type, row) {
             return "<button class='btn btn-info btn-sm dropdown-toggle mr-4' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Color</button>" +
                 "<div class='dropdown-menu'>" +
-                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'>Add</a>" +
-                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ")'>Edit</a>" +
+                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
+                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
                 "</div>" +
                 "<button class='btn btn-warning btn-sm' type='button' data-toggle='modal' data-target='#myModal' onclick=''>Add Sizes</button>";
         }
@@ -20,7 +20,7 @@
     var columnDefs = [{
         targets: [0, 1, 2],
         visible: false,
-        searchable: false
+        searchable: false,
     }];
     LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs);
 });
@@ -37,35 +37,63 @@ $(document).on("click", "#BtnSaveNew", function () {
     }
 });
 
+//add file
 $(document).on("change", ".file-img-input", function () {
+    var img = $(this).siblings("img");
+    ReadUrl(this, img);
+
+    //enable radio button
+    var id = $(this).attr("id").split("-");
+    $("#isDisplayImg-" + id[1] + ", #isMainDisplayImg-" + id[1]).removeAttr("disabled");
+});
+
+$(document).on("change", "#file-add-icon", function () {
     var img = $(this).siblings("img");
     ReadUrl(this, img);
 });
 
+//update file
+$(document).on("change", ".file-edit-img-input", function () {
+    var img = $(this).siblings("img");
+    ReadUrl(this, img);
+
+    //enable radio button (Set up display and main display)
+    var id = $(this).attr("id").split("-");
+    $("#isDisplayEditImg-" + id[1] + ", #isMainDisplayEditImg-" + id[1]).removeAttr("disabled");
+})
+
 $(document).on("click", "#BtnSaveNewProductColor", function () {
-    var counter = 1;
-    $(".file-img-input").each(function () {
-        var file = $(this).get(0).files;
-        var data = new FormData();
-        data.append(file[0].name, file[0]);
-        data.append("ProductID", parseInt($("#txtHidProductID").val()));
-        data.append("ColorID", parseInt($("#sColor").val()));
-        data.append("IsDisplay", $("[id*=isDisplayImg" + counter + "]:checked").val() == "on" ? true : false);
-        data.append("IsMainDisplay", $("[id*=isMainDisplayImg" + counter + "]:checked").val() == "on" ? true : false);
+    if ((parseInt($("#sColor").val()) > 0 && $("#file-add-icon").get(0).files.length !== 0) && $(".custom-control-input").is(":checked")) {
+        if (AddIcon() === "success") {  //add icon first then proceed for adding images
+            var counter = 1;
+            $(".file-img-input").each(function () {
+                var file = $(this).get(0).files;
+                var data = new FormData();
 
-        $.ajax({
-            type: "post",
-            url: "/Product/CreateNewProductColor",
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function (result) {
-                //alert(JSON.stringify(result));
-            }
-        });
+                //set default image if input file doesn't have image
+                if (file.length === 0) {
+                    data.append("Path", "AddImageIcon\\add-image-icon.png");
+                }
+                else {
+                    data.append(file[0].name, file[0]);
+                }
 
-        counter++;
-    });
+                data.append("ProductID", parseInt($("#txtHidProductID").val()));
+                data.append("ColorID", parseInt($("#sColor").val()));
+                data.append("IsDisplay", $("[id*=isDisplayImg-" + counter + "]:checked").val() == "on" ? true : false);
+                data.append("IsMainDisplay", $("[id*=isMainDisplayImg-" + counter + "]:checked").val() == "on" ? true : false);
+
+                UploadFileToServer("CreateNewProductColor", data);
+                counter++;
+            });
+        }
+        else {
+            alert("failed");
+        }
+    }
+    else {
+        alert("failed");
+    }
 });
 
 $(document).on("click", "#BtnSetUsDisplay", function () {
@@ -93,6 +121,7 @@ $(document).on("click", "#BtnSetUsBothDisplay", function () {
     $("#BtnSetUsDisplay, #BtnSetUsMainDisplay").trigger("click");
 });
 
+//preview images 
 function ReadUrl(input, img) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -103,6 +132,30 @@ function ReadUrl(input, img) {
     }
 }
 
+function UploadFileToServer(actionName, data) {
+    $.ajax({
+        type: "post",
+        url: "/Product/" + actionName,
+        data: data,
+        contentType: false,
+        processData: false
+    });
+}
+
+function AddIcon() {
+    var file = $("#file-add-icon").get(0).files;
+    var data = new FormData();
+
+    if (file.length > 0) {  //check if icon exist
+        data.append(file[0].name, file[0]);
+
+        UploadFileToServer("CreateNewIcon", data);
+        return "success";
+    }
+
+    return "failed";  //return failed if icon cant uploaded
+}
+
 function AddColorImages(productID) {
     FetchData("/Product/NewColorModalForm", null).done(function (content) {
         $("#NewProductColorForm").html(content);
@@ -110,8 +163,8 @@ function AddColorImages(productID) {
     });
 }
 
-function EditColorImages(productID) {
-    FetchData("/Product/EditColorModalForm", null).done(function (content) {
+function EditColorImages(productID, colorID, iconID) {
+    FetchData("/Product/EditColorModalForm", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#EditProductColorForm").html(content);
     });
 }

@@ -13,6 +13,7 @@ using System.IO;
 using System.Drawing;
 using System.Data.Entity;
 using EntityFramework.Extensions;
+using System.Net;
 
 namespace OECS.Controllers
 {
@@ -76,9 +77,19 @@ namespace OECS.Controllers
             return PartialView("Partials/Modals/_NewProductColor");
         }
 
-        public ActionResult EditColorModalForm()
+        public ActionResult EditColorModalForm(int? productID, int? colorID, int? iconID)
         {
-            return PartialView("Partials/Modals/_EditProductColor");
+            if (productID == null && colorID == null && iconID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            List<ProductImage> productImageModel = dbContext.ProductImage
+                                                            .Where(i => i.ProductColor.ProductID == productID && i.ProductColor.ColorID == colorID && i.IconID == iconID).ToList();
+
+            ViewBag.ProductID = productID;
+            ViewBag.ColorList = GetColorListItems();
+            return PartialView("Partials/Modals/_EditProductColor", productImageModel);
         }
         #endregion ("END MODAL FORMS")
 
@@ -106,56 +117,82 @@ namespace OECS.Controllers
         }
 
         [Authorize(Roles = "1")]
+        public ActionResult CreateNewIcon()
+        {
+            Models.Icon icon = new Models.Icon();
+            if(Request.Files.Count > 0)
+            {
+                HttpFileCollectionBase files = Request.Files;
+                HttpPostedFileBase file = files[0];
+
+                string fname = UploadFile(file, "/Images/AddImageIcon");
+
+                icon.icon1 = "Images\\AddImageIcon\\" + fname;
+
+                dbContext.Icon.Add(icon);
+                dbContext.SaveChanges();
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private string UploadFile(HttpPostedFileBase file, string directory)  //upload file to directory
+        {
+            var fname = Path.GetFileNameWithoutExtension(file.FileName);
+            var extension = Path.GetExtension(file.FileName);
+            fname = fname + DateTime.Now.ToString("yymmssff") + extension;
+            file.SaveAs(Path.Combine(Server.MapPath(directory), fname));
+
+            return fname;
+        }
+
+        [Authorize(Roles = "1")]
         public ActionResult CreateNewProductColor(ProductColorModel productColorModel)
         {
             ProductImage productImage = new ProductImage();
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                string fname = productColorModel.Path;
                 if (Request.Files.Count > 0)
                 {
                     HttpFileCollectionBase files = Request.Files;
                     HttpPostedFileBase file = files[0];
 
-                    var fname = Path.GetFileNameWithoutExtension(file.FileName);
-                    var extension = Path.GetExtension(file.FileName);
-                    fname = fname + DateTime.Now.ToString("yymmssff") + extension;
-                    file.SaveAs(Path.Combine(Server.MapPath("/Images"), fname));
+                    fname = UploadFile(file, "/Images");
+                }
 
-                    /*
+                /*
                      * this code might be a little bit tricky, if the product has duplicate color e.g 2 greens, set 1 color to (toDisplay) to avoid product duplication
                      * count the number of product with duplicate color, if none set each 1 to true
                      */
-                    var noOfDuplicateInColor = dbContext.ProductColor
-                                                        .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Count();
+                var noOfDuplicateInColor = dbContext.ProductColor
+                                                    .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Count();
 
-                    bool toDisplay = noOfDuplicateInColor == 0 ? true : false;  //set to Display
+                bool toDisplay = noOfDuplicateInColor == 0 ? true : false;  //set to Display
 
-                    productImage.isMainDisplay = productColorModel.IsMainDisplay;
-                    productImage.path = "Images\\" + fname;
-                    productImage.ProductColor = new ProductColor
-                    {
-                        ProductID = productColorModel.ProductID,
-                        ColorID = productColorModel.ColorID,
-                        isDisplay = productColorModel.IsDisplay,
-                        toDisplay = toDisplay
-                    };
+                productImage.isMainDisplay = productColorModel.IsMainDisplay;
+                productImage.path = "Images\\" + fname;
+                productImage.IconID = dbContext.Icon.Max(i => i.IconID);  //get newly added icon
+                productImage.ProductColor = new ProductColor
+                {
+                    ProductID = productColorModel.ProductID,
+                    ColorID = productColorModel.ColorID,
+                    isDisplay = productColorModel.IsDisplay,
+                    toDisplay = (productImage.path == "Images\\AddImageIcon\\add-image-icon.png" ? false : toDisplay)  //don't assign the default image us toDisplay
+                };
 
-                    dbContext.ProductImage.Add(productImage);
-                    dbContext.SaveChanges();
-                    return Json(productImage, JsonRequestBehavior.AllowGet);
-                }
+                dbContext.ProductImage.Add(productImage);
+                dbContext.SaveChanges();
             }
-           
-            return Json(productColorModel, JsonRequestBehavior.AllowGet);
-        }
 
-        
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
 
         public ActionResult ViewPhotoGallery(int? productID, int? colorID, int? iconID)
         {
             if (productID == null && colorID == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             List<ViewProductModel> productImage = dbContext.ProductImage
@@ -189,7 +226,8 @@ namespace OECS.Controllers
         public ActionResult ShowProduct(DataTableParam param)
         {
             var product = dbContext.ProductImage
-                                   .Select(pi => new {
+                                   .Select(pi => new
+                                   {
                                        pi.ProductColor.Product.ProductID,
                                        pi.ProductColor.ColorID,
                                        pi.isMainDisplay,
@@ -200,7 +238,7 @@ namespace OECS.Controllers
                                        pi.ProductColor.Product.price
                                    }).Where(pi => pi.isMainDisplay == true).ToList();
 
-            if(!String.IsNullOrEmpty(param.sSearch))
+            if (!String.IsNullOrEmpty(param.sSearch))
             {
                 product = product.Where(p => p.productName.ToLower().Contains(param.sSearch) ||
                                              p.category1.ToLower().Contains(param.sSearch)).ToList();
@@ -208,6 +246,9 @@ namespace OECS.Controllers
 
             switch (param.iSortCol_0)  //column sorting
             {
+                case 0:
+                    product = product.OrderByDescending(c => c.date).ToList();
+                    break;
                 case 3:
                     product = param.sSortDir_0 == "asc" ? product.OrderBy(c => c.productName).ToList() : product.OrderByDescending(c => c.productName).ToList();
                     break;
@@ -238,9 +279,9 @@ namespace OECS.Controllers
         [Authorize(Roles = "1")]
         public ActionResult SetDisplay(int? defaultID, int? selectedID)
         {
-            if(defaultID == null && selectedID == null)
+            if (defaultID == null && selectedID == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             UpdateDisplay(new ProductColor() { ProductColorID = (int)defaultID, isDisplay = false });  //remove previous display
@@ -251,9 +292,9 @@ namespace OECS.Controllers
 
         public ActionResult SetMainDisplay(int? productID, int? selectedID)
         {
-            if(productID == null && selectedID == null)
+            if (productID == null && selectedID == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             UpdateMainDisplay(new ProductColorModel() { ProductID = (int)productID }, true);  //remove previous  main display
@@ -283,7 +324,7 @@ namespace OECS.Controllers
 
         private void UpdateDisplay(ProductColor productColor)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 dbContext.ProductColor.Attach(productColor);
                 dbContext.Entry(productColor).Property(i => i.isDisplay).IsModified = true;  //modify and update only 1 property
