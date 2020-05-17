@@ -120,7 +120,7 @@ namespace OECS.Controllers
         public ActionResult CreateNewIcon()
         {
             Models.Icon icon = new Models.Icon();
-            if(Request.Files.Count > 0)
+            if (Request.Files.Count > 0)
             {
                 HttpFileCollectionBase files = Request.Files;
                 HttpPostedFileBase file = files[0];
@@ -168,17 +168,23 @@ namespace OECS.Controllers
                 var noOfDuplicateInColor = dbContext.ProductColor
                                                     .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Count();
 
-                bool toDisplay = noOfDuplicateInColor == 0 ? true : false;  //set to Display
+                productColorModel.ToDisplay = false;
 
                 productImage.isMainDisplay = productColorModel.IsMainDisplay;
                 productImage.path = "Images\\" + fname;
                 productImage.IconID = dbContext.Icon.Max(i => i.IconID);  //get newly added icon
+
+                if(noOfDuplicateInColor == 0 && productImage.path != "Images\\AddImageIcon\\add-image-icon.png")  //avoid display default image if product color has been duplicated
+                {
+                    productColorModel.ToDisplay = true;
+                }
+
                 productImage.ProductColor = new ProductColor
                 {
                     ProductID = productColorModel.ProductID,
                     ColorID = productColorModel.ColorID,
                     isDisplay = productColorModel.IsDisplay,
-                    toDisplay = (productImage.path == "Images\\AddImageIcon\\add-image-icon.png" ? false : toDisplay)  //don't assign the default image us toDisplay
+                    toDisplay = productColorModel.ToDisplay
                 };
 
                 dbContext.ProductImage.Add(productImage);
