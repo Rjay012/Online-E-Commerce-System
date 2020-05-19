@@ -1,5 +1,5 @@
 ﻿@model OECS.Models.ProductModels.ProductColorModel
-@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "" }, new { enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
         <h5 class="modal-title">New Color</h5>
@@ -9,8 +9,9 @@
     </div>
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(i => i.ProductID, new { @id = "txtHidProductID" })
-        @Html.HiddenFor(i => i.IsDisplayPosition, new { @id = "txtIsDisplayPosition" })
+
+        @Html.HiddenFor(i => i.ProductID)  @*determine the product that your editing*@
+        @Html.HiddenFor(i => i.IsDisplayPosition)  @*determine the image you want to set us display*@
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -69,14 +70,14 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        @Html.TextBoxFor(i => i.Files, new { type = "file", @multiple = "multiple", @class = "file-img-input", @id = "file-6" })
+                        @Html.TextBoxFor(i => i.Files, new { type = "file", @multiple = "multiple", @class = "file-img-input" })
                     </td>
                 </tr>
             </tbody>
         </table>
         <strong>Set Icon:</strong>
         <label>
-            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none", @id = "file-add-icon" })
+            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none" })
             <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="~/Images/AddImageIcon/add-image-icon.png" id="imgAddIcon" />
         </label>
     </div>

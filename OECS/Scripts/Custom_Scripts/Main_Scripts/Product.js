@@ -1,28 +1,5 @@
 ﻿$(document).ready(function () {
-    var columns = [{ 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'isMainDisplay' }, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
-    {
-        'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>View Gallery</button>";
-        }
-    },
-    { 'data': 'date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'price' },
-    {
-        'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-info btn-sm dropdown-toggle mr-4' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Color</button>" +
-                "<div class='dropdown-menu'>" +
-                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
-                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
-                "</div>" +
-                "<button class='btn btn-warning btn-sm' type='button' data-toggle='modal' data-target='#myModal' onclick=''>Add Sizes</button>";
-        }
-    }];
-
-    var columnDefs = [{
-        targets: [0, 1, 2],
-        visible: false,
-        searchable: false,
-    }];
-    LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs);
+    LoadTable();
 });
 
 $(document).on("click", "#BtnTriggerModalForm", function () {
@@ -37,7 +14,7 @@ $(document).on("click", "#BtnSaveNew", function () {
     }
 });
 
-$(document).on("change", "#file-add-icon", function () {
+$(document).on("change", "#IconFile", function () { //changed from "file-add-icon" to "IconFile"
     var img = $(this).siblings("img");
     ReadUrl(this, img);
 });
@@ -52,7 +29,7 @@ $(document).on("change", ".file-edit-img-input", function () {
     $("#isDisplayEditImg-" + id[1] + ", #isMainDisplayEditImg-" + id[1]).removeAttr("disabled");
 })
 
-$(document).on("change", "#file-6", function () {
+$(document).on("change", "#Files", function () {  //changed from "Files" to "file-6"
     var files = $(this)[0].files;
     var c = 1;
 
@@ -68,19 +45,24 @@ $(document).on("change", "#file-6", function () {
         }
     }
     else {
-        alert("Images must be less than or equal to 5");
+        toastr.error("Please select 5 images to continue!", "All Image are Required", { "positionClass": "md-toast-top-right" });
         $(this).val("");
     }
 });
 
 $(document).on("change", ".custom-control-input", function () {
     var position = $(this).attr("id").split("-");
-    $("#txtIsDisplayPosition").val(position[1]);
+    $("#IsDisplayPosition").val(position[1]);
 });
 
 $(document).on("click", "#BtnSaveNewProductColor", function () {
     if (confirm("Sure you want to add this new color?") == true) {
-        $("#BtnConfirmSaveNewProductColor").click();
+        if ((parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) && $("#IsDisplayPosition").val() != 0) {
+            $("#BtnConfirmSaveNewProductColor").click();
+        }
+        else {
+            toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
+        }
     }
 });
 
@@ -109,6 +91,33 @@ $(document).on("click", "#BtnSetUsBothDisplay", function () {
     $("#BtnSetUsDisplay, #BtnSetUsMainDisplay").trigger("click");
 });
 
+function LoadTable() {
+    var columns = [{ 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'isMainDisplay' }, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>View Gallery</button>";
+        }
+    },
+    { 'data': 'date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'price' },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<button class='btn btn-info btn-sm dropdown-toggle mr-4' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Color</button>" +
+                "<div class='dropdown-menu'>" +
+                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
+                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
+                "</div>" +
+                "<button class='btn btn-warning btn-sm' type='button' data-toggle='modal' data-target='#myModal' onclick=''>Add Sizes</button>";
+        }
+    }];
+
+    var columnDefs = [{
+        targets: [0, 1, 2],
+        visible: false,
+        searchable: false,
+    }];
+    LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs);
+}
+
 //preview images 
 function ReadUrl(input, img) {
     if (input.files && input.files[0]) {
@@ -120,34 +129,10 @@ function ReadUrl(input, img) {
     }
 }
 
-function UploadFileToServer(actionName, data) {
-    $.ajax({
-        type: "post",
-        url: "/Product/" + actionName,
-        data: data,
-        contentType: false,
-        processData: false
-    });
-}
-
-function AddIcon() {
-    var file = $("#file-add-icon").get(0).files;
-    var data = new FormData();
-
-    if (file.length > 0) {  //check if icon exist
-        data.append(file[0].name, file[0]);
-
-        UploadFileToServer("CreateNewIcon", data);
-        return "success";
-    }
-
-    return "failed";  //return failed if icon cant uploaded
-}
-
 function AddColorImages(productID) {
     FetchData("/Product/NewColorModalForm", null).done(function (content) {
         $("#NewProductColorForm").html(content);
-        $("#txtHidProductID").val(productID);
+        $("#ProductID").val(productID);
     });
 }
 
@@ -175,6 +160,8 @@ function MarkSelectedOption(val) {
     });
 }
 
-function success(data) {
-    alert(JSON.stringify(data));
+function Success(response) {
+    if (response.data == "success") {
+        toastr.success("Request Successful", "Success", { "positionClass": "md-toast-top-right" });
+    }
 }

@@ -177,7 +177,7 @@ namespace OECS.Controllers
                     productColorModel.ToDisplay = (noOfDuplicateInColor == 0 && productImage.path != "Images\\AddImageIcon\\add-image-icon.png" ? true : false); //avoid display default image if product color has been duplicated
 
                     bool findMainDisplay = dbContext.ProductImage
-                                                    .Where(c => c.ProductColor.ProductID == productColorModel.ProductID && c.ProductColor.ColorID == productColorModel.ColorID && c.isMainDisplay == true).Any();
+                                                    .Where(c => c.ProductColor.ProductID == productColorModel.ProductID && c.isMainDisplay == true).Any();
 
                     productImage.isMainDisplay = (findMainDisplay == true ? false : true);  //for each product color, only 1 color can be set to main display
                     productImage.path = "Images\\" + fname;
@@ -189,11 +189,12 @@ namespace OECS.Controllers
                         isDisplay = productColorModel.IsDisplay,
                         toDisplay = productColorModel.ToDisplay
                     };
-                    
+
                     dbContext.ProductImage.Add(productImage);
                     dbContext.SaveChanges();
                     position++;
                 }
+                return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
             }
 
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
