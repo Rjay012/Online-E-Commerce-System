@@ -37,16 +37,6 @@ $(document).on("click", "#BtnSaveNew", function () {
     }
 });
 
-//add file
-$(document).on("change", ".file-img-input", function () {
-    var img = $(this).siblings("img");
-    ReadUrl(this, img);
-
-    //enable radio button
-    var id = $(this).attr("id").split("-");
-    $("#isDisplayImg-" + id[1] + ", #isMainDisplayImg-" + id[1]).removeAttr("disabled");
-});
-
 $(document).on("change", "#file-add-icon", function () {
     var img = $(this).siblings("img");
     ReadUrl(this, img);
@@ -62,37 +52,35 @@ $(document).on("change", ".file-edit-img-input", function () {
     $("#isDisplayEditImg-" + id[1] + ", #isMainDisplayEditImg-" + id[1]).removeAttr("disabled");
 })
 
-$(document).on("click", "#BtnSaveNewProductColor", function () {
-    if ((parseInt($("#sColor").val()) > 0 && $("#file-add-icon").get(0).files.length !== 0) && $(".custom-control-input").is(":checked")) {
-        if (AddIcon() === "success") {  //add icon first then proceed for adding images
-            var counter = 1;
-            $(".file-img-input").each(function () {
-                var file = $(this).get(0).files;
-                var data = new FormData();
+$(document).on("change", "#file-6", function () {
+    var files = $(this)[0].files;
+    var c = 1;
 
-                //set default image if input file doesn't have image
-                if (file.length === 0) {
-                    data.append("Path", "AddImageIcon\\add-image-icon.png");
-                }
-                else {
-                    data.append(file[0].name, file[0]);
-                }
-
-                data.append("ProductID", parseInt($("#txtHidProductID").val()));
-                data.append("ColorID", parseInt($("#sColor").val()));
-                data.append("IsDisplay", $("[id*=isDisplayImg-" + counter + "]:checked").val() == "on" ? true : false);
-                data.append("IsMainDisplay", $("[id*=isMainDisplayImg-" + counter + "]:checked").val() == "on" ? true : false);
-
-                UploadFileToServer("CreateNewProductColor", data);
-                counter++;
-            });
-        }
-        else {
-            alert("failed");
+    if (files.length == 5) {
+        for (var i = 0, f; f = files[i]; i++) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img' + c).attr('src', e.target.result);
+                $("#isDisplayImg-" + c).attr("disabled", false);
+                c++;
+            };
+            reader.readAsDataURL(f);
         }
     }
     else {
-        alert("failed");
+        alert("Images must be less than or equal to 5");
+        $(this).val("");
+    }
+});
+
+$(document).on("change", ".custom-control-input", function () {
+    var position = $(this).attr("id").split("-");
+    $("#txtIsDisplayPosition").val(position[1]);
+});
+
+$(document).on("click", "#BtnSaveNewProductColor", function () {
+    if (confirm("Sure you want to add this new color?") == true) {
+        $("#BtnConfirmSaveNewProductColor").click();
     }
 });
 
@@ -166,12 +154,24 @@ function AddColorImages(productID) {
 function EditColorImages(productID, colorID, iconID) {
     FetchData("/Product/EditColorModalForm", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#EditProductColorForm").html(content);
+        MarkSelectedOption(colorID);
+
+        //increase the height and width of selected icon
+        $("#edit-icon-" + iconID).css({ "height": "45px", "width": "45px" });
     });
 }
 
 function ViewProductPhotoGallery(productID, colorID, iconID) {
     FetchData("/Product/ViewPhotoGallery", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#ProductImageGalleryForm").html(content);
+    });
+}
+
+function MarkSelectedOption(val) {
+    $("#sEditColor option").each(function () {
+        if ($(this).val() == val) {
+            $(this).prop("selected", true);
+        }
     });
 }
 

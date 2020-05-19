@@ -24,7 +24,7 @@
         <thead>
             <tr>
                 <th>
-                    <select class="browser-default form-control" id="sColor">
+                    <select class="browser-default form-control" id="sEditColor">
                         <option>Select Color</option>
                         @foreach (var color in ViewBag.ColorList as IEnumerable<SelectListItem>)
                         {
@@ -93,7 +93,7 @@
         @foreach (var i in icon)
         {
             <a onclick="EditColorImages(parseInt(@productID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon">
+                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="edit-icon-@i.IconID" />
             </a>
         }
     </div>

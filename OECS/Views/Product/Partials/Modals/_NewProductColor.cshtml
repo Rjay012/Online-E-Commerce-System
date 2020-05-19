@@ -1,6 +1,6 @@
-﻿@*@model OECS.Models.ProductModels.ProductColorModel
-@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "RedirectToLandingPage(data)" }, new { enctype = "multipart/form-data" }))
-{*@
+﻿@model OECS.Models.ProductModels.ProductColorModel
+@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "" }, new { enctype = "multipart/form-data" }))
+{
     <div class="modal-header">
         <h5 class="modal-title">New Color</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -8,19 +8,14 @@
         </button>
     </div>
     <div class="modal-body">
-        @*@Html.AntiForgeryToken()*@
-        <input type="hidden" id="txtHidProductID" />
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(i => i.ProductID, new { @id = "txtHidProductID" })
+        @Html.HiddenFor(i => i.IsDisplayPosition, new { @id = "txtIsDisplayPosition" })
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>
-                        <select class="browser-default form-control" id="sColor">
-                            <option>Select Color</option>
-                            @foreach(var color in ViewBag.ColorList as IEnumerable<SelectListItem>)
-                            {
-                                <option value="@Convert.ToInt32(color.Value)" style="color: @color.Text">@color.Text</option>
-                            }
-                        </select>
+                        @Html.DropDownListFor(i => i.ColorID, Model.ColorList, "Select Color", new { @class = "browser-default form-control" })
                     </th>
                     <th>1</th>
                     <th>2</th>
@@ -33,115 +28,61 @@
             <tbody>
                 <tr>
                     <td>Images</td>
-                    <td class="text-center">
-                        <label>
-                            @*@Html.TextBoxFor(i => i.File, new { type = "file", @class = "file-img-input d-none" })*@
-                            <input class="file-img-input" type="file" id="file-1" style="display: none" />
-                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img1" />
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label>
-                            <input class="file-img-input" type="file" id="file-2" style="display: none" />
-                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img2" />
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label>
-                            <input class="file-img-input" type="file" id="file-3" style="display: none" />
-                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img3" />
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label>
-                            <input class="file-img-input" type="file" id="file-4" style="display: none" />
-                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img4" />
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label>
-                            <input class="file-img-input" type="file" id="file-5" style="display: none" />
-                            <img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img5" />
-                        </label>
-                    </td>
+                    <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img1" /></td>
+                    <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img2" /></td>
+                    <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img3" /></td>
+                    <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img4" /></td>
+                    <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img5" /></td>
                 </tr>
                 <tr>
                     <td>Set Us Color Display</td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg-1" name="isDisplayImg" disabled />
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-1", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-1"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg-2" name="isDisplayImg" disabled />
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-2", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-2"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg-3" name="isDisplayImg" disabled />
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-3", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-3"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg-4" name="isDisplayImg" disabled />
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-4", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-4"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isDisplayImg-5" name="isDisplayImg" disabled />
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-5", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-5"></label>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>Set Us Main Display</td>
-                    <td class="text-center">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-1" name="isMainDisplayImg" disabled />
-                            <label class="custom-control-label" for="isMainDisplayImg-1"></label>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-2" name="isMainDisplayImg" disabled />
-                            <label class="custom-control-label" for="isMainDisplayImg-2"></label>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-3" name="isMainDisplayImg" disabled />
-                            <label class="custom-control-label" for="isMainDisplayImg-3"></label>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-4" name="isMainDisplayImg" disabled />
-                            <label class="custom-control-label" for="isMainDisplayImg-4"></label>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="isMainDisplayImg-5" name="isMainDisplayImg" disabled />
-                            <label class="custom-control-label" for="isMainDisplayImg-5"></label>
-                        </div>
+                    <td colspan="6">
+                        @Html.TextBoxFor(i => i.Files, new { type = "file", @multiple = "multiple", @class = "file-img-input", @id = "file-6" })
                     </td>
                 </tr>
             </tbody>
         </table>
         <strong>Set Icon:</strong>
         <label>
-            <input type="file" id="file-add-icon" style="display: none" />
+            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none", @id = "file-add-icon" })
             <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="~/Images/AddImageIcon/add-image-icon.png" id="imgAddIcon" />
         </label>
     </div>
     <div class="modal-footer">
-        @*<button class="d-none" type="button" id="BtnConfirmSaveNewProductColor"></button>*@
+        <button class="d-none" type="submit" id="BtnConfirmSaveNewProductColor"></button>
         <button class="btn btn-primary" type="button" id="BtnSaveNewProductColor">Save</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
     </div>
-@*}*@
+}
