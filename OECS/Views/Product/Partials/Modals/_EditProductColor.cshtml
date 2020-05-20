@@ -1,104 +1,73 @@
-﻿@model IEnumerable<OECS.Models.ProductImage>
+﻿@model OECS.Models.ProductModels.ProductColorModel
 @using OECS.Models;
-<div class="modal-header">
-    <h5 class="modal-title">Edit Color</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-<div class="modal-body">
-    @{
-        oecsEntities dbContext = new oecsEntities();
-        int productID = Convert.ToInt32(ViewBag.ProductID);
-        int c = 1;
-        var icon = dbContext.ProductImage
-                            .Where(i => i.ProductColor.ProductID == productID)
-                            .Select(i => new
-                            {
-                                i.IconID,
-                                i.ProductColor.ColorID,
-                                i.Icon.icon1
-                            }).Distinct().ToList();
-    }
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    <select class="browser-default form-control" id="sEditColor">
-                        <option>Select Color</option>
-                        @foreach (var color in ViewBag.ColorList as IEnumerable<SelectListItem>)
-                        {
-                            <option value="@Convert.ToInt32(color.Value)" style="color: @color.Text">@color.Text</option>
-                        }
-                    </select>
-                </th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>Images</td>
-                @foreach (var path in Model)
-                {
-                    <td class="text-center">
-                        <label>
-                            <input class="file-edit-img-input" type="file" id="fileEdit-@c" style="display: none" />
-                            <img class="img-display" src="@path.path" id="imgEdit-@c" />
-                        </label>
-                    </td>
-                    { c++; }
-                }
-            </tr>
-            <tr>
-                <td>Set Us Color Display</td>
-                @{
-                    c = 1;
-                    foreach (var isDisplay in Model)
-                    {
-                        <td class="text-center">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="isDisplayEditImg-@c" name="isDisplayEditImg" @(isDisplay.ProductColor.isDisplay == true ? "checked" : "") @(isDisplay.path == "Images\\AddImageIcon\\add-image-icon.png" ? "disabled" : "") />
-                                <label class="custom-control-label" for="isDisplayEditImg-@c"></label>
-                            </div>
-                        </td>
-                        { c++; }
-                    }
-                }
-            </tr>
-            <tr>
-                <td>Set Us Main Display</td>
-                @{
-                    c = 1;
-                    foreach (var isMainDisplay in Model)
-                    {
-                        <td class="text-center">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="isMainDisplayEditImg-@c" @(isMainDisplay.isMainDisplay == true ? "checked" : "") @(isMainDisplay.path == "Images\\AddImageIcon\\add-image-icon.png" ? "disabled" : "") name="isMainDisplayEditImg" />
-                                <label class="custom-control-label" for="isMainDisplayEditImg-@c"></label>
-                            </div>
-                        </td>
-                        { c++; }
-                    }
-                }
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="container">
-        @foreach (var i in icon)
-        {
-            <a onclick="EditColorImages(parseInt(@productID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="edit-icon-@i.IconID" />
-            </a>
-        }
+@using (Ajax.BeginForm("EditProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
+{
+    <div class="modal-header">
+        <h5 class="modal-title">Edit Color</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" type="button" id="BtnSaveEditProductColor">Save</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-</div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(i => i.ProductID)
+        @Html.HiddenFor(i => i.ProductColorID)
+        @{
+            oecsEntities dbContext = new oecsEntities();
+            int c = 1;
+            var icon = dbContext.ProductImage
+                                .Where(i => i.ProductColor.ProductID == Model.ProductID)
+                                .Select(i => new
+                                {
+                                    i.IconID,
+                                    i.ProductColor.ColorID,
+                                    i.Icon.icon1
+                                }).Distinct().ToList();
+        }
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DropDownListFor(i => i.ColorID, Model.ColorList, "Select Color", new { @class = "browser-default form-control" })
+                    </th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Images</td>
+                    @foreach (var path in Model.ProductImage)
+                    {
+                        <td class="text-center">
+                            <label>
+                                @Html.Hidden("txtHidImgID-" + @c, path.ImageID, new { @class = "form-control txtHidImgID" })
+                                @Html.TextBoxFor(i => i.Files, new { type = "file", @class = "file-edit-img-input d-none", @id = "fileEdit-" + c })
+                                <img class="img-display" src="@path.path" id="imgEdit-@c" />
+                            </label>
+                        </td>
+                        { c++; }
+                    }
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="container">
+            @foreach (var i in icon)
+            {
+                <a onclick="EditColorImages(@Model.ProductID, parseInt(@i.ColorID), parseInt(@i.IconID))">
+                    <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="edit-icon-@i.IconID" />
+                </a>
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary d-none" type="submit" id="BtnConfirmSaveEditProductColor"></button>
+        <button class="btn btn-primary" type="button" id="BtnSaveEditProductColor">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+}

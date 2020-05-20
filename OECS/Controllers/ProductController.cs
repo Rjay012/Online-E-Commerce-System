@@ -85,12 +85,17 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            List<ProductImage> productImageModel = dbContext.ProductImage
-                                                            .Where(i => i.ProductColor.ProductID == productID && i.ProductColor.ColorID == colorID && i.IconID == iconID).ToList();
+            List<ProductImage> productImage = dbContext.ProductImage
+                                                       .Where(i => i.ProductColor.ProductID == productID && i.ProductColor.ColorID == colorID && i.IconID == iconID).ToList();
 
-            ViewBag.ProductID = productID;
-            ViewBag.ColorList = GetColorListItems();
-            return PartialView("Partials/Modals/_EditProductColor", productImageModel);
+            ProductColorModel productColorModel = new ProductColorModel
+            {
+                ProductImage = productImage.ToList(),
+                ColorList = GetColorListItems(),
+                ProductID = (int)productID,
+                ProductColorID = (int)productImage.Select(c => new { c.ProductColorID }).FirstOrDefault().ProductColorID
+            };
+            return PartialView("Partials/Modals/_EditProductColor", productColorModel);
         }
         #endregion ("END MODAL FORMS")
 
@@ -197,6 +202,61 @@ namespace OECS.Controllers
                 return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
             }
 
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        [Authorize(Roles = "1")]
+        public ActionResult EditProductImage(ProductColorModel productColorModel)  //via jquer ajax request
+        {
+            ProductImage productImage = new ProductImage();
+
+            if(ModelState.IsValid)
+            {
+                if (Request.Files.Count > 0)  //update the images to database and directory
+                {
+                    HttpFileCollectionBase files = Request.Files;
+                    HttpPostedFileBase file = files[0];
+
+                    //remove the file first
+                    productImage = dbContext.ProductImage.Find(productColorModel.ImageID);
+                    string deletePath = Server.MapPath("~\\" + productImage.path);
+                    if (System.IO.File.Exists(deletePath))
+                    {
+                        System.IO.File.Delete(deletePath);
+                    }
+
+                    //upload the new image
+                    productImage.ImageID = productColorModel.ImageID;
+                    productImage.path = "Images\\" + UploadFile(file, "/Images");
+
+                    dbContext.ProductImage.Attach(productImage);
+                    dbContext.Entry(productImage).Property(i => i.path).IsModified = true;
+                    dbContext.SaveChanges();
+                }
+            }
+            
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        [Authorize(Roles = "1")]
+        public ActionResult EditProductColor([Bind(Include = "ProductID, ProductColorID, ColorID")] ProductColorModel productColorModel)  //via unobtrussive ajax request
+        {
+            ProductColor productColor = new ProductColor();
+            if(ModelState.IsValid)
+            {
+                bool hasColorDuplicate = dbContext.ProductColor
+                                                  .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Any();
+                productColorModel.ToDisplay = hasColorDuplicate == true ? false : true;
+
+                for(int i=1; i<=5; i++)  
+                {
+                    dbContext.ProductColor
+                             .Where(c => c.ProductID == productColorModel.ProductID && c.ProductColorID == productColorModel.ProductColorID)
+                             .Update(c => new ProductColor { ColorID = productColorModel.ColorID, toDisplay = productColorModel.ToDisplay });
+                    productColorModel.ProductColorID += 1;
+                    productColorModel.ToDisplay = false;  //only first data to update will be true the rest is false
+                }
+            }
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
 

@@ -19,16 +19,6 @@ $(document).on("change", "#IconFile", function () { //changed from "file-add-ico
     ReadUrl(this, img);
 });
 
-//update file
-$(document).on("change", ".file-edit-img-input", function () {
-    var img = $(this).siblings("img");
-    ReadUrl(this, img);
-
-    //enable radio button (Set up display and main display)
-    var id = $(this).attr("id").split("-");
-    $("#isDisplayEditImg-" + id[1] + ", #isMainDisplayEditImg-" + id[1]).removeAttr("disabled");
-})
-
 $(document).on("change", "#Files", function () {  //changed from "Files" to "file-6"
     var files = $(this)[0].files;
     var c = 1;
@@ -66,6 +56,34 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
     }
 });
 
+$(document).on("click", "#BtnSaveEditProductColor", function () {
+    //if (confirm("Sure you want to add this new color?") == true) {
+    //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
+            var c = 1;
+            $(".file-edit-img-input").each(function () {  //manage images first via ajax
+                var file = $(this).get(0).files;
+                var data = new FormData();
+                if (file.length !== 0) {  //select image file to be updated
+                    data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
+                    data.append(file[0].name, file[0]);
+                    $.ajax({
+                        type: "post",
+                        url: "/Product/EditProductImage",
+                        data: data,
+                        contentType: false,
+                        processData: false
+                    });
+                }
+                c++;
+            });
+            $("#BtnConfirmSaveEditProductColor").click();
+    //    }
+    //    else {
+    //        toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
+    //    }        
+    //}
+});
+
 $(document).on("click", "#BtnSetUsDisplay", function () {
     var defaultID = $(".default-img").attr("productColorID");
     var selectedID = $(".selected").attr("productColorID");
@@ -89,6 +107,11 @@ $(document).on("click", "#BtnSetUsMainDisplay", function () {
 
 $(document).on("click", "#BtnSetUsBothDisplay", function () {
     $("#BtnSetUsDisplay, #BtnSetUsMainDisplay").trigger("click");
+});
+
+$(document).on("change", ".file-edit-img-input", function () {
+    var img = $(this).siblings("img");
+    ReadUrl(this, img);
 });
 
 function LoadTable() {
