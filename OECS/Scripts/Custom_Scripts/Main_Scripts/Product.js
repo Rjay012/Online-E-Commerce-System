@@ -5,6 +5,9 @@
 $(document).on("click", "#BtnTriggerModalForm", function () {
     FetchData("/Product/NewProductModalForm", null).done(function (content) {
         $("#NewProductForm").html(content);
+        $('.datepicker').pickadate({
+            format: 'yyyy-mm-dd'
+        });
     });
 });
 
@@ -59,24 +62,24 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
 $(document).on("click", "#BtnSaveEditProductColor", function () {
     //if (confirm("Sure you want to add this new color?") == true) {
     //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
-            var c = 1;
-            $(".file-edit-img-input").each(function () {  //manage images first via ajax
-                var file = $(this).get(0).files;
-                var data = new FormData();
-                if (file.length !== 0) {  //select image file to be updated
-                    data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
-                    data.append(file[0].name, file[0]);
-                    $.ajax({
-                        type: "post",
-                        url: "/Product/EditProductImage",
-                        data: data,
-                        contentType: false,
-                        processData: false
-                    });
-                }
-                c++;
+    var c = 1;
+    $(".file-edit-img-input").each(function () {  //manage images first via ajax
+        var file = $(this).get(0).files;
+        var data = new FormData();
+        if (file.length !== 0) {  //select image file to be updated
+            data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
+            data.append(file[0].name, file[0]);
+            $.ajax({
+                type: "post",
+                url: "/Product/EditProductImage",
+                data: data,
+                contentType: false,
+                processData: false
             });
-            $("#BtnConfirmSaveEditProductColor").click();
+        }
+        c++;
+    });
+    $("#BtnConfirmSaveEditProductColor").click();
     //    }
     //    else {
     //        toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
@@ -118,18 +121,33 @@ function LoadTable() {
     var columns = [{ 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'isMainDisplay' }, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>View Gallery</button>";
+            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>VIEW GALLERY</button>";
         }
     },
     { 'data': 'date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'price' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-info btn-sm dropdown-toggle mr-4' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Color</button>" +
+            return "<div class='dropdown'><button class='btn btn-info btn-sm dropdown-toggle mr-4' id='dropdown-1' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>COLOR</button>" +
                 "<div class='dropdown-menu'>" +
-                "<a class='dropdown-item' role='button' href='' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
-                "<a class='dropdown-item' href='' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
-                "</div>" +
-                "<button class='btn btn-warning btn-sm' type='button' data-toggle='modal' data-target='#myModal' onclick=''>Add Sizes</button>";
+                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
+                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
+                "</div></dropdown>";
+
+        }
+    },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<div class='dropdown'><button class='btn btn-warning btn-sm dropdown-toggle mr-4' id='dropdown-2' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>SIZE</button>" +
+                "<div class='dropdown-menu'>" +
+                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalNewProductSize' onclick='AddSize(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
+                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#' onclick=''><i class='fas fa-edit'></i> Edit</a>" +
+                "</div></div>";
+
+        }
+    },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<button class='btn btn-primary btn-sm' type='button' data-toggle='modal' data-target='#modalProductEdit' onclick=''>EDIT</button>";
         }
     }];
 
@@ -152,6 +170,12 @@ function ReadUrl(input, img) {
     }
 }
 
+function AddSize(productID) {
+    FetchData("/Product/AddSizeModalForm", null).done(function (content) {
+        $("#NewProductSizeForm").html(content);
+    });
+}
+
 function AddColorImages(productID) {
     FetchData("/Product/NewColorModalForm", null).done(function (content) {
         $("#NewProductColorForm").html(content);
@@ -172,6 +196,7 @@ function EditColorImages(productID, colorID, iconID) {
 function ViewProductPhotoGallery(productID, colorID, iconID) {
     FetchData("/Product/ViewPhotoGallery", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#ProductImageGalleryForm").html(content);
+        $("#icon-" + iconID).css({ "height": "45px", "width": "45px" });
     });
 }
 

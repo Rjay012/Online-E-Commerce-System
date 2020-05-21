@@ -55,7 +55,7 @@
         @foreach (var i in icon)
         {
             <a onclick="ViewProductPhotoGallery(parseInt(@i.ProductID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon">
+                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="icon-@i.IconID">
             </a>
         }
     </div>

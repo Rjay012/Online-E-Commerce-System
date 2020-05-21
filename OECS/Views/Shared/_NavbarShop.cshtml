@@ -183,12 +183,11 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
         <span class="navbar-brand">Categories:</span>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-                aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="basicExampleNav">
-            <ul class="navbar-nav mr-auto" id="NavChooseCategory"></ul>
+            <ul class="navbar-nav mr-auto" id="NavChooseCategory"><li class="spinner-border" role="status"></li></ul>
             <form class="form-inline">
                 <div class="md-form my-0">
                     <input class="form-control mr-sm-2" id="txtSearchProduct" type="text" placeholder="Search" aria-label="Search">
@@ -254,7 +253,9 @@
                     <div id="collapseUnfiled2" class="collapse" role="tabpanel" aria-labelledby="headingUnfiled" data-parent="#accordionEx80">
                         <div class="card-body">
                             <div class="container">
-                                <div class="row" id="ProductColorList"></div>
+                                <div class="row" id="ProductColorList">
+                                    <div class="spinner-border" role="status"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -265,7 +266,7 @@
         <div class="col-lg-9">
             <!--Section: Products v.3-->
             <section class="text-center mb-4" id="ProductList">
-                
+                <div class="spinner-border" role="status"><span class="sr-only"></span></div>
             </section>
             <!--Section: Products v.3-->
             <!--Pagination-->

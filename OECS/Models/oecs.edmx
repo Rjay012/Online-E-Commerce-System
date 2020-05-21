@@ -71,6 +71,7 @@
           <Property Name="date" Type="date" />
           <Property Name="price" Type="money" />
           <Property Name="description" Type="varchar(max)" />
+          <Property Name="display" Type="bit" />
         </EntityType>
         <EntityType Name="ProductColor">
           <Key>
@@ -635,6 +636,7 @@
           <Property Name="date" Type="DateTime" Precision="0" />
           <Property Name="price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="display" Type="Boolean" />
           <NavigationProperty Name="Category" Relationship="oecsModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductColor" />
           <NavigationProperty Name="ProductSize" Relationship="oecsModel.FK_ProductSize_Product" FromRole="Product" ToRole="ProductSize" />
@@ -1052,6 +1054,7 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="oecsModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="display" ColumnName="display" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="date" ColumnName="date" />

@@ -19,9 +19,26 @@ namespace OECS.Models.ProductModels
         public string Path { get; set; }
         public string IconPath { get; set; }
         public HttpPostedFileBase IconFile { get; set; }
-        public HttpPostedFileBase[] Files {get; set;}
+        public HttpPostedFileBase[] Files { get; set; }
 
-        public IEnumerable<SelectListItem> ColorList { get; set; }
+        public IEnumerable<SelectListItem> ColorList
+        {
+            get
+            {
+                oecsEntities dbContext = new oecsEntities();
+                List<SelectListItem> ColorListTempStorage = new List<SelectListItem>();
+                var color = dbContext.Color.ToList();
+                foreach (var item in color)
+                {
+                    ColorListTempStorage.Add(new SelectListItem
+                    {
+                        Value = item.ColorID.ToString(),
+                        Text = item.color1
+                    });
+                }
+                return ColorListTempStorage;
+            }
+        }
 
         public List<ProductImage> ProductImage { get; set; }
     }

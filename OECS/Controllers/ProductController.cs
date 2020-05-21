@@ -68,13 +68,11 @@ namespace OECS.Controllers
         #region ("START MODAL FORMS")
         public ActionResult NewProductModalForm(ProductModel productModel)
         {
-            productModel.CategoryList = GetCategoryListItems();
             return PartialView("Partials/Modals/_NewProduct", productModel);
         }
 
         public ActionResult NewColorModalForm(ProductColorModel productColorModel)
         {
-            productColorModel.ColorList = GetColorListItems();
             return PartialView("Partials/Modals/_NewProductColor", productColorModel);
         }
 
@@ -91,11 +89,15 @@ namespace OECS.Controllers
             ProductColorModel productColorModel = new ProductColorModel
             {
                 ProductImage = productImage.ToList(),
-                ColorList = GetColorListItems(),
                 ProductID = (int)productID,
                 ProductColorID = (int)productImage.Select(c => new { c.ProductColorID }).FirstOrDefault().ProductColorID
             };
             return PartialView("Partials/Modals/_EditProductColor", productColorModel);
+        }
+
+        public ActionResult AddSizeModalForm(ProductSizeModel productSizeModel)
+        {
+            return PartialView("Partials/Modals/_NewProductSize", productSizeModel);
         }
         #endregion ("END MODAL FORMS")
 
@@ -104,22 +106,6 @@ namespace OECS.Controllers
         {
             //create logic
             return Json(productModel, JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<SelectListItem> GetColorListItems()
-        {
-            List<SelectListItem> ColorListTempStorage = new List<SelectListItem>();
-            var color = dbContext.Color.ToList();
-            foreach (var item in color)
-            {
-                ColorListTempStorage.Add(new SelectListItem
-                {
-                    Value = item.ColorID.ToString(),
-                    Text = item.color1
-                });
-            }
-
-            return ColorListTempStorage;
         }
 
         private ActionResult CreateNewIcon([Bind(Include = "IconPath")] ProductColorModel productColorModel)
@@ -276,22 +262,6 @@ namespace OECS.Controllers
                                                            }).Where(p => p.ProductColor.ProductID == productID && p.ProductColor.ColorID == colorID && p.ProductImage.IconID == iconID).ToList();
             ViewBag.ProductID = productID;
             return PartialView("Partials/Modals/_ProductImageGallery", productImage);
-        }
-
-        private IEnumerable<SelectListItem> GetCategoryListItems()
-        {
-            List<SelectListItem> CategoryListTempStorage = new List<SelectListItem>();
-            var category = dbContext.Category.ToList();
-            foreach (var item in category)
-            {
-                CategoryListTempStorage.Add(new SelectListItem
-                {
-                    Value = item.CategoryID.ToString(),
-                    Text = item.category1
-                });
-            }
-
-            return CategoryListTempStorage;
         }
 
         [Authorize(Roles = "1")]

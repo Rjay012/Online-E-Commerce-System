@@ -17,7 +17,7 @@
         @Html.DropDownListFor(p => p.Category.CategoryID, Model.CategoryList, "Select Category", new { @class = "browser-default mdb-select form-control mb-4" })
 
         @Html.LabelFor(p => p.Date)
-        @Html.TextBoxFor(p => p.Date, new { @class = "form-control mb-4", @placeholder = "Date" })
+        @Html.TextBoxFor(p => p.Date, new { @class = "form-control datepicker mb-4", @placeholder = "Date" })
 
         @Html.LabelFor(p => p.Price)
         @Html.TextBoxFor(p => p.Price, new { @class = "form-control mb-4", @placeholder = "Price" })

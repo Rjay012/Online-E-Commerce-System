@@ -20,8 +20,8 @@ namespace OECS
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Index"),
-                LogoutPath = new PathString("/Account/Index"),
+                LoginPath = new PathString("/Account"),
+                LogoutPath = new PathString("/Account"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(5.0),
                 ReturnUrlParameter = "/Account"
             });

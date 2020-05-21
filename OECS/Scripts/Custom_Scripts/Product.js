@@ -21,10 +21,10 @@ $(document).on("click", ".myPopover", function () {
         content: $("#popover-" + item).html(),
         placement: "auto"
     });
-    $(".img-thumbnail").css("height", "28px");
+    $(".img-thumbnail").css({ "height": "28px", "width": "28px" });
 });
 
 $(document).on("click", ".product-icon", function () {
-    var id = $(this).attr("id").split("-");  //id as path and productID
+    var id = $(this).attr("id").split("|~|");  //id as path and productID
     $("#card-img-" + id[1]).attr("src", id[0]);
 });

@@ -70,7 +70,8 @@ namespace OECS.Controllers
                     var authenticationManager = ctx.Authentication;
                     authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
 
-                    return Json(new { action = "Index", controller = "Dashboard" }, JsonRequestBehavior.AllowGet);
+                    //return Json(new { action = "Index", controller = "Dashboard" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { controller = "Product" }, JsonRequestBehavior.AllowGet);  //bypass main target module
                 }
             }
             return Json("failed", JsonRequestBehavior.AllowGet);

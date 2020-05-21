@@ -27,6 +27,24 @@ namespace OECS.Models.ProductModels
         public string Description { get; set; }
 
         public CategoryModel Category { get; set; }
-        public IEnumerable<SelectListItem> CategoryList { get; set; }
+        public IEnumerable<SelectListItem> CategoryList 
+        {
+            get 
+            {
+                oecsEntities dbContext = new oecsEntities();
+                List<SelectListItem> CategoryListTempStorage = new List<SelectListItem>();
+                var category = dbContext.Category.ToList();
+                foreach (var item in category)
+                {
+                    CategoryListTempStorage.Add(new SelectListItem
+                    {
+                        Value = item.CategoryID.ToString(),
+                        Text = item.category1
+                    });
+                }
+
+                return CategoryListTempStorage;
+            } 
+        }
     }
 }

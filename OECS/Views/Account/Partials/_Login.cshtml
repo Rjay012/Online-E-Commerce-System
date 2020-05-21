@@ -11,7 +11,7 @@
     <div class="modal-body">
         @Html.AntiForgeryToken()
 
-        @Html.DropDownListFor(l => l.RoleID, Model.RoleList, "Select Role", new { @class = "mdb-select form-control mb-4" })
+        @Html.DropDownListFor(l => l.RoleID, Model.RoleList, "Select Role", new { @class = "browser-default mdb-select form-control mb-4" })
 
         @Html.TextBoxFor(l => l.UserID, new { @class = "form-control mb-4", @placeholder = "AdminID/E-mail" })
         @Html.PasswordFor(l => l.Password, new { @class = "form-control mb-4", @placeholder = "Password" })

@@ -34,7 +34,7 @@
                                 <div class="col-sm-12">
                                     @foreach (var i in icon)
                                     {
-                                        <a class="product-icon" id="@i.path-@p.Key.Product.ProductID">
+                                        <a class="product-icon" id="@i.path|~|@p.Key.Product.ProductID">
                                             <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail" alt="">
                                         </a>
                                     }
@@ -56,15 +56,15 @@
                         </h5>
 
                         <h4 class="font-weight-bold blue-text">
-                            <strong>@p.Key.Product.price</strong>
+                            <strong>$ @p.Key.Product.price</strong>
                         </h4>
 
-                        <div class="container-fluid">
+                        <div class="container">
                             <div class="col-xs-6">
-                                <button class="btn btn-primary btn-sm" type="button">Buy Now</button>
+                                <button class="btn btn-primary btn-sm" type="button">BUY NOW</button>
                             </div>
                             <div class="col-xs-6">
-                                <button class="btn btn-warning btn-sm" type="button">Add to Cart</button>
+                                <button class="btn btn-warning btn-sm" type="button">ADD TO CART</button>
                             </div>
                         </div>
                     </div>
