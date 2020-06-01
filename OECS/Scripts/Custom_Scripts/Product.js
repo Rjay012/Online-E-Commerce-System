@@ -1,15 +1,15 @@
 ﻿$(document).ready(function () {
-    ShowProduct(0, 0, "");
+    ShowProduct(0, 0, 0, "");
 });
 
-function ShowProduct(categoryID, colorID, searchString) {
-    FetchData("/Product/Show", { categoryID: categoryID, colorID: colorID, searchString: searchString }).done(function (productList) {
+function ShowProduct(categoryID, colorID, sizeID, searchString) {
+    FetchData("/Product/Show", { categoryID: categoryID, colorID: colorID, sizeID: sizeID, searchString: searchString }).done(function (productList) {
         $("#ProductList").html(productList);
     });
 }
 
 $(document).on("keyup", "#txtSearchProduct", function () {
-    ShowProduct(0, 0, $(this).val());
+    ShowProduct(0, 0, 0, $(this).val());
 });
 
 $(document).on("click", ".myPopover", function () {

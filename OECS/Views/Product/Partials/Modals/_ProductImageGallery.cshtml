@@ -14,35 +14,32 @@
                 @{
                     oecsEntities dbContext = new oecsEntities();
                     int productID = Convert.ToInt32(ViewBag.ProductID);
-                    var icon = dbContext.ProductImage
-                                        .Where(i => i.ProductColor.ProductID == productID)
+                    var icon = dbContext.DisplayColor
+                                        .Where(i => i.ProductImage.ProductDetail.ProductID == productID)
                                         .Select(i => new
                                         {
-                                            i.IconID,
-                                            i.ProductColor.ProductID,
-                                            i.ProductColor.ColorID,
-                                            i.Icon.icon1
+                                            i.ProductImage.Image.IconID,
+                                            i.ProductImage.ProductDetail.ProductID,
+                                            i.ProductImage.ProductDetail.ColorID,
+                                            i.ProductImage.Image.Icon.icon1
                                         }).Distinct().ToList();
 
                     var defaultImg = "";
                     var isMainDisplay = "";
-                    foreach (var img in Model.Where(p => p.ProductImage.path != "Images\\AddImageIcon\\add-image-icon.png"))
+
+                    var display = Model.Where(d => d.ProductImage.DisplayColor.Count() > 0).FirstOrDefault();
+                    isMainDisplay = (display.ProductImage.isMainDisplay == true ? "main-display" : "");
+                    defaultImg = display.ProductImage.Image.path;
+                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImage.ImageID" data-full="@defaultImg">
+                        <img src="@defaultImg" />
+                    </a>
+
+                    foreach (var img in Model.Where(i => i.ProductImage.DisplayColor.Count() == 0).Take(4))
                     {
                         isMainDisplay = (img.ProductImage.isMainDisplay == true ? "main-display" : "");
-
-                        if (img.ProductColor.isDisplay == true)
-                        {
-                            defaultImg = img.ProductImage.path;
-                            <a class="selected default-img @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@defaultImg">
-                                <img src="@defaultImg" />
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="img-link-wrapper @isMainDisplay" productColorID="@img.ProductColor.ProductColorID" data-full="@img.ProductImage.path">
-                                <img src="@img.ProductImage.path" />
-                            </a>
-                        }
+                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImage.ImageID" data-full="@img.ProductImage.Image.path">
+                            <img src="@img.ProductImage.Image.path" />
+                        </a>
                     }
                 }
             </div>

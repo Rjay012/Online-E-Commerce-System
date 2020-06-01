@@ -9,26 +9,26 @@
 
         foreach (var p in product)
         {
-            var icon = dbContext.ProductImage
-                                .Where(i => i.ProductColor.ProductID == p.Key.Product.ProductID && i.ProductColor.isDisplay == true)
-                                .Select(i => new
+            var icon = dbContext.DisplayColor
+                                .Where(c => c.ProductImage.ProductDetail.ProductID == p.Key.Product.ProductID)
+                                .Select(c => new
                                 {
-                                    i.path,
-                                    i.Icon.icon1
+                                    c.ProductImage.Image.path,
+                                    c.ProductImage.Image.Icon.icon1
                                 }).ToList();
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card">
                     <div class="view overlay">
-                        <img src="@p.Key.ProductImage.path" class="card-img-top" id="card-img-@p.Key.Product.ProductID" alt="No images available">
+                        <img src="@p.Key.ProductImage.Image.path" class="card-img-top" id="card-img-@p.Key.Product.ProductID" alt="No images available">
                         <a>
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-                    @if (p.Key.Product.ProductColor.Where(pc => pc.isDisplay == true).Count() > 1)
+                    @if (icon.Count() > 1)
                     {
                         <div class="col-sm-6">
                             <a class="badge badge-light float-left myPopover" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
-                                @p.Key.Product.ProductColor.Where(pc => pc.isDisplay == true).Count() colour(s)
+                                @icon.Count() Colours
                             </a>
                             <div class="d-none" id="popover-@p.Key.Product.ProductID" role="tooltip">
                                 <div class="col-sm-12">

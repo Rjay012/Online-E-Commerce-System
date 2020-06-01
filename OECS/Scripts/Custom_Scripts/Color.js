@@ -10,7 +10,7 @@ function ShowProductColor(productCategoryID) {
 
 function SortByColor(colorID) {
     var categoryID = $(".active").children(".category").attr("categoryID");
-    ShowProduct(categoryID, colorID, "");
+    ShowProduct(categoryID, colorID, 0, "");
 }
 
 $(document).one("click", "#accordionEx80", function () {

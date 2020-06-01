@@ -10,9 +10,12 @@ namespace OECS.Models.ProductModels
     public class ProductColorModel
     {
         public int ProductColorID { get; set; }
+        public int ProductImageID { get; set; }
         public int ImageID { get; set; }
         public int ProductID { get; set; }
         public int ColorID { get; set; }
+        public int SID { get; set; }  //single valued size id
+        public int[] SizeID { get; set; }
         public int IsDisplayPosition { get; set; }
         public bool? IsDisplay { get; set; }
         public bool ToDisplay { get; set; }
@@ -37,6 +40,25 @@ namespace OECS.Models.ProductModels
                     });
                 }
                 return ColorListTempStorage;
+            }
+        }
+
+        public IEnumerable<SelectListItem> SizeList
+        {
+            get
+            {
+                oecsEntities dbContext = new oecsEntities();
+                List<SelectListItem> SizeListTempStorage = new List<SelectListItem>();
+                var size = dbContext.Size.ToList();
+                foreach (var item in size)
+                {
+                    SizeListTempStorage.Add(new SelectListItem
+                    {
+                        Value = item.SideID.ToString(),
+                        Text = item.size1
+                    });
+                }
+                return SizeListTempStorage;
             }
         }
 

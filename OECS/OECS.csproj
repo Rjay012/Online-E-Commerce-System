@@ -170,6 +170,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SizeController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -190,7 +191,16 @@
     </Compile>
     <Compile Include="Models\CustomerModels\CustomerModel.cs" />
     <Compile Include="Models\DataTableParam.cs" />
+    <Compile Include="Models\DisplayColor.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DisplaySize.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Icon.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Image.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginModels\LoginModel.cs" />
@@ -218,7 +228,7 @@
     <Compile Include="Models\Product.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductColor.cs">
+    <Compile Include="Models\ProductDetail.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductImage.cs">
@@ -228,9 +238,6 @@
     <Compile Include="Models\ProductModels\ProductModel.cs" />
     <Compile Include="Models\ProductModels\ProductSizeModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
-    <Compile Include="Models\ProductSize.cs">
-      <DependentUpon>oecs.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -2303,6 +2310,7 @@
     <Content Include="Scripts\Custom_Scripts\Login.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
+    <Content Include="Scripts\Custom_Scripts\Size.js" />
     <Content Include="Scripts\Custom_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Register.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2355,11 +2363,13 @@
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\Product\Partials\Modals\_NewProductSize.cshtml" />
+    <Content Include="Views\Size\Partials\_ProductSize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Icons\" />
     <Folder Include="Views\Dashboard\Partials\" />
+    <Folder Include="Views\Size\Partials\Modals\" />
     <Folder Include="Views\Supplier\" />
   </ItemGroup>
   <ItemGroup>

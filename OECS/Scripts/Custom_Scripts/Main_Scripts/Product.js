@@ -43,7 +43,7 @@ $(document).on("change", "#Files", function () {  //changed from "Files" to "fil
     }
 });
 
-$(document).on("change", ".custom-control-input", function () {
+$(document).on("change", ".add-display", function () {
     var position = $(this).attr("id").split("-");
     $("#IsDisplayPosition").val(position[1]);
 });
@@ -88,8 +88,8 @@ $(document).on("click", "#BtnSaveEditProductColor", function () {
 });
 
 $(document).on("click", "#BtnSetUsDisplay", function () {
-    var defaultID = $(".default-img").attr("productColorID");
-    var selectedID = $(".selected").attr("productColorID");
+    var defaultID = $(".default-img").attr("productImageID");
+    var selectedID = $(".selected").attr("productImageID");
 
     if (confirm("Sure you want to set this image us default color display?") == true) {
         FetchData("/Product/SetDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
@@ -99,7 +99,7 @@ $(document).on("click", "#BtnSetUsDisplay", function () {
 });
 
 $(document).on("click", "#BtnSetUsMainDisplay", function () {
-    var selectedID = $(".selected").attr("productColorID");
+    var selectedID = $(".selected").attr("productImageID");
 
     if (confirm("Sure you want to set this image us default display?") == true) {
         FetchData("/Product/SetMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedID: selectedID }).done(function (result) {
@@ -117,8 +117,29 @@ $(document).on("change", ".file-edit-img-input", function () {
     ReadUrl(this, img);
 });
 
+$(document).on("change", ".add-size", function () {
+    var sizeID = $(this).attr("sizeID");
+    $("#txtHidSizeID-" + sizeID).val($(this).is(":checked") ? sizeID : 0);
+});
+
+$(document).on("click", ".color-wrapper", function () {
+    var colorID = $(this).children(".add-color").attr("colorID");
+    $("#ColorID").val(colorID);
+    //mark selected
+    $(this).siblings(".color-wrapper").children(".add-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
+    $(this).children(".add-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+});
+
 function LoadTable() {
-    var columns = [{ 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'isMainDisplay' }, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
+    var columns = [{
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<div class='custom-control custom-checkbox'>" +
+                "<input class='custom-control-input' type='checkbox' id='display-" + parseInt(productID) + "' " + (row.display == true ? 'checked': '') + " />" +
+                "<label class='custom-control-label' for='display-" + parseInt(productID) + "' />" +
+                "</div>";
+        }
+    },
+    { 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'IconID'}, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
             return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>VIEW GALLERY</button>";
@@ -152,7 +173,7 @@ function LoadTable() {
     }];
 
     var columnDefs = [{
-        targets: [0, 1, 2],
+        targets: [1, 2, 3],
         visible: false,
         searchable: false,
     }];

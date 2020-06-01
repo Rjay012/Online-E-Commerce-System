@@ -1,0 +1,7 @@
+﻿@model IEnumerable<OECS.Models.ProductModels.ViewProductModel>
+@foreach (var size in Model)
+{
+    <div class="col-xs-3 size-wrapper">
+        <span class="badge badge-light badge-size" onclick="SortBySize(parseInt(@size.Size.SideID))">@size.Size.size1</span>
+    </div>
+}

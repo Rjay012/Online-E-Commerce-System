@@ -12,22 +12,19 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductColor
+    public partial class Image
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProductColor()
+        public Image()
         {
             this.ProductImage = new HashSet<ProductImage>();
         }
     
-        public int ProductColorID { get; set; }
-        public Nullable<int> ProductID { get; set; }
-        public Nullable<int> ColorID { get; set; }
-        public Nullable<bool> isDisplay { get; set; }
-        public Nullable<bool> toDisplay { get; set; }
+        public int ImageID { get; set; }
+        public string path { get; set; }
+        public Nullable<int> IconID { get; set; }
     
-        public virtual Color Color { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Icon Icon { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImage { get; set; }
     }

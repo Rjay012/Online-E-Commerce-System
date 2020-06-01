@@ -14,13 +14,23 @@ namespace OECS.Models
     
     public partial class ProductImage
     {
-        public int ImageID { get; set; }
-        public string path { get; set; }
-        public Nullable<int> ProductColorID { get; set; }
-        public Nullable<bool> isMainDisplay { get; set; }
-        public Nullable<int> IconID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ProductImage()
+        {
+            this.DisplayColor = new HashSet<DisplayColor>();
+            this.DisplaySize = new HashSet<DisplaySize>();
+        }
     
-        public virtual Icon Icon { get; set; }
-        public virtual ProductColor ProductColor { get; set; }
+        public int ProductImageID { get; set; }
+        public int ProductDetailID { get; set; }
+        public Nullable<int> ImageID { get; set; }
+        public Nullable<bool> isMainDisplay { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DisplayColor> DisplayColor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DisplaySize> DisplaySize { get; set; }
+        public virtual Image Image { get; set; }
+        public virtual ProductDetail ProductDetail { get; set; }
     }
 }

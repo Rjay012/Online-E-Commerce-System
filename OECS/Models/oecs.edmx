@@ -41,12 +41,36 @@
           <Property Name="password" Type="varchar" MaxLength="50" />
           <Property Name="RoleID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="DisplayColor">
+          <Key>
+            <PropertyRef Name="DisplayColorID" />
+          </Key>
+          <Property Name="DisplayColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductImageID" Type="int" />
+          <Property Name="isDisplay" Type="bit" />
+        </EntityType>
+        <EntityType Name="DisplaySize">
+          <Key>
+            <PropertyRef Name="DisplaySizeID" />
+          </Key>
+          <Property Name="DisplaySizeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductImageID" Type="int" />
+          <Property Name="isDisplay" Type="bit" />
+        </EntityType>
         <EntityType Name="Icon">
           <Key>
             <PropertyRef Name="IconID" />
           </Key>
           <Property Name="IconID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="icon" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="ImageID" />
+          </Key>
+          <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="path" Type="varchar(max)" />
+          <Property Name="IconID" Type="int" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -73,34 +97,24 @@
           <Property Name="description" Type="varchar(max)" />
           <Property Name="display" Type="bit" />
         </EntityType>
-        <EntityType Name="ProductColor">
+        <EntityType Name="ProductDetail">
           <Key>
-            <PropertyRef Name="ProductColorID" />
+            <PropertyRef Name="ProductDetailID" />
           </Key>
-          <Property Name="ProductColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductID" Type="int" />
           <Property Name="ColorID" Type="int" />
-          <Property Name="isDisplay" Type="bit" />
           <Property Name="toDisplay" Type="bit" />
+          <Property Name="SizeID" Type="int" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
-            <PropertyRef Name="ImageID" />
+            <PropertyRef Name="ProductImageID" />
           </Key>
-          <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="path" Type="varchar(max)" />
-          <Property Name="ProductColorID" Type="int" />
+          <Property Name="ProductImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductDetailID" Type="int" Nullable="false" />
+          <Property Name="ImageID" Type="int" />
           <Property Name="isMainDisplay" Type="bit" />
-          <Property Name="IconID" Type="int" />
-        </EntityType>
-        <EntityType Name="ProductSize">
-          <Key>
-            <PropertyRef Name="ProductSizeID" />
-          </Key>
-          <Property Name="ProductSizeID" Type="int" Nullable="false" />
-          <Property Name="quantity" Type="int" />
-          <Property Name="ProductID" Type="int" />
-          <Property Name="SizeID" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -197,6 +211,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Display_ProductImage">
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DisplayColor" Type="Self.DisplayColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ProductImageID" />
+            </Principal>
+            <Dependent Role="DisplayColor">
+              <PropertyRef Name="ProductImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DisplaySize_ProductImage">
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DisplaySize" Type="Self.DisplaySize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ProductImageID" />
+            </Principal>
+            <Dependent Role="DisplaySize">
+              <PropertyRef Name="ProductImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -215,12 +257,12 @@
           <End Role="Color" Type="Self.Color" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProductColor" Type="Self.ProductColor" Multiplicity="*" />
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Color">
               <PropertyRef Name="ColorID" />
             </Principal>
-            <Dependent Role="ProductColor">
+            <Dependent Role="ProductDetail">
               <PropertyRef Name="ColorID" />
             </Dependent>
           </ReferentialConstraint>
@@ -229,13 +271,27 @@
           <End Role="Product" Type="Self.Product" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProductColor" Type="Self.ProductColor" Multiplicity="*" />
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="ProductID" />
             </Principal>
-            <Dependent Role="ProductColor">
+            <Dependent Role="ProductDetail">
               <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductColor_Size">
+          <End Role="Size" Type="Self.Size" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Size">
+              <PropertyRef Name="SideID" />
+            </Principal>
+            <Dependent Role="ProductDetail">
+              <PropertyRef Name="SizeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -243,55 +299,41 @@
           <End Role="Icon" Type="Self.Icon" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
+          <End Role="Image" Type="Self.Image" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Icon">
               <PropertyRef Name="IconID" />
             </Principal>
-            <Dependent Role="ProductImage">
+            <Dependent Role="Image">
               <PropertyRef Name="IconID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductImage_ProductColor">
-          <End Role="ProductColor" Type="Self.ProductColor" Multiplicity="0..1">
+        <Association Name="FK_ProductImage_Image">
+          <End Role="Image" Type="Self.Image" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ProductColor">
-              <PropertyRef Name="ProductColorID" />
+            <Principal Role="Image">
+              <PropertyRef Name="ImageID" />
             </Principal>
             <Dependent Role="ProductImage">
-              <PropertyRef Name="ProductColorID" />
+              <PropertyRef Name="ImageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductSize_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+        <Association Name="FK_ProductImage_ProductDetail">
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductID" />
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
             </Principal>
-            <Dependent Role="ProductSize">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductSize_Size">
-          <End Role="Size" Type="Self.Size" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Size">
-              <PropertyRef Name="SideID" />
-            </Principal>
-            <Dependent Role="ProductSize">
-              <PropertyRef Name="SizeID" />
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductDetailID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -398,12 +440,14 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Color" EntityType="Self.Color" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DisplayColor" EntityType="Self.DisplayColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DisplaySize" EntityType="Self.DisplaySize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Icon" EntityType="Self.Icon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductColor" EntityType="Self.ProductColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductDetail" EntityType="Self.ProductDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductSize" EntityType="Self.ProductSize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleModule" EntityType="Self.RoleModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Size" EntityType="Self.Size" Schema="dbo" store:Type="Tables" />
@@ -419,33 +463,41 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
+          <AssociationSet Name="FK_Display_ProductImage" Association="Self.FK_Display_ProductImage">
+            <End Role="ProductImage" EntitySet="ProductImage" />
+            <End Role="DisplayColor" EntitySet="DisplayColor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DisplaySize_ProductImage" Association="Self.FK_DisplaySize_ProductImage">
+            <End Role="ProductImage" EntitySet="ProductImage" />
+            <End Role="DisplaySize" EntitySet="DisplaySize" />
+          </AssociationSet>
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Color" Association="Self.FK_ProductColor_Color">
             <End Role="Color" EntitySet="Color" />
-            <End Role="ProductColor" EntitySet="ProductColor" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Product" Association="Self.FK_ProductColor_Product">
             <End Role="Product" EntitySet="Product" />
-            <End Role="ProductColor" EntitySet="ProductColor" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductColor_Size" Association="Self.FK_ProductColor_Size">
+            <End Role="Size" EntitySet="Size" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductImage_Icon" Association="Self.FK_ProductImage_Icon">
             <End Role="Icon" EntitySet="Icon" />
+            <End Role="Image" EntitySet="Image" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_Image" Association="Self.FK_ProductImage_Image">
+            <End Role="Image" EntitySet="Image" />
             <End Role="ProductImage" EntitySet="ProductImage" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductImage_ProductColor" Association="Self.FK_ProductImage_ProductColor">
-            <End Role="ProductColor" EntitySet="ProductColor" />
+          <AssociationSet Name="FK_ProductImage_ProductDetail" Association="Self.FK_ProductImage_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
             <End Role="ProductImage" EntitySet="ProductImage" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductSize_Product" Association="Self.FK_ProductSize_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="ProductSize" EntitySet="ProductSize" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductSize_Size" Association="Self.FK_ProductSize_Size">
-            <End Role="Size" EntitySet="Size" />
-            <End Role="ProductSize" EntitySet="ProductSize" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleModule_Module" Association="Self.FK_RoleModule_Module">
             <End Role="Module" EntitySet="Module" />
@@ -485,12 +537,14 @@
           <EntitySet Name="Category" EntityType="oecsModel.Category" />
           <EntitySet Name="Color" EntityType="oecsModel.Color" />
           <EntitySet Name="Customer" EntityType="oecsModel.Customer" />
+          <EntitySet Name="DisplayColor" EntityType="oecsModel.DisplayColor" />
+          <EntitySet Name="DisplaySize" EntityType="oecsModel.DisplaySize" />
           <EntitySet Name="Icon" EntityType="oecsModel.Icon" />
+          <EntitySet Name="Image" EntityType="oecsModel.Image" />
           <EntitySet Name="Module" EntityType="oecsModel.Module" />
           <EntitySet Name="Product" EntityType="oecsModel.Product" />
-          <EntitySet Name="ProductColor" EntityType="oecsModel.ProductColor" />
+          <EntitySet Name="ProductDetail" EntityType="oecsModel.ProductDetail" />
           <EntitySet Name="ProductImage" EntityType="oecsModel.ProductImage" />
-          <EntitySet Name="ProductSize" EntityType="oecsModel.ProductSize" />
           <EntitySet Name="Role" EntityType="oecsModel.Role" />
           <EntitySet Name="RoleModule" EntityType="oecsModel.RoleModule" />
           <EntitySet Name="Size" EntityType="oecsModel.Size" />
@@ -508,14 +562,26 @@
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Color" Association="oecsModel.FK_ProductColor_Color">
             <End Role="Color" EntitySet="Color" />
-            <End Role="ProductColor" EntitySet="ProductColor" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_Customer_Role" Association="oecsModel.FK_Customer_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
+          <AssociationSet Name="FK_Display_ProductImage" Association="oecsModel.FK_Display_ProductImage">
+            <End Role="ProductImage" EntitySet="ProductImage" />
+            <End Role="DisplayColor" EntitySet="DisplayColor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DisplaySize_ProductImage" Association="oecsModel.FK_DisplaySize_ProductImage">
+            <End Role="ProductImage" EntitySet="ProductImage" />
+            <End Role="DisplaySize" EntitySet="DisplaySize" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductImage_Icon" Association="oecsModel.FK_ProductImage_Icon">
             <End Role="Icon" EntitySet="Icon" />
+            <End Role="Image" EntitySet="Image" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_Image" Association="oecsModel.FK_ProductImage_Image">
+            <End Role="Image" EntitySet="Image" />
             <End Role="ProductImage" EntitySet="ProductImage" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleModule_Module" Association="oecsModel.FK_RoleModule_Module">
@@ -528,11 +594,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Product" Association="oecsModel.FK_ProductColor_Product">
             <End Role="Product" EntitySet="Product" />
-            <End Role="ProductColor" EntitySet="ProductColor" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductSize_Product" Association="oecsModel.FK_ProductSize_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="ProductSize" EntitySet="ProductSize" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_Stock_Product" Association="oecsModel.FK_Stock_Product">
             <End Role="Product" EntitySet="Product" />
@@ -542,13 +604,13 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="Supply" EntitySet="Supply" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductImage_ProductColor" Association="oecsModel.FK_ProductImage_ProductColor">
-            <End Role="ProductColor" EntitySet="ProductColor" />
-            <End Role="ProductImage" EntitySet="ProductImage" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductSize_Size" Association="oecsModel.FK_ProductSize_Size">
+          <AssociationSet Name="FK_ProductColor_Size" Association="oecsModel.FK_ProductColor_Size">
             <End Role="Size" EntitySet="Size" />
-            <End Role="ProductSize" EntitySet="ProductSize" />
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_ProductDetail" Association="oecsModel.FK_ProductImage_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
+            <End Role="ProductImage" EntitySet="ProductImage" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleModule_Role" Association="oecsModel.FK_RoleModule_Role">
             <End Role="Role" EntitySet="Role" />
@@ -586,7 +648,7 @@
           </Key>
           <Property Name="ColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="color1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductColor_Color" FromRole="Color" ToRole="ProductColor" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Color" FromRole="Color" ToRole="ProductDetail" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -603,13 +665,41 @@
           <Property Name="RoleID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role" Relationship="oecsModel.FK_Customer_Role" FromRole="Customer" ToRole="Role" />
         </EntityType>
+        <EntityType Name="DisplayColor">
+          <Key>
+            <PropertyRef Name="DisplayColorID" />
+          </Key>
+          <Property Name="DisplayColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductImageID" Type="Int32" />
+          <Property Name="isDisplay" Type="Boolean" />
+          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_Display_ProductImage" FromRole="DisplayColor" ToRole="ProductImage" />
+        </EntityType>
+        <EntityType Name="DisplaySize">
+          <Key>
+            <PropertyRef Name="DisplaySizeID" />
+          </Key>
+          <Property Name="DisplaySizeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductImageID" Type="Int32" />
+          <Property Name="isDisplay" Type="Boolean" />
+          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_DisplaySize_ProductImage" FromRole="DisplaySize" ToRole="ProductImage" />
+        </EntityType>
         <EntityType Name="Icon">
           <Key>
             <PropertyRef Name="IconID" />
           </Key>
           <Property Name="IconID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="icon1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_ProductImage_Icon" FromRole="Icon" ToRole="ProductImage" />
+          <NavigationProperty Name="Image" Relationship="oecsModel.FK_ProductImage_Icon" FromRole="Icon" ToRole="Image" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="ImageID" />
+          </Key>
+          <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IconID" Type="Int32" />
+          <NavigationProperty Name="Icon" Relationship="oecsModel.FK_ProductImage_Icon" FromRole="Image" ToRole="Icon" />
+          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_ProductImage_Image" FromRole="Image" ToRole="ProductImage" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -638,46 +728,36 @@
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="display" Type="Boolean" />
           <NavigationProperty Name="Category" Relationship="oecsModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
-          <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductColor" />
-          <NavigationProperty Name="ProductSize" Relationship="oecsModel.FK_ProductSize_Product" FromRole="Product" ToRole="ProductSize" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductDetail" />
           <NavigationProperty Name="Stock" Relationship="oecsModel.FK_Stock_Product" FromRole="Product" ToRole="Stock" />
           <NavigationProperty Name="Supply" Relationship="oecsModel.FK_Supply_Product" FromRole="Product" ToRole="Supply" />
         </EntityType>
-        <EntityType Name="ProductColor">
+        <EntityType Name="ProductDetail">
           <Key>
-            <PropertyRef Name="ProductColorID" />
+            <PropertyRef Name="ProductDetailID" />
           </Key>
-          <Property Name="ProductColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="ColorID" Type="Int32" />
-          <Property Name="isDisplay" Type="Boolean" />
           <Property Name="toDisplay" Type="Boolean" />
-          <NavigationProperty Name="Color" Relationship="oecsModel.FK_ProductColor_Color" FromRole="ProductColor" ToRole="Color" />
-          <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductColor_Product" FromRole="ProductColor" ToRole="Product" />
-          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_ProductImage_ProductColor" FromRole="ProductColor" ToRole="ProductImage" />
+          <Property Name="SizeID" Type="Int32" />
+          <NavigationProperty Name="Color" Relationship="oecsModel.FK_ProductColor_Color" FromRole="ProductDetail" ToRole="Color" />
+          <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductColor_Product" FromRole="ProductDetail" ToRole="Product" />
+          <NavigationProperty Name="Size" Relationship="oecsModel.FK_ProductColor_Size" FromRole="ProductDetail" ToRole="Size" />
+          <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_ProductImage_ProductDetail" FromRole="ProductDetail" ToRole="ProductImage" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
-            <PropertyRef Name="ImageID" />
+            <PropertyRef Name="ProductImageID" />
           </Key>
-          <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ProductColorID" Type="Int32" />
+          <Property Name="ProductImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductDetailID" Type="Int32" Nullable="false" />
+          <Property Name="ImageID" Type="Int32" />
           <Property Name="isMainDisplay" Type="Boolean" />
-          <Property Name="IconID" Type="Int32" />
-          <NavigationProperty Name="Icon" Relationship="oecsModel.FK_ProductImage_Icon" FromRole="ProductImage" ToRole="Icon" />
-          <NavigationProperty Name="ProductColor" Relationship="oecsModel.FK_ProductImage_ProductColor" FromRole="ProductImage" ToRole="ProductColor" />
-        </EntityType>
-        <EntityType Name="ProductSize">
-          <Key>
-            <PropertyRef Name="ProductSizeID" />
-          </Key>
-          <Property Name="ProductSizeID" Type="Int32" Nullable="false" />
-          <Property Name="quantity" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
-          <Property Name="SizeID" Type="Int32" />
-          <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductSize_Product" FromRole="ProductSize" ToRole="Product" />
-          <NavigationProperty Name="Size" Relationship="oecsModel.FK_ProductSize_Size" FromRole="ProductSize" ToRole="Size" />
+          <NavigationProperty Name="DisplayColor" Relationship="oecsModel.FK_Display_ProductImage" FromRole="ProductImage" ToRole="DisplayColor" />
+          <NavigationProperty Name="DisplaySize" Relationship="oecsModel.FK_DisplaySize_ProductImage" FromRole="ProductImage" ToRole="DisplaySize" />
+          <NavigationProperty Name="Image" Relationship="oecsModel.FK_ProductImage_Image" FromRole="ProductImage" ToRole="Image" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductImage_ProductDetail" FromRole="ProductImage" ToRole="ProductDetail" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -706,7 +786,7 @@
           </Key>
           <Property Name="SideID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="size1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ProductSize" Relationship="oecsModel.FK_ProductSize_Size" FromRole="Size" ToRole="ProductSize" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Size" FromRole="Size" ToRole="ProductDetail" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -791,12 +871,12 @@
           <End Type="oecsModel.Color" Role="Color" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.ProductColor" Role="ProductColor" Multiplicity="*" />
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Color">
               <PropertyRef Name="ColorID" />
             </Principal>
-            <Dependent Role="ProductColor">
+            <Dependent Role="ProductDetail">
               <PropertyRef Name="ColorID" />
             </Dependent>
           </ReferentialConstraint>
@@ -815,17 +895,59 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Display_ProductImage">
+          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.DisplayColor" Role="DisplayColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ProductImageID" />
+            </Principal>
+            <Dependent Role="DisplayColor">
+              <PropertyRef Name="ProductImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DisplaySize_ProductImage">
+          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.DisplaySize" Role="DisplaySize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ProductImageID" />
+            </Principal>
+            <Dependent Role="DisplaySize">
+              <PropertyRef Name="ProductImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductImage_Icon">
           <End Type="oecsModel.Icon" Role="Icon" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <End Type="oecsModel.Image" Role="Image" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Icon">
               <PropertyRef Name="IconID" />
             </Principal>
-            <Dependent Role="ProductImage">
+            <Dependent Role="Image">
               <PropertyRef Name="IconID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_Image">
+          <End Type="oecsModel.Image" Role="Image" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Image">
+              <PropertyRef Name="ImageID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ImageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -861,26 +983,12 @@
           <End Type="oecsModel.Product" Role="Product" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.ProductColor" Role="ProductColor" Multiplicity="*" />
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="ProductID" />
             </Principal>
-            <Dependent Role="ProductColor">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductSize_Product">
-          <End Type="oecsModel.Product" Role="Product" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="oecsModel.ProductSize" Role="ProductSize" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="ProductSize">
+            <Dependent Role="ProductDetail">
               <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
@@ -913,31 +1021,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductImage_ProductColor">
-          <End Type="oecsModel.ProductColor" Role="ProductColor" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductColor">
-              <PropertyRef Name="ProductColorID" />
-            </Principal>
-            <Dependent Role="ProductImage">
-              <PropertyRef Name="ProductColorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductSize_Size">
+        <Association Name="FK_ProductColor_Size">
           <End Type="oecsModel.Size" Role="Size" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="oecsModel.ProductSize" Role="ProductSize" Multiplicity="*" />
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Size">
               <PropertyRef Name="SideID" />
             </Principal>
-            <Dependent Role="ProductSize">
+            <Dependent Role="ProductDetail">
               <PropertyRef Name="SizeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_ProductDetail">
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductDetailID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1029,11 +1137,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DisplayColor">
+            <EntityTypeMapping TypeName="oecsModel.DisplayColor">
+              <MappingFragment StoreEntitySet="DisplayColor">
+                <ScalarProperty Name="isDisplay" ColumnName="isDisplay" />
+                <ScalarProperty Name="ProductImageID" ColumnName="ProductImageID" />
+                <ScalarProperty Name="DisplayColorID" ColumnName="DisplayColorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DisplaySize">
+            <EntityTypeMapping TypeName="oecsModel.DisplaySize">
+              <MappingFragment StoreEntitySet="DisplaySize">
+                <ScalarProperty Name="isDisplay" ColumnName="isDisplay" />
+                <ScalarProperty Name="ProductImageID" ColumnName="ProductImageID" />
+                <ScalarProperty Name="DisplaySizeID" ColumnName="DisplaySizeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Icon">
             <EntityTypeMapping TypeName="oecsModel.Icon">
               <MappingFragment StoreEntitySet="Icon">
                 <ScalarProperty Name="icon1" ColumnName="icon" />
                 <ScalarProperty Name="IconID" ColumnName="IconID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Image">
+            <EntityTypeMapping TypeName="oecsModel.Image">
+              <MappingFragment StoreEntitySet="Image">
+                <ScalarProperty Name="IconID" ColumnName="IconID" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1064,35 +1199,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductColor">
-            <EntityTypeMapping TypeName="oecsModel.ProductColor">
-              <MappingFragment StoreEntitySet="ProductColor">
+          <EntitySetMapping Name="ProductDetail">
+            <EntityTypeMapping TypeName="oecsModel.ProductDetail">
+              <MappingFragment StoreEntitySet="ProductDetail">
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
                 <ScalarProperty Name="toDisplay" ColumnName="toDisplay" />
-                <ScalarProperty Name="isDisplay" ColumnName="isDisplay" />
                 <ScalarProperty Name="ColorID" ColumnName="ColorID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="ProductColorID" ColumnName="ProductColorID" />
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductImage">
             <EntityTypeMapping TypeName="oecsModel.ProductImage">
               <MappingFragment StoreEntitySet="ProductImage">
-                <ScalarProperty Name="IconID" ColumnName="IconID" />
                 <ScalarProperty Name="isMainDisplay" ColumnName="isMainDisplay" />
-                <ScalarProperty Name="ProductColorID" ColumnName="ProductColorID" />
-                <ScalarProperty Name="path" ColumnName="path" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductSize">
-            <EntityTypeMapping TypeName="oecsModel.ProductSize">
-              <MappingFragment StoreEntitySet="ProductSize">
-                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="quantity" ColumnName="quantity" />
-                <ScalarProperty Name="ProductSizeID" ColumnName="ProductSizeID" />
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
+                <ScalarProperty Name="ProductImageID" ColumnName="ProductImageID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

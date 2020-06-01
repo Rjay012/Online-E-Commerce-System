@@ -29,12 +29,14 @@ namespace OECS.Models
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Color> Color { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<DisplayColor> DisplayColor { get; set; }
+        public virtual DbSet<DisplaySize> DisplaySize { get; set; }
         public virtual DbSet<Icon> Icon { get; set; }
+        public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<ProductColor> ProductColor { get; set; }
+        public virtual DbSet<ProductDetail> ProductDetail { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
-        public virtual DbSet<ProductSize> ProductSize { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RoleModule> RoleModule { get; set; }
         public virtual DbSet<Size> Size { get; set; }

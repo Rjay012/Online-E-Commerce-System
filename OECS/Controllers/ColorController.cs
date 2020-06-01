@@ -21,7 +21,7 @@ namespace OECS.Controllers
 
         public ActionResult ShowProductColor(int productCategoryID)
         {
-            List<ViewProductModel> productColor = (from pr in dbContext.ProductColor
+            List<ViewProductModel> productColor = (from pr in dbContext.ProductDetail
                                                    join c in dbContext.Color on pr.ColorID equals c.ColorID
                                                    join p in dbContext.Product on pr.ProductID equals p.ProductID
                                                    join cat in dbContext.Category on p.CategoryID equals cat.CategoryID

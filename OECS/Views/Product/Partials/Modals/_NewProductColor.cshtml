@@ -12,11 +12,16 @@
 
         @Html.HiddenFor(i => i.ProductID)  @*determine the product that your editing*@
         @Html.HiddenFor(i => i.IsDisplayPosition)  @*determine the image you want to set us display*@
+        @Html.HiddenFor(i => i.ColorID)  @*holds color id*@
+
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DropDownListFor(i => i.ColorID, Model.ColorList, "Select Color", new { @class = "browser-default form-control" })
+                    <th class="text-center">
+                        <label>
+                            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none" })
+                            <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="~/Images/AddImageIcon/add-image-icon.png" id="imgAddIcon" />
+                        </label>
                     </th>
                     <th>1</th>
                     <th>2</th>
@@ -36,50 +41,77 @@
                     <td class="text-center"><img class="img-display" src="~/Images/AddImageIcon/add-image-icon.png" id="img5" /></td>
                 </tr>
                 <tr>
-                    <td>Set Us Color Display</td>
+                    <td>Set Display</td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-1", @disabled = "true" })
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input add-display", @id = "isDisplayImg-1", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-1"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-2", @disabled = "true" })
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input add-display", @id = "isDisplayImg-2", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-2"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-3", @disabled = "true" })
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input add-display", @id = "isDisplayImg-3", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-3"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-4", @disabled = "true" })
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input add-display", @id = "isDisplayImg-4", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-4"></label>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="custom-control custom-radio">
-                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input", @id = "isDisplayImg-5", @disabled = "true" })
+                            @Html.RadioButtonFor(i => i.IsDisplay, false, new { @class = "custom-control-input add-display", @id = "isDisplayImg-5", @disabled = "true" })
                             <label class="custom-control-label" for="isDisplayImg-5"></label>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="6">
-                        @Html.TextBoxFor(i => i.Files, new { type = "file", @multiple = "multiple", @class = "file-img-input" })
+                    <td>Sizes</td>
+                    <td class="text-center" colspan="5">
+                        <div class="container-fluid">
+                            <div class="row">
+                                @foreach (var size in Model.SizeList)
+                                {
+                                    @Html.HiddenFor(i => i.SizeID, new { @id = "txtHidSizeID-" + size.Value })
+                                    <div class="custom-control custom-checkbox" style="padding-right: 20px">
+                                        @Html.CheckBox(size.Value, new { @class = "custom-control-input add-size", @id = "checkbox-" + size.Value, @sizeID = size.Value })
+                                        <label class="custom-control-label" for="checkbox-@size.Value">@size.Text</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Color</td>
+                    <td class="text-center" colspan="5">
+                        <div class="container-fluid">
+                            <div class="row">
+                                @foreach (var color in Model.ColorList)
+                                {
+                                    <div class="col-xs-3 color-wrapper">
+                                        <span class="badge badge-color add-color" colorID="@color.Value" style="background-color: @color.Text"><strong class="d-none">1</strong></span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="6">
+                        @Html.TextBoxFor(i => i.Files, new { type = "file", @multiple = "multiple", @class = "file-img-input btn btn-primary btn-sm" })
                     </td>
                 </tr>
             </tbody>
         </table>
-        <strong>Set Icon:</strong>
-        <label>
-            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none" })
-            <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="~/Images/AddImageIcon/add-image-icon.png" id="imgAddIcon" />
-        </label>
     </div>
     <div class="modal-footer">
         <button class="d-none" type="submit" id="BtnConfirmSaveNewProductColor"></button>

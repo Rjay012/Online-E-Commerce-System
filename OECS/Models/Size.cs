@@ -17,13 +17,13 @@ namespace OECS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Size()
         {
-            this.ProductSize = new HashSet<ProductSize>();
+            this.ProductDetail = new HashSet<ProductDetail>();
         }
     
         public int SideID { get; set; }
         public string size1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductSize> ProductSize { get; set; }
+        public virtual ICollection<ProductDetail> ProductDetail { get; set; }
     }
 }
