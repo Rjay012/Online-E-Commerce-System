@@ -92,8 +92,8 @@ $(document).on("click", "#BtnSetUsDisplay", function () {
     var selectedID = $(".selected").attr("productImageID");
 
     if (confirm("Sure you want to set this image us default color display?") == true) {
-        FetchData("/Product/SetDisplay", { defaultID: defaultID, selectedID: selectedID }).done(function (result) {
-            alert("Image Setup");
+        FetchData("/Product/SetImageDisplay", { defaultDisplayID: defaultID, selectedDisplayID: selectedID }).done(function (result) {
+            toastr.success("Image Setup us display", "Success", { "positionClass": "md-toast-top-right" });
         });
     }
 });
@@ -102,14 +102,14 @@ $(document).on("click", "#BtnSetUsMainDisplay", function () {
     var selectedID = $(".selected").attr("productImageID");
 
     if (confirm("Sure you want to set this image us default display?") == true) {
-        FetchData("/Product/SetMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedID: selectedID }).done(function (result) {
-            alert("Image Setup");
+        FetchData("/Product/SetImageMainDisplay", { productID: parseInt($("#txtHidProductID").val()), selectedMainDisplayID: selectedID }).done(function (result) {
+            toastr.success("Image Setup us main display", "Success", { "positionClass": "md-toast-top-right" });
         });
     }
 });
 
 $(document).on("click", "#BtnSetUsBothDisplay", function () {
-    $("#BtnSetUsDisplay, #BtnSetUsMainDisplay").trigger("click");
+    alert("NOT YET WORKING!");
 });
 
 $(document).on("change", ".file-edit-img-input", function () {

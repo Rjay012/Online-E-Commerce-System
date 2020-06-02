@@ -30,15 +30,15 @@
                     var display = Model.Where(d => d.ProductImage.DisplayColor.Count() > 0).FirstOrDefault();
                     isMainDisplay = (display.ProductImage.isMainDisplay == true ? "main-display" : "");
                     defaultImg = display.ProductImage.Image.path;
-                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImage.ImageID" data-full="@defaultImg">
-                        <img src="@defaultImg" />
+                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImage.ProductImageID" data-full="@defaultImg">
+                        <img src="@defaultImg" />@display.ProductImage.ProductImageID
                     </a>
 
                     foreach (var img in Model.Where(i => i.ProductImage.DisplayColor.Count() == 0).Take(4))
                     {
                         isMainDisplay = (img.ProductImage.isMainDisplay == true ? "main-display" : "");
-                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImage.ImageID" data-full="@img.ProductImage.Image.path">
-                            <img src="@img.ProductImage.Image.path" />
+                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImage.ProductImageID" data-full="@img.ProductImage.Image.path">
+                            <img src="@img.ProductImage.Image.path" />@img.ProductImage.ProductImageID
                         </a>
                     }
                 }

@@ -17,6 +17,8 @@ using System.Net;
 using Icon = OECS.Models.Icon;
 using System.Web.UI.WebControls;
 using Image = OECS.Models.Image;
+using System.Linq.Dynamic;
+using System.Data.Entity.Migrations;
 
 namespace OECS.Controllers
 {
@@ -404,19 +406,83 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            List<ViewProductModel> productImage = dbContext.ProductImage
-                                               .Select(i => new ViewProductModel
-                                               {
-                                                   ProductImage = i
-                                               }).Where(d => d.ProductImage.ProductDetail.ProductID == productID && d.ProductImage.ProductDetail.ColorID == colorID && d.ProductImage.Image.IconID == iconID).ToList();
+            List<ViewProductModel> productGallery = dbContext.ProductImage
+                                                             .Select(i => new ViewProductModel
+                                                             {
+                                                                ProductImage = i
+                                                             }).Where(d => d.ProductImage.ProductDetail.ProductID == productID && d.ProductImage.ProductDetail.ColorID == colorID && d.ProductImage.Image.IconID == iconID).ToList();
+
             ViewBag.ProductID = productID;
-            return PartialView("Partials/Modals/_ProductImageGallery", productImage);
+            return PartialView("Partials/Modals/_ProductImageGallery", productGallery);
         }
 
         [Authorize(Roles = "1")]
-        public ActionResult SetImageDisplay()
+        public ActionResult SetImageDisplay(int? defaultDisplayID, int? selectedDisplayID)
         {
+            if(defaultDisplayID == null || selectedDisplayID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
+            DisplayColor displayColor = new DisplayColor();
+            displayColor.DisplayColorID = dbContext.DisplayColor
+                                                   .AsNoTracking()
+                                                   .Where(dc => dc.ProductImageID == defaultDisplayID)
+                                                   .SingleOrDefault().DisplayColorID;
+            displayColor.ProductImageID = selectedDisplayID;
+            dbContext.DisplayColor.Attach(displayColor);
+            dbContext.Entry(displayColor).Property(dc => dc.ProductImageID).IsModified = true;
+            dbContext.SaveChanges();
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        [Authorize(Roles = "1")]
+        public ActionResult SetImageMainDisplay(int? productID, int? selectedMainDisplayID)
+        {
+            if(productID == null || selectedMainDisplayID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            UpdatePreviousMainDisplay(productID);
+            SetNewMainDisplay(selectedMainDisplayID);
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+
+
+        private ActionResult SetNewMainDisplay(int? selectedMainDisplayID)
+        {
+            if(selectedMainDisplayID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ProductImage productImage = new ProductImage();
+            productImage.ProductImageID = (int)selectedMainDisplayID;
+            productImage.isMainDisplay = true;   //setting new main display
+            dbContext.ProductImage.Attach(productImage);
+            dbContext.Entry(productImage).Property(pi => pi.isMainDisplay).IsModified = true;
+            dbContext.SaveChanges();
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult UpdatePreviousMainDisplay(int? productID)
+        {
+            if(productID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ProductImage productImage = new ProductImage();
+            productImage.ProductImageID = dbContext.ProductImage
+                                                   .AsNoTracking()
+                                                   .Where(pi => pi.ProductDetail.ProductID == productID && pi.isMainDisplay == true)
+                                                   .SingleOrDefault().ProductImageID;
+            productImage.isMainDisplay = false;
+            dbContext.ProductImage.Attach(productImage);
+            dbContext.Entry(productImage).Property(pi => pi.isMainDisplay).IsModified = true;
+            dbContext.SaveChanges();
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
         #endregion ("END VIEWING AND MANAGING GALLERY")
