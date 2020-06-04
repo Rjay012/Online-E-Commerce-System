@@ -19,6 +19,7 @@ using System.Web.UI.WebControls;
 using Image = OECS.Models.Image;
 using System.Linq.Dynamic;
 using System.Data.Entity.Migrations;
+using Size = OECS.Models.Size;
 
 namespace OECS.Controllers
 {
@@ -115,7 +116,7 @@ namespace OECS.Controllers
             return PartialView("Partials/Modals/_NewProductColor", productColorModel);
         }
 
-        /*public ActionResult EditColorModalForm(int? productID, int? colorID, int? iconID)
+        public ActionResult EditColorModalForm(int? productID, int? colorID, int? iconID)
         {
             if (productID == null && colorID == null && iconID == null)
             {
@@ -123,16 +124,19 @@ namespace OECS.Controllers
             }
 
             List<ProductImage> productImage = dbContext.ProductImage
-                                                       .Where(i => i.ProductColor.ProductID == productID && i.ProductColor.ColorID == colorID && i.IconID == iconID).ToList();
-
+                                                       .Where(i => i.ProductDetail.ProductID == productID && i.ProductDetail.ColorID == colorID && i.Image.IconID == iconID).ToList();
+            
             ProductColorModel productColorModel = new ProductColorModel
             {
                 ProductImage = productImage.ToList(),
                 ProductID = (int)productID,
-                ProductColorID = (int)productImage.Select(c => new { c.ProductColorID }).FirstOrDefault().ProductColorID
+                ColorID = (int)colorID,
+                IconID = (int)iconID,
+                IconPath = productImage.Select(pi => new { pi.Image.Icon.icon1 }).FirstOrDefault().icon1,
+                ProductDetailID = (int)productImage.Select(c => new { c.ProductDetailID }).FirstOrDefault().ProductDetailID
             };
             return PartialView("Partials/Modals/_EditProductColor", productColorModel);
-        }*/
+        }
 
         public ActionResult AddSizeModalForm(ProductSizeModel productSizeModel)
         {
@@ -376,27 +380,31 @@ namespace OECS.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }*/
 
-        /*[Authorize(Roles = "1")]
-        public ActionResult EditProductColor([Bind(Include = "ProductID, ProductColorID, ColorID")] ProductColorModel productColorModel)  //via unobtrussive ajax request
+        [Authorize(Roles = "1")]
+        public ActionResult EditProductColor(ProductColorModel productColorModel)
         {
-            ProductColor productColor = new ProductColor();
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                bool hasColorDuplicate = dbContext.ProductColor
-                                                  .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Any();
-                productColorModel.ToDisplay = hasColorDuplicate == true ? false : true;
 
-                productColor.ProductColorID = productColorModel.ProductColorID;
-                productColor.ColorID = productColorModel.ColorID;
-                productColor.toDisplay = productColorModel.ToDisplay;
-
-                dbContext.ProductColor.Attach(productColor);
-                dbContext.Entry(productColor).Property(c => c.ColorID).IsModified = true;
-                dbContext.Entry(productColor).Property(c => c.toDisplay).IsModified = true;
-                dbContext.SaveChanges();
             }
+            //ProductColor productColor = new ProductColor();
+            //if (ModelState.IsValid)
+            //{
+            //    bool hasColorDuplicate = dbContext.ProductColor
+            //                                      .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Any();
+            //    productColorModel.ToDisplay = hasColorDuplicate == true ? false : true;
+
+            //    productColor.ProductColorID = productColorModel.ProductColorID;
+            //    productColor.ColorID = productColorModel.ColorID;
+            //    productColor.toDisplay = productColorModel.ToDisplay;
+
+            //    dbContext.ProductColor.Attach(productColor);
+            //    dbContext.Entry(productColor).Property(c => c.ColorID).IsModified = true;
+            //    dbContext.Entry(productColor).Property(c => c.toDisplay).IsModified = true;
+            //    dbContext.SaveChanges();
+            //}
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
-        }*/
+        }
 
         #region ("START VIEWING AND MANAGING GALLERY")
         public ActionResult ViewPhotoGallery(int? productID, int? colorID, int? iconID)

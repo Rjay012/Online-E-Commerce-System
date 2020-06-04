@@ -81,7 +81,7 @@
                                 @foreach (var size in Model.SizeList)
                                 {
                                     @Html.HiddenFor(i => i.SizeID, new { @id = "txtHidSizeID-" + size.Value })
-                                    <div class="custom-control custom-checkbox" style="padding-right: 20px">
+                                    <div class="custom-control custom-checkbox">
                                         @Html.CheckBox(size.Value, new { @class = "custom-control-input add-size", @id = "checkbox-" + size.Value, @sizeID = size.Value })
                                         <label class="custom-control-label" for="checkbox-@size.Value">@size.Text</label>
                                     </div>

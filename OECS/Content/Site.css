@@ -47,8 +47,7 @@ html, body, header, .carousel {
     padding: 10px;
 }
 
-.size-wrapper, .color-wrapper
-{
+.size-wrapper, .color-wrapper, .color-edit-wrapper {
     padding: 10px;
 }
 
@@ -66,4 +65,8 @@ html, body, header, .carousel {
     height: 40px;
     width: 40px;
     border-radius: 50%;
+}
+
+.row .custom-checkbox {
+    padding-right: 20px
 }

@@ -9,9 +9,10 @@ namespace OECS.Models.ProductModels
 {
     public class ProductColorModel
     {
-        public int ProductColorID { get; set; }
+        public int ProductDetailID { get; set; }
         public int ProductImageID { get; set; }
         public int ImageID { get; set; }
+        public int IconID { get; set; }
         public int ProductID { get; set; }
         public int ColorID { get; set; }
         public int SID { get; set; }  //single valued size id

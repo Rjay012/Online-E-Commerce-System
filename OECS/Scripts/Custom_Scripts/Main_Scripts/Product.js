@@ -62,23 +62,23 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
 $(document).on("click", "#BtnSaveEditProductColor", function () {
     //if (confirm("Sure you want to add this new color?") == true) {
     //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
-    var c = 1;
-    $(".file-edit-img-input").each(function () {  //manage images first via ajax
-        var file = $(this).get(0).files;
-        var data = new FormData();
-        if (file.length !== 0) {  //select image file to be updated
-            data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
-            data.append(file[0].name, file[0]);
-            $.ajax({
-                type: "post",
-                url: "/Product/EditProductImage",
-                data: data,
-                contentType: false,
-                processData: false
-            });
-        }
-        c++;
-    });
+    //var c = 1;
+    //$(".file-edit-img-input").each(function () {  //manage images first via ajax
+    //    var file = $(this).get(0).files;
+    //    var data = new FormData();
+    //    if (file.length !== 0) {  //select image file to be updated
+    //        data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
+    //        data.append(file[0].name, file[0]);
+    //        $.ajax({
+    //            type: "post",
+    //            url: "/Product/EditProductImage",
+    //            data: data,
+    //            contentType: false,
+    //            processData: false
+    //        });
+    //    }
+    //    c++;
+    //});
     $("#BtnConfirmSaveEditProductColor").click();
     //    }
     //    else {
@@ -122,12 +122,31 @@ $(document).on("change", ".add-size", function () {
     $("#txtHidSizeID-" + sizeID).val($(this).is(":checked") ? sizeID : 0);
 });
 
+/** START REVISE THIS CODE LATER **/
 $(document).on("click", ".color-wrapper", function () {
     var colorID = $(this).children(".add-color").attr("colorID");
     $("#ColorID").val(colorID);
     //mark selected
     $(this).siblings(".color-wrapper").children(".add-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
     $(this).children(".add-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+});
+
+$(document).on("click", ".color-edit-wrapper", function () {
+    var colorID = $(this).children(".edit-color").attr("colorID");
+    $("#ColorID").val(colorID);
+    $(this).siblings(".color-edit-wrapper").children(".edit-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
+    $(this).children(".edit-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+});
+/** END REVISE THIS CODE LATER **/
+
+$(document).on("click", ".size-popover", function () {
+    var item = parseInt($(this).attr("sizeID"));
+    $(this).popover({   //activate color popover
+        html: true,
+        title: '<h6 class="custom-title">Size Quantity</h6>',
+        content: $("#size-popover-" + item).html(),
+        placement: "auto"
+    });
 });
 
 function LoadTable() {
@@ -153,16 +172,6 @@ function LoadTable() {
                 "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
                 "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalEditProductColor' onclick='EditColorImages(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'><i class='fas fa-edit'></i> Edit</a>" +
                 "</div></dropdown>";
-
-        }
-    },
-    {
-        'data': 'ProductID', render: function (productID, type, row) {
-            return "<div class='dropdown'><button class='btn btn-warning btn-sm dropdown-toggle mr-4' id='dropdown-2' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>SIZE</button>" +
-                "<div class='dropdown-menu'>" +
-                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#modalNewProductSize' onclick='AddSize(" + parseInt(productID) + ")'><i class='fas fa-plus'></i> Add</a>" +
-                "<a class='dropdown-item' role='button' data-toggle='modal' data-target='#' onclick=''><i class='fas fa-edit'></i> Edit</a>" +
-                "</div></div>";
 
         }
     },
@@ -198,6 +207,7 @@ function AddSize(productID) {
 }
 
 function AddColorImages(productID) {
+    $("#EditProductColorForm").html("");  //clear other form to avoid conflicts on properties
     FetchData("/Product/NewColorModalForm", null).done(function (content) {
         $("#NewProductColorForm").html(content);
         $("#ProductID").val(productID);
@@ -205,12 +215,21 @@ function AddColorImages(productID) {
 }
 
 function EditColorImages(productID, colorID, iconID) {
+    $("#NewProductColorForm").html("");  //clear other form to avoid conflicts on properties
     FetchData("/Product/EditColorModalForm", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#EditProductColorForm").html(content);
-        MarkSelectedOption(colorID);
+        //MarkSelectedOption(colorID);
 
         //increase the height and width of selected icon
         $("#edit-icon-" + iconID).css({ "height": "45px", "width": "45px" });
+
+        //mark default color when updating
+        $(".color-edit-wrapper .edit-color").each(function () {
+            var colorID = $(this).attr("colorID");
+            if (colorID == $("#ColorID").val()) {
+                $(this).css({ "height": "40px", "width": "40px" });
+            }
+        });
     });
 }
 
@@ -221,13 +240,13 @@ function ViewProductPhotoGallery(productID, colorID, iconID) {
     });
 }
 
-function MarkSelectedOption(val) {
-    $("#sEditColor option").each(function () {
-        if ($(this).val() == val) {
-            $(this).prop("selected", true);
-        }
-    });
-}
+//function MarkSelectedOption(val) {
+//    $("#sEditColor option").each(function () {
+//        if ($(this).val() == val) {
+//            $(this).prop("selected", true);
+//        }
+//    });
+//}
 
 function Success(response) {
     if (response.data == "success") {

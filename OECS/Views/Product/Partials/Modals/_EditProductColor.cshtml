@@ -11,24 +11,36 @@
     <div class="modal-body">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(i => i.ProductID)
-        @Html.HiddenFor(i => i.ProductColorID)
+        @Html.HiddenFor(i => i.IconID)
+        @Html.HiddenFor(i => i.ProductDetailID)
         @{
             oecsEntities dbContext = new oecsEntities();
             int c = 1;
             var icon = dbContext.ProductImage
-                                .Where(i => i.ProductColor.ProductID == Model.ProductID)
+                                .Where(i => i.ProductDetail.ProductID == Model.ProductID)
                                 .Select(i => new
                                 {
-                                    i.IconID,
-                                    i.ProductColor.ColorID,
-                                    i.Icon.icon1
+                                    i.Image.IconID,
+                                    i.ProductDetail.ColorID,
+                                    i.Image.Icon.icon1
                                 }).Distinct().ToList();
+
+            var size = dbContext.Size
+                                .SelectMany(s => dbContext.DisplaySize.Where(ds => s.SideID == ds.ProductImage.ProductDetail.SizeID && ds.ProductImage.ProductDetail.ProductID == Model.ProductID && ds.ProductImage.ProductDetail.ColorID == Model.ColorID && ds.ProductImage.Image.IconID == Model.IconID).DefaultIfEmpty(), (s, ds) => new
+                                {
+                                    s.SideID,
+                                    s.size1,
+                                    ds.ProductImage.ProductDetail.SizeID
+                                }).ToList();
         }
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DropDownListFor(i => i.ColorID, Model.ColorList, "Select Color", new { @class = "browser-default form-control" })
+                    <th class="text-center">
+                        <label>
+                            @Html.TextBoxFor(i => i.IconFile, new { type = "file", @class = "d-none" })
+                            <img class="img-display img-fluid z-depth-1 rounded-circle img-thumbnail" src="@Model.IconPath" id="imgEditIcon" />
+                        </label>
                     </th>
                     <th>1</th>
                     <th>2</th>
@@ -41,17 +53,67 @@
             <tbody>
                 <tr>
                     <td>Images</td>
-                    @foreach (var path in Model.ProductImage)
+                    @foreach (var path in Model.ProductImage.Take(5))
                     {
                         <td class="text-center">
                             <label>
                                 @Html.Hidden("txtHidImgID-" + @c, path.ImageID, new { @class = "form-control txtHidImgID" })
                                 @Html.TextBoxFor(i => i.Files, new { type = "file", @class = "file-edit-img-input d-none", @id = "fileEdit-" + c })
-                                <img class="img-display" src="@path.path" id="imgEdit-@c" />
+                                <img class="img-display" src="@path.Image.path" id="imgEdit-@c" />
                             </label>
                         </td>
                         { c++; }
                     }
+                </tr>
+                <tr>
+                    <td>Sizes</td>
+                    <td class="text-center" colspan="5">
+                        <div class="container-fluid">
+                            <div class="row">
+                                @foreach (var s in size.Distinct())
+                                {
+                                    string sizeCount = s.SizeID != null ? "(" + size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count().ToString() + ")" : "";
+                                    <div class="custom-control custom-checkbox">
+                                        @if (s.SizeID != null)
+                                        {
+                                            @Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input", @id = "checkbox-edit-" + s.SideID, @checked = "checked" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input", @id = "checkbox-edit-" + s.SideID })
+                                        }
+                                        <label class="custom-control-label" for="checkbox-edit-@s.SideID">@s.size1</label>
+                                        @if (size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count() > 0)
+                                        {
+                                            <a class="size-popover" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@sizeCount</a>
+                                            <div class="d-none" id="size-popover-@s.SideID" role="tooltip">
+                                                <div class="col-sm-12">
+                                                    @sizeCount
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Colours</td>
+                    <td class="text-center" colspan="5">
+                        <div class="container-fluid">
+                            <div class="row">
+                                @Html.HiddenFor(i => i.ColorID)  @* use to mark default color *@
+                                @foreach (var color in Model.ColorList)
+                                {
+                                    <div class="col-xs-3 color-edit-wrapper">
+                                        <span class="badge badge-color edit-color" colorID="@color.Value" style="background-color: @color.Text"><strong class="d-none">1</strong></span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
