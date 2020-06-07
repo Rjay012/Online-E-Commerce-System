@@ -11,12 +11,14 @@ namespace OECS.Models.ProductModels
     {
         public int ProductDetailID { get; set; }
         public int ProductImageID { get; set; }
-        public int ImageID { get; set; }
+        public int[] ImageID { get; set; }
         public int IconID { get; set; }
         public int ProductID { get; set; }
         public int ColorID { get; set; }
         public int SID { get; set; }  //single valued size id
         public int[] SizeID { get; set; }
+        public string[] NewSizeQuantity { get; set; }  //handles sizeID and its quantity
+        public int[] SizeQuantity { get; set; }
         public int IsDisplayPosition { get; set; }
         public bool? IsDisplay { get; set; }
         public bool ToDisplay { get; set; }
@@ -64,5 +66,13 @@ namespace OECS.Models.ProductModels
         }
 
         public List<ProductImage> ProductImage { get; set; }
+
+        //public NewSizeQuantity[] NSizeQuantity { get; set; }
     }
+
+    //public class NewSizeQuantity
+    //{
+    //    public int SizeID { get; set; }
+    //    public int Quantity { get; set; }
+    //}
 }

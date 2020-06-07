@@ -145,8 +145,32 @@ $(document).on("click", ".size-popover", function () {
         html: true,
         title: '<h6 class="custom-title">Size Quantity</h6>',
         content: $("#size-popover-" + item).html(),
-        placement: "auto"
+        placement: "top",
+        sanitize: false
     });
+});
+
+$(document).on("change", ".new-size", function () {
+    var sizeID = $(this).attr("sizeID");
+    if ($(this).is(":checked")) {
+        $(this).popover({   //activate color popover
+            html: true,
+            title: '<h6 class="custom-title">New Size Quantity</h6>',
+            content: $("#new-size-quantity-popover-" + sizeID).html(),
+            placement: "top",
+            sanitize: false
+        });
+    }
+    else {
+        $("#new-size-quantity-holder-" + sizeID).val("");
+    }
+});
+
+$(document).on("keyup", ".new-size-quantity", function () {
+    var id = $(this).attr("id").split("-");
+    var quantity = $(this).val();
+
+    $("#new-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
 });
 
 function LoadTable() {
@@ -229,6 +253,10 @@ function EditColorImages(productID, colorID, iconID) {
             if (colorID == $("#ColorID").val()) {
                 $(this).css({ "height": "40px", "width": "40px" });
             }
+        });
+
+        $(".txtHidImgID").each(function () {
+            $("#hid-strongly-typed-img-" + $(this).val()).val($(this).val());
         });
     });
 }

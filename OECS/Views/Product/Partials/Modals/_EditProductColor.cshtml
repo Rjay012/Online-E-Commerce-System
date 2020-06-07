@@ -56,6 +56,7 @@
                     @foreach (var path in Model.ProductImage.Take(5))
                     {
                         <td class="text-center">
+                            @Html.HiddenFor(i => i.ImageID, new { @id = "hid-strongly-typed-img-" + path.ImageID })
                             <label>
                                 @Html.Hidden("txtHidImgID-" + @c, path.ImageID, new { @class = "form-control txtHidImgID" })
                                 @Html.TextBoxFor(i => i.Files, new { type = "file", @class = "file-edit-img-input d-none", @id = "fileEdit-" + c })
@@ -72,7 +73,8 @@
                             <div class="row">
                                 @foreach (var s in size.Distinct())
                                 {
-                                    string sizeCount = s.SizeID != null ? "(" + size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count().ToString() + ")" : "";
+                                    int sizeCount = size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count();
+                                    string strSizeCount = s.SizeID != null ? "(" + sizeCount.ToString() + ")" : "";
                                     <div class="custom-control custom-checkbox">
                                         @if (s.SizeID != null)
                                         {
@@ -80,19 +82,21 @@
                                         }
                                         else
                                         {
-                                            @Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input", @id = "checkbox-edit-" + s.SideID })
-                                        }
-                                        <label class="custom-control-label" for="checkbox-edit-@s.SideID">@s.size1</label>
-                                        @if (size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count() > 0)
-                                        {
-                                            <a class="size-popover" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@sizeCount</a>
-                                            <div class="d-none" id="size-popover-@s.SideID" role="tooltip">
-                                                <div class="col-sm-12">
-                                                    @sizeCount
-                                                </div>
+                                            @*@Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input new-size", @id = "checkbox-edit-" + s.SideID, @sizeID = s.SideID })*@
+                                            @Html.HiddenFor(q => q.NewSizeQuantity, new { @id = "new-size-quantity-holder-" + s.SideID })
+                                            <input class="custom-control-input new-size" id="checkbox-edit-@s.SideID" type="checkbox" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>" />
+                                            <div class="d-none" id="new-size-quantity-popover-@s.SideID" role="tooltip">
+                                                <input class="form-control new-size-quantity" type="text" id="txtnew-size-quantity-@s.SideID" />
                                             </div>
                                         }
-
+                                        <label class="custom-control-label" for="checkbox-edit-@s.SideID">@s.size1</label>
+                                        @if (sizeCount > 0)
+                                        {
+                                            <a class="size-popover" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@strSizeCount</a>
+                                            <div class="d-none" id="size-popover-@s.SideID" role="tooltip">
+                                                <input class="form-control" type="text" value="0" />
+                                            </div>
+                                        }
                                     </div>
                                 }
                             </div>

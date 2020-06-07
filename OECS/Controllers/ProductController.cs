@@ -6,19 +6,13 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using OECS.Models.ProductModels;
-using System.Security.Cryptography;
-using Microsoft.Ajax.Utilities;
-using OECS.Models.CategoryModels;
 using System.IO;
-using System.Drawing;
 using System.Data.Entity;
-using EntityFramework.Extensions;
 using System.Net;
 using Icon = OECS.Models.Icon;
 using System.Web.UI.WebControls;
 using Image = OECS.Models.Image;
 using System.Linq.Dynamic;
-using System.Data.Entity.Migrations;
 using Size = OECS.Models.Size;
 
 namespace OECS.Controllers
@@ -125,7 +119,7 @@ namespace OECS.Controllers
 
             List<ProductImage> productImage = dbContext.ProductImage
                                                        .Where(i => i.ProductDetail.ProductID == productID && i.ProductDetail.ColorID == colorID && i.Image.IconID == iconID).ToList();
-            
+
             ProductColorModel productColorModel = new ProductColorModel
             {
                 ProductImage = productImage.ToList(),
@@ -309,8 +303,8 @@ namespace OECS.Controllers
         private ActionResult CreateDisplayDetail([Bind(Include = "ProductID")] ProductColorModel productColorModel, int imgID)
         {
             List<ProductColorModel> productImage = dbContext.ProductImage
-                                         .Where(pi => pi.ImageID == imgID)
-                                         .Select(pi => new ProductColorModel { ProductImageID =  pi.ProductImageID, SID = (int)pi.ProductDetail.SizeID, ColorID = (int)pi.ProductDetail.ColorID }).ToList();
+                                                            .Where(pi => pi.ImageID == imgID)
+                                                            .Select(pi => new ProductColorModel { ProductImageID =  pi.ProductImageID, SID = (int)pi.ProductDetail.SizeID, ColorID = (int)pi.ProductDetail.ColorID }).ToList();
             CreateDisplayColor(new ProductColorModel() { ProductImageID = productImage.FirstOrDefault().ProductImageID, ProductID = productColorModel.ProductID, ColorID = productImage.FirstOrDefault().ColorID });
             CreateDisplaySize(productImage, productColorModel.ProductID);
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
@@ -347,64 +341,105 @@ namespace OECS.Controllers
         }
         #endregion ("END CREATE PRODUCT AND ITS DETAILS")
 
-        /*[Authorize(Roles = "1")]
-        public ActionResult EditProductImage(ProductColorModel productColorModel)  //via jquer ajax request
-        {
-            ProductImage productImage = new ProductImage();
+        #region ("START UPDATE PRODUCT AND ITS DETAILS")
 
+        private List<int> CreateNewProductDetail([Bind(Include = "ProductID, ColorID")] ProductColorModel productColorModel, Dictionary<int, int> newSizeAndQuantity)
+        {
+            List<int> lstNewProductDetailID = new List<int>();
             if (ModelState.IsValid)
             {
-                if (Request.Files.Count > 0)  //update the images to database and directory
+                ProductDetail productDetail = new ProductDetail();
+                foreach (var item in newSizeAndQuantity)  //loop through on how many new sizes is selected by the user
                 {
-                    HttpFileCollectionBase files = Request.Files;
-                    HttpPostedFileBase file = files[0];
-
-                    //remove the file first
-                    productImage = dbContext.ProductImage.Find(productColorModel.ImageID);
-                    string deletePath = Server.MapPath("~\\" + productImage.path);
-                    if (System.IO.File.Exists(deletePath))
+                    for (int c = 0; c < item.Value; c++)  //on how many size quantity
                     {
-                        System.IO.File.Delete(deletePath);
+                        productDetail.ProductID = productColorModel.ProductID;
+                        productDetail.ColorID = productColorModel.ColorID;
+                        productDetail.SizeID = item.Key;
+
+                        dbContext.ProductDetail.Add(productDetail);
+                        dbContext.SaveChanges();
+                        lstNewProductDetailID.Add(dbContext.ProductDetail.Max(pd => pd.ProductDetailID));
                     }
+                }
+            }
+            return lstNewProductDetailID;
+        }
 
-                    //upload the new image
-                    productImage.ImageID = productColorModel.ImageID;
-                    productImage.path = "Images\\" + UploadFile(file, "/Images");
+        private ActionResult CreateNewProductImage([Bind(Include = "ImageID")] ProductColorModel productColorModel, List<int> lstNewProductDetailID)
+        {
+            if(ModelState.IsValid)
+            {
+                ProductImage productImage = new ProductImage();
+                foreach (var item in lstNewProductDetailID)
+                {
+                    foreach (var imgID in productColorModel.ImageID)
+                    {
+                        productImage.ProductDetailID = item;
+                        productImage.ImageID = imgID;
+                        productImage.isMainDisplay = false;   //set automatic to false
 
-                    dbContext.ProductImage.Attach(productImage);
-                    dbContext.Entry(productImage).Property(i => i.path).IsModified = true;
+                        dbContext.ProductImage.Add(productImage);
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult CreateNewDisplaySize([Bind(Include = "ProductDetailID")] ProductColorModel productColorModel, List<int> lstNewProductDetailID)
+        {
+            if(ModelState.IsValid)
+            {
+                DisplaySize displaySize = new DisplaySize();
+                int isDisplayImgID = (int)dbContext.ProductImage
+                                                   .Where(pi => pi.ProductDetailID == productColorModel.ProductDetailID)
+                                                   .Join(dbContext.DisplaySize, pi => pi.ProductImageID, ds => ds.ProductImageID, (pi, ds) => new
+                                                   {
+                                                       pi.ImageID
+                                                   }).FirstOrDefault().ImageID;
+
+                foreach (var item in lstNewProductDetailID)
+                {
+                    displaySize.ProductImageID = dbContext.ProductImage
+                                                          .Where(pi => pi.ProductDetailID == item && pi.ImageID == isDisplayImgID)
+                                                          .Select(pi => new { pi.ProductImageID }).FirstOrDefault().ProductImageID;
+                    displaySize.isDisplay = false;
+                    dbContext.DisplaySize.Add(displaySize);
                     dbContext.SaveChanges();
                 }
             }
-
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
-        }*/
+        }
+
+        private ActionResult CreateNewProductSize([Bind(Include = "ProductID, ProductDetailID, ColorID, SizeID, ImageID")] ProductColorModel productColorModel)  //creating/adding new product size in update area
+        {
+            if(ModelState.IsValid)
+            {
+                Dictionary<int, int> newSizeAndQuantity = new Dictionary<int, int>();
+                foreach(var item in productColorModel.NewSizeQuantity.Where(i => i != "").ToArray())
+                {
+                    newSizeAndQuantity.Add(Convert.ToInt32(item.Split('-').First()), Convert.ToInt32(item.Split('-').Last()));
+                }
+
+                List<int> lstNewProductDetailID = CreateNewProductDetail(productColorModel, newSizeAndQuantity);
+                CreateNewProductImage(productColorModel, lstNewProductDetailID);
+                CreateNewDisplaySize(productColorModel, lstNewProductDetailID);
+                
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
 
         [Authorize(Roles = "1")]
         public ActionResult EditProductColor(ProductColorModel productColorModel)
         {
             if(ModelState.IsValid)
             {
-
+                CreateNewProductSize(productColorModel);
             }
-            //ProductColor productColor = new ProductColor();
-            //if (ModelState.IsValid)
-            //{
-            //    bool hasColorDuplicate = dbContext.ProductColor
-            //                                      .Where(c => c.ProductID == productColorModel.ProductID && c.ColorID == productColorModel.ColorID).Any();
-            //    productColorModel.ToDisplay = hasColorDuplicate == true ? false : true;
-
-            //    productColor.ProductColorID = productColorModel.ProductColorID;
-            //    productColor.ColorID = productColorModel.ColorID;
-            //    productColor.toDisplay = productColorModel.ToDisplay;
-
-            //    dbContext.ProductColor.Attach(productColor);
-            //    dbContext.Entry(productColor).Property(c => c.ColorID).IsModified = true;
-            //    dbContext.Entry(productColor).Property(c => c.toDisplay).IsModified = true;
-            //    dbContext.SaveChanges();
-            //}
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
+        #endregion ("END UPDATE PRODUCT AND ITS DETAILS")
 
         #region ("START VIEWING AND MANAGING GALLERY")
         public ActionResult ViewPhotoGallery(int? productID, int? colorID, int? iconID)
@@ -548,63 +583,5 @@ namespace OECS.Controllers
                 iTotalDisplayRecords = product.Count()
             }, JsonRequestBehavior.AllowGet);
         }
-
-        /*#region ("START SET IMAGE DISPLAY")
-        [Authorize(Roles = "1")]
-        public ActionResult SetDisplay(int? defaultID, int? selectedID)
-        {
-            if (defaultID == null && selectedID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            UpdateDisplay(new ProductImage() { ImageID = (int)defaultID, isDisplay = false });  //remove previous display
-            UpdateDisplay(new ProductImage() { ImageID = (int)selectedID, isDisplay = true });  //set new display
-
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult SetMainDisplay(int? productID, int? selectedID)
-        {
-            if (productID == null && selectedID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            UpdateMainDisplay(new ProductColorModel() { ProductID = (int)productID }, true);  //remove previous  main display
-            UpdateMainDisplay(new ProductColorModel() { ImageID = (int)selectedID }, false);  //set new main display
-
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        private void UpdateMainDisplay(ProductColorModel productColorModel, bool isMainDisplay) //this update uses (ENTITY FRAMEWORK.EXTENDED) for more info see https://www.seguetech.com/performing-bulk-updatesentity-framework-6-1/
-        {
-            if (ModelState.IsValid)
-            {
-                if (isMainDisplay == true)
-                {
-                    dbContext.ProductImage
-                             .Where(i => i.ProductColor.ProductID == productColorModel.ProductID && i.isMainDisplay == true)  //remove old main display
-                             .Update(i => new ProductImage() { isMainDisplay = false });
-                }
-                else
-                {
-                    dbContext.ProductImage
-                             .Where(i => i.ImageID == productColorModel.ImageID)  //set new main display
-                             .Update(i => new ProductImage() { isMainDisplay = true });
-                }
-            }
-        }
-
-        private void UpdateDisplay(ProductImage productImage)
-        {
-            if (ModelState.IsValid)
-            {
-                dbContext.ProductImage.Attach(productImage);
-                dbContext.Entry(productImage).Property(i => i.isDisplay).IsModified = true;  //modify and update only 1 property
-                dbContext.SaveChanges();
-            }
-        }
-        #endregion ("END SET IMAGE DISPLAY")*/
     }
 }
