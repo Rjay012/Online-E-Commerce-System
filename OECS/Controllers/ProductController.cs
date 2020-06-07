@@ -412,7 +412,7 @@ namespace OECS.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
 
-        private ActionResult CreateNewProductSize([Bind(Include = "ProductID, ProductDetailID, ColorID, SizeID, ImageID")] ProductColorModel productColorModel)  //creating/adding new product size in update area
+        private ActionResult CreateNewProductSize([Bind(Include = "ProductID, ProductDetailID, ColorID, SizeID, ImageID, NewSizeQuantity")] ProductColorModel productColorModel)  //creating/adding new product size in update area
         {
             if(ModelState.IsValid)
             {
@@ -435,7 +435,7 @@ namespace OECS.Controllers
         {
             if(ModelState.IsValid)
             {
-                CreateNewProductSize(productColorModel);
+                if(productColorModel.NewSizeQuantity.Any(s => s != "")) { CreateNewProductSize(productColorModel); }  //check if new size has been added/selected by the admin
             }
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }

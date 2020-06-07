@@ -92,9 +92,10 @@
                                         <label class="custom-control-label" for="checkbox-edit-@s.SideID">@s.size1</label>
                                         @if (sizeCount > 0)
                                         {
-                                            <a class="size-popover" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@strSizeCount</a>
+                                            @Html.HiddenFor(q => q.AddedSizeQuantity, new { @id = "edit-size-quantity-holder-" + s.SideID })
+                                            <a class="size-popover edit-size" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@strSizeCount</a>
                                             <div class="d-none" id="size-popover-@s.SideID" role="tooltip">
-                                                <input class="form-control" type="text" value="0" />
+                                                <input class="form-control edit-size-quantity" type="text" id="txtedit-size-quantity-@s.SideID" value="0" />
                                             </div>
                                         }
                                     </div>

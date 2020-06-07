@@ -60,7 +60,7 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
 });
 
 $(document).on("click", "#BtnSaveEditProductColor", function () {
-    //if (confirm("Sure you want to add this new color?") == true) {
+    if (confirm("Sure you want to edit this color?") == true) {
     //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
     //var c = 1;
     //$(".file-edit-img-input").each(function () {  //manage images first via ajax
@@ -84,7 +84,7 @@ $(document).on("click", "#BtnSaveEditProductColor", function () {
     //    else {
     //        toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
     //    }        
-    //}
+    }
 });
 
 $(document).on("click", "#BtnSetUsDisplay", function () {
@@ -170,7 +170,19 @@ $(document).on("keyup", ".new-size-quantity", function () {
     var id = $(this).attr("id").split("-");
     var quantity = $(this).val();
 
-    $("#new-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
+    if (isNaN(quantity)) {
+        toastr.warning("Only Number is allowed to enter", "Warning", { "positionClass": "md-toast-top-right" });
+    }
+    else {
+        $("#new-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
+    }
+});
+
+$(document).on("keyup", ".edit-size-quantity", function () {
+    var id = $(this).attr("id").split("-");
+    var quantity = $(this).val();
+
+    $("#edit-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
 });
 
 function LoadTable() {

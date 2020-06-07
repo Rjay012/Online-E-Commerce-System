@@ -18,6 +18,7 @@ namespace OECS.Models.ProductModels
         public int SID { get; set; }  //single valued size id
         public int[] SizeID { get; set; }
         public string[] NewSizeQuantity { get; set; }  //handles sizeID and its quantity
+        public string[] AddedSizeQuantity { get; set; }  //use when adding quantities to sizes
         public int[] SizeQuantity { get; set; }
         public int IsDisplayPosition { get; set; }
         public bool? IsDisplay { get; set; }
