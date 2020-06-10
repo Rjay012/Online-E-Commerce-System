@@ -115,6 +115,8 @@ $(document).on("click", "#BtnSetUsBothDisplay", function () {
 $(document).on("change", ".file-edit-img-input", function () {
     var img = $(this).siblings("img");
     ReadUrl(this, img);
+
+    $(this).siblings("#FileToRemove").val($(this).siblings("img").attr("imgID"));
 });
 
 $(document).on("change", ".add-size", function () {
@@ -133,7 +135,7 @@ $(document).on("click", ".color-wrapper", function () {
 
 $(document).on("click", ".color-edit-wrapper", function () {
     var colorID = $(this).children(".edit-color").attr("colorID");
-    $("#ColorID").val(colorID);
+    $("#NewColorID").val(colorID);
     $(this).siblings(".color-edit-wrapper").children(".edit-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
     $(this).children(".edit-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
 });
@@ -153,7 +155,7 @@ $(document).on("click", ".size-popover", function () {
 $(document).on("change", ".new-size", function () {
     var sizeID = $(this).attr("sizeID");
     if ($(this).is(":checked")) {
-        $(this).popover({   //activate color popover
+        $(this).popover({   //activate new size quantity popover
             html: true,
             title: '<h6 class="custom-title">New Size Quantity</h6>',
             content: $("#new-size-quantity-popover-" + sizeID).html(),
@@ -182,8 +184,28 @@ $(document).on("keyup", ".edit-size-quantity", function () {
     var id = $(this).attr("id").split("-");
     var quantity = $(this).val();
 
-    $("#edit-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
+    $("#new-size-quantity-holder-" + id[3]).val(id[3] + "-" + quantity);
 });
+
+$(document).on("change", ".existing-size", function () {
+    var id = $(this).attr("id").split("-");  //split and get the sizeID to remove
+    if (!$(this).is(":checked")) {
+        $("#txthid-remove-size-" + id[2]).val(id[2]);
+    }
+    else {
+        $("#txthid-remove-size-" + id[2]).val(0);
+    }
+});
+
+$(document).on("change", "#chkNewlyAddedProduct", function () {
+    if ($(this).is(":checked")) {
+
+    }
+    else {
+
+    }
+});
+
 
 function LoadTable() {
     var columns = [{
@@ -254,7 +276,6 @@ function EditColorImages(productID, colorID, iconID) {
     $("#NewProductColorForm").html("");  //clear other form to avoid conflicts on properties
     FetchData("/Product/EditColorModalForm", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#EditProductColorForm").html(content);
-        //MarkSelectedOption(colorID);
 
         //increase the height and width of selected icon
         $("#edit-icon-" + iconID).css({ "height": "45px", "width": "45px" });
@@ -279,14 +300,6 @@ function ViewProductPhotoGallery(productID, colorID, iconID) {
         $("#icon-" + iconID).css({ "height": "45px", "width": "45px" });
     });
 }
-
-//function MarkSelectedOption(val) {
-//    $("#sEditColor option").each(function () {
-//        if ($(this).val() == val) {
-//            $(this).prop("selected", true);
-//        }
-//    });
-//}
 
 function Success(response) {
     if (response.data == "success") {

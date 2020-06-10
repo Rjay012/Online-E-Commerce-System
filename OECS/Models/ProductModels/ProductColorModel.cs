@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,17 +10,16 @@ namespace OECS.Models.ProductModels
         public int ProductDetailID { get; set; }
         public int ProductImageID { get; set; }
         public int[] ImageID { get; set; }
+        public int[] FileToRemove { get; set; }
         public int IconID { get; set; }
         public int ProductID { get; set; }
         public int ColorID { get; set; }
+        public int NewColorID { get; set; }  //holds the new color id when updating
         public int SID { get; set; }  //single valued size id
         public int[] SizeID { get; set; }
         public string[] NewSizeQuantity { get; set; }  //handles sizeID and its quantity
-        public string[] AddedSizeQuantity { get; set; }  //use when adding quantities to sizes
-        public int[] SizeQuantity { get; set; }
+        public int[] ToRemoveSizeID { get; set; }  //holds the sizeID selected by the user to remove
         public int IsDisplayPosition { get; set; }
-        public bool? IsDisplay { get; set; }
-        public bool ToDisplay { get; set; }
         public string Path { get; set; }
         public string IconPath { get; set; }
         public HttpPostedFileBase IconFile { get; set; }
@@ -67,13 +64,5 @@ namespace OECS.Models.ProductModels
         }
 
         public List<ProductImage> ProductImage { get; set; }
-
-        //public NewSizeQuantity[] NSizeQuantity { get; set; }
     }
-
-    //public class NewSizeQuantity
-    //{
-    //    public int SizeID { get; set; }
-    //    public int Quantity { get; set; }
-    //}
 }

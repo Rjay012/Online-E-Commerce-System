@@ -1,6 +1,6 @@
 ﻿@model OECS.Models.ProductModels.ProductColorModel
 @using OECS.Models;
-@using (Ajax.BeginForm("EditProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm("EditProductDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
         <h5 class="modal-title">Edit Color</h5>
@@ -12,6 +12,7 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(i => i.ProductID)
         @Html.HiddenFor(i => i.IconID)
+        @Html.HiddenFor(i => i.IconPath)
         @Html.HiddenFor(i => i.ProductDetailID)
         @{
             oecsEntities dbContext = new oecsEntities();
@@ -58,10 +59,12 @@
                         <td class="text-center">
                             @Html.HiddenFor(i => i.ImageID, new { @id = "hid-strongly-typed-img-" + path.ImageID })
                             <label>
+                                @Html.HiddenFor(i => i.FileToRemove)
                                 @Html.Hidden("txtHidImgID-" + @c, path.ImageID, new { @class = "form-control txtHidImgID" })
                                 @Html.TextBoxFor(i => i.Files, new { type = "file", @class = "file-edit-img-input d-none", @id = "fileEdit-" + c })
-                                <img class="img-display" src="@path.Image.path" id="imgEdit-@c" />
+                                <img class="img-display" src="@path.Image.path" imgID="@path.ImageID" id="imgEdit-@c" />
                             </label>
+                            @path.ImageID
                         </td>
                         { c++; }
                     }
@@ -76,14 +79,14 @@
                                     int sizeCount = size.Where(ds => ds.SideID == s.SideID && s.SizeID != null).Count();
                                     string strSizeCount = s.SizeID != null ? "(" + sizeCount.ToString() + ")" : "";
                                     <div class="custom-control custom-checkbox">
+                                        @Html.HiddenFor(q => q.NewSizeQuantity, new { @id = "new-size-quantity-holder-" + s.SideID })
                                         @if (s.SizeID != null)
                                         {
-                                            @Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input", @id = "checkbox-edit-" + s.SideID, @checked = "checked" })
+                                            @Html.HiddenFor(q => q.ToRemoveSizeID, new { @id = "txthid-remove-size-" + s.SideID })
+                                            @Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input existing-size", @id = "checkbox-edit-" + s.SideID, @checked = "checked" })
                                         }
                                         else
                                         {
-                                            @*@Html.CheckBox(Convert.ToString(s.SideID), new { @class = "custom-control-input new-size", @id = "checkbox-edit-" + s.SideID, @sizeID = s.SideID })*@
-                                            @Html.HiddenFor(q => q.NewSizeQuantity, new { @id = "new-size-quantity-holder-" + s.SideID })
                                             <input class="custom-control-input new-size" id="checkbox-edit-@s.SideID" type="checkbox" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>" />
                                             <div class="d-none" id="new-size-quantity-popover-@s.SideID" role="tooltip">
                                                 <input class="form-control new-size-quantity" type="text" id="txtnew-size-quantity-@s.SideID" />
@@ -92,7 +95,6 @@
                                         <label class="custom-control-label" for="checkbox-edit-@s.SideID">@s.size1</label>
                                         @if (sizeCount > 0)
                                         {
-                                            @Html.HiddenFor(q => q.AddedSizeQuantity, new { @id = "edit-size-quantity-holder-" + s.SideID })
                                             <a class="size-popover edit-size" sizeID="@s.SideID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">@strSizeCount</a>
                                             <div class="d-none" id="size-popover-@s.SideID" role="tooltip">
                                                 <input class="form-control edit-size-quantity" type="text" id="txtedit-size-quantity-@s.SideID" value="0" />
@@ -110,6 +112,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 @Html.HiddenFor(i => i.ColorID)  @* use to mark default color *@
+                                @Html.HiddenFor(i => i.NewColorID) @* use to hold the new color id when updating *@
                                 @foreach (var color in Model.ColorList)
                                 {
                                     <div class="col-xs-3 color-edit-wrapper">

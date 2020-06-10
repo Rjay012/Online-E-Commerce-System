@@ -219,7 +219,7 @@ namespace OECS.Controllers
             var fname = Path.GetFileNameWithoutExtension(file.FileName);
             var extension = Path.GetExtension(file.FileName);
             fname = fname + DateTime.Now.ToString("yymmssff") + extension;
-            file.SaveAs(Path.Combine(Server.MapPath(directory), fname));
+            //file.SaveAs(Path.Combine(Server.MapPath(directory), fname));
             return fname;
         }
 
@@ -430,14 +430,145 @@ namespace OECS.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "1")]
-        public ActionResult EditProductColor(ProductColorModel productColorModel)
+        //YOU STOPPED HERE, YOU CAN CONTROL TO REMOVE THE NUMBER OF QUANTITY BY USING TAKE METHOD 
+        private ActionResult RemoveProductSize([Bind(Include = "ToRemoveSizeID, ColorID, ProductID, IconID")] ProductColorModel productColorModel)
         {
             if(ModelState.IsValid)
             {
-                if(productColorModel.NewSizeQuantity.Any(s => s != "")) { CreateNewProductSize(productColorModel); }  //check if new size has been added/selected by the admin
+                foreach (var item in productColorModel.ToRemoveSizeID.Where(s => s > 0).ToList())
+                {
+                    var pdToRemove = dbContext.ProductImage
+                                              .Where(pi => pi.ProductDetail.SizeID == item && pi.ProductDetail.ColorID == productColorModel.ColorID && pi.ProductDetail.ProductID == productColorModel.ProductID && pi.Image.IconID == productColorModel.IconID)
+                                              .Select(pi => new { pi.ProductDetailID }).Distinct().ToList();
+                    foreach(var pdID in pdToRemove)
+                    {
+                        ProductDetail productDetail = dbContext.ProductDetail.Find(pdID.ProductDetailID);
+                    }
+                }
             }
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        [Authorize(Roles = "1")]
+        public ActionResult EditProductDetail(ProductColorModel productColorModel)
+        {
+            if(ModelState.IsValid)
+            {
+                /** UNCOMMENT THOSE LINES BELOW IF THE UPDATE FEATURE FOR THE PRODUCT DETAIL HAS BEEN FINISHED **/
+                //if(productColorModel.NewSizeQuantity.Any(s => s != "")) { CreateNewProductSize(productColorModel); }  //check if new size has been added/selected by the admin
+                //RemoveProductSize(productColorModel);
+                //ChangeImageIcon(productColorModel);
+                //ChangeProductColor(productColorModel);
+                ChangeProductImage(productColorModel); //error when updating image path to the database
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult ChangeProductImage(ProductColorModel productColorModel)
+        {
+            if(ModelState.IsValid)
+            {
+                RemoveOldImage(productColorModel);
+                ChangeImage(productColorModel);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult ChangeImage([Bind(Include = "Files, FileToRemove")]ProductColorModel productColorModel)
+        {
+            if(ModelState.IsValid)
+            {
+                int[] arrImgID = productColorModel.FileToRemove.Where(f => f != 0).ToArray();
+                int indx = 0;
+                foreach (HttpPostedFileBase file in productColorModel.Files)
+                {
+                    Image image = new Image();
+                    image.ImageID = arrImgID[indx];
+                    image.path = "Images\\" + UploadFile(file, "/Images");
+                    dbContext.Image.Attach(image);
+                    dbContext.Entry(image).Property(i => i.path).IsModified = true;  
+                    indx++;
+                } //error here
+
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult RemoveOldImage([Bind(Include = "FileToRemove")]ProductColorModel productColorModel)    //remove old image from directory
+        {
+            if(ModelState.IsValid)
+            {
+                foreach(var item in productColorModel.FileToRemove.Where(f => f != 0).ToArray())
+                {
+                    Image image = dbContext.Image.Find(item);
+                    string deleteImagePath = Server.MapPath("~\\" + image.path);
+                    if(System.IO.File.Exists(deleteImagePath))
+                    {
+                        //System.IO.File.Delete(deleteImagePath);
+                    }
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult ChangeProductColor([Bind(Include = "ProductID, ColorID, IconID, NewColorID")]ProductColorModel productColorModel)
+        {
+            if(ModelState.IsValid && productColorModel.NewColorID != 0)
+            {
+                var productDetailID = dbContext.ProductDetail
+                                               .Where(pd => pd.ProductID == productColorModel.ProductID && pd.ColorID == productColorModel.ColorID)
+                                               .Join(dbContext.ProductImage, pd => pd.ProductDetailID, pi => pi.ProductDetailID, (pd, pi) => new
+                                               {
+                                                    pd.ProductDetailID,
+                                                    pi.Image.IconID
+                                               }).Where(pi => pi.IconID == productColorModel.IconID).Distinct().ToList();
+                
+                foreach(var pdID in productDetailID)
+                {
+                    ProductDetail productDetail = new ProductDetail();
+                    productDetail.ProductDetailID = pdID.ProductDetailID;
+                    productDetail.ColorID = productColorModel.NewColorID;
+                    dbContext.ProductDetail.Attach(productDetail);
+                    dbContext.Entry(productDetail).Property(pd => pd.ColorID).IsModified = true;
+                    dbContext.SaveChanges();
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult ChangeImageIcon([Bind(Include = "IconID, IconPath, IconFile")] ProductColorModel productColorModel)
+        {
+            if(ModelState.IsValid)
+            {
+                RemoveOldIconFromDirectory(productColorModel.IconPath);
+                ChangeIconAndDirectoryPath(productColorModel);   //update the icon inside the directory and its path to the database
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private ActionResult ChangeIconAndDirectoryPath([Bind(Include = "IconID, IconFile")] ProductColorModel productColorModel)
+        {
+            Icon icon = new Icon();
+            if(ModelState.IsValid)
+            {
+                HttpPostedFileBase file = productColorModel.IconFile;
+                string path = "Images\\AddImageIcon\\" + UploadFile(file, "/Images/AddImageIcon");
+
+                icon.IconID = productColorModel.IconID;
+                icon.icon1 = path;  //new path
+                dbContext.Entry(icon).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+        }
+
+        private void RemoveOldIconFromDirectory(string iconPath)
+        {
+            string deleteIconPath = Server.MapPath("~\\" + iconPath);
+            if (System.IO.File.Exists(deleteIconPath))
+            {
+                System.IO.File.Delete(deleteIconPath);
+            }
         }
         #endregion ("END UPDATE PRODUCT AND ITS DETAILS")
 
@@ -491,8 +622,6 @@ namespace OECS.Controllers
             SetNewMainDisplay(selectedMainDisplayID);
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
-
-
 
         private ActionResult SetNewMainDisplay(int? selectedMainDisplayID)
         {
