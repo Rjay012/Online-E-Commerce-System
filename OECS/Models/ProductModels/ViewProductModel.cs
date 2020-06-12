@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace OECS.Models.ProductModels
+﻿namespace OECS.Models.ProductModels
 {
     public class ViewProductModel
     {

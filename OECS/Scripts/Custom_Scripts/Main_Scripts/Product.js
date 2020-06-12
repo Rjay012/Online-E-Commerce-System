@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    LoadTable();
+    ReadyProductTableList();
 });
 
 $(document).on("click", "#BtnTriggerModalForm", function () {
@@ -61,29 +61,29 @@ $(document).on("click", "#BtnSaveNewProductColor", function () {
 
 $(document).on("click", "#BtnSaveEditProductColor", function () {
     if (confirm("Sure you want to edit this color?") == true) {
-    //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
-    //var c = 1;
-    //$(".file-edit-img-input").each(function () {  //manage images first via ajax
-    //    var file = $(this).get(0).files;
-    //    var data = new FormData();
-    //    if (file.length !== 0) {  //select image file to be updated
-    //        data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
-    //        data.append(file[0].name, file[0]);
-    //        $.ajax({
-    //            type: "post",
-    //            url: "/Product/EditProductImage",
-    //            data: data,
-    //            contentType: false,
-    //            processData: false
-    //        });
-    //    }
-    //    c++;
-    //});
-    $("#BtnConfirmSaveEditProductColor").click();
-    //    }
-    //    else {
-    //        toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
-    //    }        
+        //    if (parseInt($("#ColorID").val()) > 0 && $("#IconFile").get(0).files.length !== 0 && $("#Files").get(0).files.length !== 0) {
+        //var c = 1;
+        //$(".file-edit-img-input").each(function () {  //manage images first via ajax
+        //    var file = $(this).get(0).files;
+        //    var data = new FormData();
+        //    if (file.length !== 0) {  //select image file to be updated
+        //        data.append("ImageID", parseInt($("#txtHidImgID-" + c).val()));
+        //        data.append(file[0].name, file[0]);
+        //        $.ajax({
+        //            type: "post",
+        //            url: "/Product/EditProductImage",
+        //            data: data,
+        //            contentType: false,
+        //            processData: false
+        //        });
+        //    }
+        //    c++;
+        //});
+        $("#BtnConfirmSaveEditProductColor").click();
+        //    }
+        //    else {
+        //        toastr.error("Color, Color Display, Images and Icons are required!", "All Fields are Required", { "positionClass": "md-toast-top-right" });
+        //    }        
     }
 });
 
@@ -199,30 +199,66 @@ $(document).on("change", ".existing-size", function () {
 
 $(document).on("change", "#chkNewlyAddedProduct", function () {
     if ($(this).is(":checked")) {
-
+        ReadyNewlyAddedProducts();
     }
     else {
-
+        ReadyProductTableList();
     }
 });
 
+function ReadyProductTableList() {
+    MainLoader("#ProductTableList");
+    FetchData("/Product/ReadyProductListTable").done(function (table) {
+        $("#ProductTableList").html(table);
+        LoadTable();
+    });
+}
+
+function ReadyNewlyAddedProducts() {
+    MainLoader("#ProductTableList");
+    FetchData("/Product/ShowNewlyAddedProductListTable").done(function (table) {
+        $("#ProductTableList").html(table);
+        LoadNewlyAddedProducts();
+    });
+}
+
+function LoadNewlyAddedProducts() {
+    var columns = [{ 'data': 'ProductID' }, { 'data': 'ProductName' }, { 'data': 'CategoryName' },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<button class='btn btn-success btn-sm btn-block' data-toggle='modal' data-target='#modalNewProductColor' onclick='AddColorImages(" + parseInt(productID) + ")'>ADD DETAILS</button>";
+        }
+    },
+    { 'data': 'Date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'Price' },
+    {
+        'data': 'ProductID', render: function (productID, type, row) {
+            return "<button class='btn btn-primary btn-sm btn-block'>EDIT</button>";
+        }
+    }];
+    var columnDefs = [{
+        targets: [0],
+        visible: false,
+        searchable: false
+    }];
+    LoadTableViaServerSide("ShowNewlyAddedProductList", "/Product/ShowProduct", columns, columnDefs, { name: "isNewlyAdded", value: true });
+}
 
 function LoadTable() {
     var columns = [{
         'data': 'ProductID', render: function (productID, type, row) {
             return "<div class='custom-control custom-checkbox'>" +
-                "<input class='custom-control-input' type='checkbox' id='display-" + parseInt(productID) + "' " + (row.display == true ? 'checked': '') + " />" +
+                "<input class='custom-control-input' type='checkbox' id='display-" + parseInt(productID) + "' " + (row.display == true ? 'checked' : '') + " />" +
                 "<label class='custom-control-label' for='display-" + parseInt(productID) + "' />" +
                 "</div>";
         }
     },
-    { 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'IconID'}, { 'data': 'productName', 'width': '30%' }, { 'data': 'category1', 'width': '20%' },
+    { 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'IconID' }, { 'data': 'ProductName', 'width': '30%' }, { 'data': 'CategoryName', 'width': '20%' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
             return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>VIEW GALLERY</button>";
         }
     },
-    { 'data': 'date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'price' },
+    { 'data': 'Date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'Price' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
             return "<div class='dropdown'><button class='btn btn-info btn-sm dropdown-toggle mr-4' id='dropdown-1' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>COLOR</button>" +
@@ -244,7 +280,7 @@ function LoadTable() {
         visible: false,
         searchable: false,
     }];
-    LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs);
+    LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs, { name: "isNewlyAdded", value: false });
 }
 
 //preview images 

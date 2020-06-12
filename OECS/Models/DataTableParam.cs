@@ -23,7 +23,7 @@ namespace OECS.Models
         public List<int> iSortCol { get; set; }
         public List<string> sSortDir { get; set; }
         public List<bool> bEscapeRegexColumns { get; set; }
-
+        public bool isNewlyAdded { get; set; }
         public DataTableParam()
         {
             sColumnNames = new List<string>();

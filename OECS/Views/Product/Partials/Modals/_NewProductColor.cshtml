@@ -1,4 +1,4 @@
-﻿@model OECS.Models.ProductModels.ProductColorModel
+﻿@model OECS.Models.ProductModels.ProductDetailModel
 @using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
@@ -9,7 +9,6 @@
     </div>
     <div class="modal-body">
         @Html.AntiForgeryToken()
-
         @Html.HiddenFor(i => i.ProductID)  @*determine the product that your editing*@
         @Html.HiddenFor(i => i.IsDisplayPosition)  @*determine the image you want to set us display*@
         @Html.HiddenFor(i => i.ColorID)  @*holds color id*@

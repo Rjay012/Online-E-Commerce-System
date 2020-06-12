@@ -6,26 +6,11 @@
     <div class="custom-control custom-checkbox float-right">
         <input class="custom-control-input" type="checkbox" id="chkNewlyAddedProduct" />
         <label class="custom-control-label" for="chkNewlyAddedProduct">Newly Added</label>
+        <span class="badge badge-danger ml-2">@ViewBag.NewlyAddedProductCount</span>
     </div>
-    <table id="ShowProductList" class="table table-bordered" width="100%">
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th class="th-sm text-center">Product Name</th>
-                <th class="th-sm text-center">Category</th>
-                <th class="th-sm text-center">Gallery</th>
-                <th class="th-sm text-center">Date</th>
-                <th class="th-sm text-center">Price</th>
-                <th class="th-sm text-center">Color</th>
-                <th class="th-sm text-center"></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div id="ProductTableList">
+        
+    </div>
 </div>
 
 <!-- Modal Add New Product -->

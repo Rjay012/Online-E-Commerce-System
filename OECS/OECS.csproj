@@ -164,6 +164,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ClassServices\_File.cs" />
+    <Compile Include="ClassServices\_Product.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
@@ -234,9 +236,10 @@
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductModels\ProductColorModel.cs" />
+    <Compile Include="Models\ProductModels\ProductDetailModel.cs" />
     <Compile Include="Models\ProductModels\ProductModel.cs" />
     <Compile Include="Models\ProductModels\ProductSizeModel.cs" />
+    <Compile Include="Models\ProductModels\ViewProductDetailModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\Role.cs">
       <DependentUpon>oecs.tt</DependentUpon>
@@ -2307,6 +2310,7 @@
     <Content Include="Scripts\Custom_Scripts\Category.js" />
     <Content Include="Scripts\Custom_Scripts\Color.js" />
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
+    <Content Include="Scripts\Custom_Scripts\Loader.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
@@ -2364,6 +2368,8 @@
     <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\Product\Partials\Modals\_NewProductSize.cshtml" />
     <Content Include="Views\Size\Partials\_ProductSize.cshtml" />
+    <Content Include="Views\Product\Partials\Tables\_ReadyProductList.cshtml" />
+    <Content Include="Views\Product\Partials\Tables\_NewlyAddedProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace OECS.Models.ProductModels
 {
-    public class ProductColorModel
+    public class ProductDetailModel
     {
         public int ProductDetailID { get; set; }
         public int ProductImageID { get; set; }
@@ -19,6 +19,8 @@ namespace OECS.Models.ProductModels
         public int[] SizeID { get; set; }
         public string[] NewSizeQuantity { get; set; }  //handles sizeID and its quantity
         public int[] ToRemoveSizeID { get; set; }  //holds the sizeID selected by the user to remove
+        public bool? IsDisplay { get; set; }
+        public bool ToDisplay { get; set; }
         public int IsDisplayPosition { get; set; }
         public string Path { get; set; }
         public string IconPath { get; set; }
