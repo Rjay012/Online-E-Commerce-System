@@ -13,6 +13,13 @@
           <Property Name="password" Type="varchar" MaxLength="50" />
           <Property Name="RoleID" Type="int" />
         </EntityType>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="BrandID" />
+          </Key>
+          <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrandName" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -91,11 +98,12 @@
           </Key>
           <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="productName" Type="varchar(max)" />
-          <Property Name="CategoryID" Type="int" />
+          <Property Name="SubCategoryID" Type="int" />
           <Property Name="date" Type="date" />
           <Property Name="price" Type="money" />
           <Property Name="description" Type="varchar(max)" />
           <Property Name="display" Type="bit" />
+          <Property Name="BrandID" Type="int" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -145,6 +153,14 @@
           <Property Name="StockID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="quantity" Type="int" />
           <Property Name="ProductID" Type="int" />
+        </EntityType>
+        <EntityType Name="SubCategory">
+          <Key>
+            <PropertyRef Name="SubCategoryID" />
+          </Key>
+          <Property Name="SubCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subCategory" Type="varchar" MaxLength="100" />
+          <Property Name="CategoryID" Type="int" />
         </EntityType>
         <EntityType Name="SubModule">
           <Key>
@@ -239,17 +255,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Product_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+        <Association Name="FK_Product_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Category">
-              <PropertyRef Name="CategoryID" />
+            <Principal Role="Brand">
+              <PropertyRef Name="BrandID" />
             </Principal>
             <Dependent Role="Product">
-              <PropertyRef Name="CategoryID" />
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_SubCategory">
+          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategory">
+              <PropertyRef Name="SubCategoryID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="SubCategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -379,6 +409,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SubCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="SubCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SubModule_Module">
           <End Role="Module" Type="Self.Module" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -437,6 +481,7 @@
         </Association>
         <EntityContainer Name="oecsModelStoreContainer">
           <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Color" EntityType="Self.Color" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
@@ -452,6 +497,7 @@
           <EntitySet Name="RoleModule" EntityType="Self.RoleModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Size" EntityType="Self.Size" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubCategory" EntityType="Self.SubCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubModule" EntityType="Self.SubModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supply" EntityType="Self.Supply" Schema="dbo" store:Type="Tables" />
@@ -471,8 +517,12 @@
             <End Role="ProductImage" EntitySet="ProductImage" />
             <End Role="DisplaySize" EntitySet="DisplaySize" />
           </AssociationSet>
-          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
-            <End Role="Category" EntitySet="Category" />
+          <AssociationSet Name="FK_Product_Brand" Association="Self.FK_Product_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_SubCategory" Association="Self.FK_Product_SubCategory">
+            <End Role="SubCategory" EntitySet="SubCategory" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Color" Association="Self.FK_ProductColor_Color">
@@ -511,6 +561,10 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="Stock" EntitySet="Stock" />
           </AssociationSet>
+          <AssociationSet Name="FK_SubCategory_Category" Association="Self.FK_SubCategory_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="SubCategory" EntitySet="SubCategory" />
+          </AssociationSet>
           <AssociationSet Name="FK_SubModule_Module" Association="Self.FK_SubModule_Module">
             <End Role="Module" EntitySet="Module" />
             <End Role="SubModule" EntitySet="SubModule" />
@@ -534,6 +588,7 @@
       <Schema Namespace="oecsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="oecsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Administrator" EntityType="oecsModel.Administrator" />
+          <EntitySet Name="Brand" EntityType="oecsModel.Brand" />
           <EntitySet Name="Category" EntityType="oecsModel.Category" />
           <EntitySet Name="Color" EntityType="oecsModel.Color" />
           <EntitySet Name="Customer" EntityType="oecsModel.Customer" />
@@ -549,6 +604,7 @@
           <EntitySet Name="RoleModule" EntityType="oecsModel.RoleModule" />
           <EntitySet Name="Size" EntityType="oecsModel.Size" />
           <EntitySet Name="Stock" EntityType="oecsModel.Stock" />
+          <EntitySet Name="SubCategory" EntityType="oecsModel.SubCategory" />
           <EntitySet Name="SubModule" EntityType="oecsModel.SubModule" />
           <EntitySet Name="Supplier" EntityType="oecsModel.Supplier" />
           <EntitySet Name="Supply" EntityType="oecsModel.Supply" />
@@ -556,9 +612,13 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
-          <AssociationSet Name="FK_Product_Category" Association="oecsModel.FK_Product_Category">
-            <End Role="Category" EntitySet="Category" />
+          <AssociationSet Name="FK_Product_Brand" Association="oecsModel.FK_Product_Brand">
+            <End Role="Brand" EntitySet="Brand" />
             <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubCategory_Category" Association="oecsModel.FK_SubCategory_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="SubCategory" EntitySet="SubCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Color" Association="oecsModel.FK_ProductColor_Color">
             <End Role="Color" EntitySet="Color" />
@@ -591,6 +651,10 @@
           <AssociationSet Name="FK_SubModule_Module" Association="oecsModel.FK_SubModule_Module">
             <End Role="Module" EntitySet="Module" />
             <End Role="SubModule" EntitySet="SubModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_SubCategory" Association="oecsModel.FK_Product_SubCategory">
+            <End Role="SubCategory" EntitySet="SubCategory" />
+            <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductColor_Product" Association="oecsModel.FK_ProductColor_Product">
             <End Role="Product" EntitySet="Product" />
@@ -634,13 +698,21 @@
           <Property Name="RoleID" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="oecsModel.FK_Administrator_Role" FromRole="Administrator" ToRole="Role" />
         </EntityType>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="BrandID" />
+          </Key>
+          <Property Name="BrandID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Product" Relationship="oecsModel.FK_Product_Brand" FromRole="Brand" ToRole="Product" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="category1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Product" Relationship="oecsModel.FK_Product_Category" FromRole="Category" ToRole="Product" />
+          <NavigationProperty Name="SubCategory" Relationship="oecsModel.FK_SubCategory_Category" FromRole="Category" ToRole="SubCategory" />
         </EntityType>
         <EntityType Name="Color">
           <Key>
@@ -722,12 +794,14 @@
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="productName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="SubCategoryID" Type="Int32" />
           <Property Name="date" Type="DateTime" Precision="0" />
           <Property Name="price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="display" Type="Boolean" />
-          <NavigationProperty Name="Category" Relationship="oecsModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
+          <Property Name="BrandID" Type="Int32" />
+          <NavigationProperty Name="Brand" Relationship="oecsModel.FK_Product_Brand" FromRole="Product" ToRole="Brand" />
+          <NavigationProperty Name="SubCategory" Relationship="oecsModel.FK_Product_SubCategory" FromRole="Product" ToRole="SubCategory" />
           <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductDetail" />
           <NavigationProperty Name="Stock" Relationship="oecsModel.FK_Stock_Product" FromRole="Product" ToRole="Stock" />
           <NavigationProperty Name="Supply" Relationship="oecsModel.FK_Supply_Product" FromRole="Product" ToRole="Supply" />
@@ -797,6 +871,16 @@
           <Property Name="ProductID" Type="Int32" />
           <NavigationProperty Name="Product" Relationship="oecsModel.FK_Stock_Product" FromRole="Stock" ToRole="Product" />
         </EntityType>
+        <EntityType Name="SubCategory">
+          <Key>
+            <PropertyRef Name="SubCategoryID" />
+          </Key>
+          <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subCategory1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryID" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="oecsModel.FK_SubCategory_Category" FromRole="SubCategory" ToRole="Category" />
+          <NavigationProperty Name="Product" Relationship="oecsModel.FK_Product_SubCategory" FromRole="SubCategory" ToRole="Product" />
+        </EntityType>
         <EntityType Name="SubModule">
           <Key>
             <PropertyRef Name="SubModuleID" />
@@ -853,16 +937,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Product_Category">
-          <End Type="oecsModel.Category" Role="Category" Multiplicity="0..1">
+        <Association Name="FK_Product_Brand">
+          <End Type="oecsModel.Brand" Role="Brand" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="oecsModel.Product" Role="Product" Multiplicity="*" />
           <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="BrandID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubCategory_Category">
+          <End Type="oecsModel.Category" Role="Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.SubCategory" Role="SubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="CategoryID" />
             </Principal>
-            <Dependent Role="Product">
+            <Dependent Role="SubCategory">
               <PropertyRef Name="CategoryID" />
             </Dependent>
           </ReferentialConstraint>
@@ -976,6 +1074,20 @@
             </Principal>
             <Dependent Role="SubModule">
               <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_SubCategory">
+          <End Type="oecsModel.SubCategory" Role="SubCategory" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategory">
+              <PropertyRef Name="SubCategoryID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="SubCategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1106,6 +1218,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Brand">
+            <EntityTypeMapping TypeName="oecsModel.Brand">
+              <MappingFragment StoreEntitySet="Brand">
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Category">
             <EntityTypeMapping TypeName="oecsModel.Category">
               <MappingFragment StoreEntitySet="Category">
@@ -1189,11 +1309,12 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="oecsModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="display" ColumnName="display" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
                 <ScalarProperty Name="productName" ColumnName="productName" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </MappingFragment>
@@ -1251,6 +1372,15 @@
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
                 <ScalarProperty Name="StockID" ColumnName="StockID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubCategory">
+            <EntityTypeMapping TypeName="oecsModel.SubCategory">
+              <MappingFragment StoreEntitySet="SubCategory">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="subCategory1" ColumnName="subCategory" />
+                <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

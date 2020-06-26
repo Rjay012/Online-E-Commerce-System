@@ -1,0 +1,29 @@
+.demo2 {
+    float: left;
+    clear: both;
+    width: 100px;
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+}
+
+    .demo2 .inside {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 100px;
+        margin-top: 1px;
+        padding-bottom: 60px;
+    }
+
+    .demo2 a {
+        display: block;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        -moz-border-radius: 100px;
+        -webkit-border-radius: 100px;
+        border-radius: 100px;
+        border: 3px solid #fff;
+    }

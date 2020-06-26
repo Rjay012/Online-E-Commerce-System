@@ -1,4 +1,5 @@
 ﻿using OECS.Models.RoleModels;
+using OECS.Models.SupplyModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OECS.Models.SupplierModels
         public Nullable<int> RoleID { get; set; }
 
         public RoleModel Role { get; set; }
+        public List<SupplyModel> Supplies { get; set; }
     }
 }

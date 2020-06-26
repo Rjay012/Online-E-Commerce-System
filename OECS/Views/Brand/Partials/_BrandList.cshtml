@@ -1,0 +1,8 @@
+﻿@model IEnumerable<OECS.Models.BrandModels.BrandModel>
+@foreach (var brand in Model)
+{
+    <div class="custom-control custom-radio">
+        <input type="radio" class="custom-control-input" id="brand-@brand.BrandID" onchange="SortByBrand(parseInt(@brand.BrandID))" name="brand" />
+        <label class="custom-control-label" for="brand-@brand.BrandID">@brand.BrandName</label>
+    </div><br />
+}

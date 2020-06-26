@@ -1,4 +1,7 @@
-﻿using OECS.Models.CategoryModels;
+﻿using OECS.Models.BrandModels;
+using OECS.Models.CategoryModels;
+using OECS.Models.StockModels;
+using OECS.Models.SupplyModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,38 +16,68 @@ namespace OECS.Models.ProductModels
     public class ProductModel
     {
         [Key]
-        [Required]
         public int ProductID { get; set; }
         [Required]
         [MaxLength(100), MinLength(6)]
         [DisplayName("Product Name:")]
         public string ProductName { get; set; }
+        [Required]
         [DisplayName("Date:")]
         public string Date { get; set; }
+        [Required]
         [DisplayName("Price:")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         [DisplayName("Description:")]
         public string Description { get; set; }
+        public bool? Display { get; set; }
+        [Required]
+        [ForeignKey("SubCategoryModel")]
+        [DisplayName("Category:")]
+        public int? SubCategoryID { get; set; }
+        [ForeignKey("BrandModel")]
+        [DisplayName("Brand:")]
+        public int? BrandID { get; set; }
 
-        public CategoryModel Category { get; set; }
-        public IEnumerable<SelectListItem> CategoryList 
+        public IEnumerable<SelectListItem> CategorySelectList
         {
-            get 
+            get
             {
                 oecsEntities dbContext = new oecsEntities();
                 List<SelectListItem> CategoryListTempStorage = new List<SelectListItem>();
-                var category = dbContext.Category.ToList();
-                foreach (var item in category)
+                var subCategory = dbContext.SubCategory
+                                           .OrderBy(c => c.Category.category1)
+                                           .ToList();
+                foreach (var item in subCategory)
                 {
                     CategoryListTempStorage.Add(new SelectListItem
                     {
-                        Value = item.CategoryID.ToString(),
-                        Text = item.category1
+                        Value = item.SubCategoryID.ToString(),
+                        Text = item.Category.category1 + " • " + item.subCategory1
                     });
                 }
 
                 return CategoryListTempStorage;
-            } 
+            }
+        }
+
+        public IEnumerable<SelectListItem> BrandSelectList
+        {
+            get
+            {
+                oecsEntities dbContext = new oecsEntities();
+                List<SelectListItem> BrandListTempStorage = new List<SelectListItem>();
+                var subCategory = dbContext.Brand.ToList();
+                foreach (var item in subCategory)
+                {
+                    BrandListTempStorage.Add(new SelectListItem
+                    {
+                        Value = item.BrandID.ToString(),
+                        Text = item.BrandName
+                    });
+                }
+
+                return BrandListTempStorage;
+            }
         }
     }
 }

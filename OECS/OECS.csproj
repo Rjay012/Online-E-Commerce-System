@@ -166,7 +166,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="ClassServices\_File.cs" />
     <Compile Include="ClassServices\_Product.cs" />
+    <Compile Include="ClassServices\_ProductService.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -181,10 +183,15 @@
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminModels\AdminModel.cs" />
+    <Compile Include="Models\Brand.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BrandModels\BrandModel.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoryModels\CategoryModel.cs" />
+    <Compile Include="Models\CategoryModels\SubCategoryModel.cs" />
     <Compile Include="Models\Color.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -233,6 +240,8 @@
     <Compile Include="Models\ProductDetail.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductDetailModels\ColorModels\ColorModel.cs" />
+    <Compile Include="Models\ProductDetailModels\SizeModels\SizeModel.cs" />
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -255,6 +264,10 @@
     <Compile Include="Models\Stock.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StockModels\StockModel.cs" />
+    <Compile Include="Models\SubCategory.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SubModule.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -265,6 +278,7 @@
     <Compile Include="Models\Supply.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplyModels\SupplyModel.cs" />
     <Compile Include="Models\ViewModuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -2055,6 +2069,34 @@
     <Content Include="MDB\Pagination\js\Pagination.js" />
     <Content Include="MDB\Pagination\js\Pagination.min.js" />
     <Content Include="MDB\README.txt" />
+    <Content Include="MDB\scroller\assets\img1.jpg" />
+    <Content Include="MDB\scroller\assets\img10.jpg" />
+    <Content Include="MDB\scroller\assets\img11.jpg" />
+    <Content Include="MDB\scroller\assets\img12.jpg" />
+    <Content Include="MDB\scroller\assets\img13.jpg" />
+    <Content Include="MDB\scroller\assets\img14.jpg" />
+    <Content Include="MDB\scroller\assets\img15.jpg" />
+    <Content Include="MDB\scroller\assets\img2.jpg" />
+    <Content Include="MDB\scroller\assets\img3.jpg" />
+    <Content Include="MDB\scroller\assets\img4.jpg" />
+    <Content Include="MDB\scroller\assets\img5.jpg" />
+    <Content Include="MDB\scroller\assets\img6.jpg" />
+    <Content Include="MDB\scroller\assets\img7.jpg" />
+    <Content Include="MDB\scroller\assets\img8.jpg" />
+    <Content Include="MDB\scroller\assets\img9.jpg" />
+    <Content Include="MDB\scroller\css\default.css" />
+    <Content Include="MDB\scroller\css\demo1.css" />
+    <Content Include="MDB\scroller\css\demo2.css" />
+    <Content Include="MDB\scroller\css\demo3.css" />
+    <Content Include="MDB\scroller\demo2.html" />
+    <Content Include="MDB\scroller\demo3.html" />
+    <Content Include="MDB\scroller\images\bg.jpg" />
+    <Content Include="MDB\scroller\index.html" />
+    <Content Include="MDB\scroller\js\init.js" />
+    <Content Include="MDB\scroller\js\jquery.easing.js" />
+    <Content Include="MDB\scroller\js\jquery.js" />
+    <Content Include="MDB\scroller\js\scroller.js" />
+    <Content Include="MDB\scroller\js\scroller.min.js" />
     <Content Include="MDB\src\js\free\forms-free.js" />
     <Content Include="MDB\src\js\free\scrolling-navbar.js" />
     <Content Include="MDB\src\js\free\treeview.js" />
@@ -2312,6 +2354,7 @@
     <Content Include="Scripts\Custom_Scripts\Dashboard.js" />
     <Content Include="Scripts\Custom_Scripts\Loader.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
+    <Content Include="Scripts\Custom_Scripts\Brand.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Size.js" />
@@ -2354,22 +2397,24 @@
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Shared\_NavbarShop.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
-    <Content Include="Views\Category\Partials\_NavbarCategory.cshtml" />
+    <Content Include="Views\Category\Partials\_CategoryList.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Partials\_ProductList.cshtml" />
     <Content Include="Views\Color\Index.cshtml" />
     <Content Include="Views\Color\Partials\_ProductColor.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Product\Partials\Modals\_NewProduct.cshtml" />
-    <Content Include="Views\Product\Partials\Modals\_NewProductColor.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_NewProductDetail.cshtml" />
     <Content Include="Views\Product\Partials\Modals\_ProductImageGallery.cshtml" />
-    <Content Include="Views\Product\Partials\Modals\_EditProductColor.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_EditProductDetail.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
-    <Content Include="Views\Product\Partials\Modals\_NewProductSize.cshtml" />
     <Content Include="Views\Size\Partials\_ProductSize.cshtml" />
     <Content Include="Views\Product\Partials\Tables\_ReadyProductList.cshtml" />
     <Content Include="Views\Product\Partials\Tables\_NewlyAddedProduct.cshtml" />
+    <Content Include="Views\Brand\Index.cshtml" />
+    <Content Include="Views\Brand\Partials\_BrandList.cshtml" />
+    <Content Include="Views\Category\Partials\_SubCategoryList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

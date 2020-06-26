@@ -24,13 +24,15 @@ namespace OECS.Models
     
         public int ProductID { get; set; }
         public string productName { get; set; }
-        public Nullable<int> CategoryID { get; set; }
+        public Nullable<int> SubCategoryID { get; set; }
         public Nullable<System.DateTime> date { get; set; }
         public Nullable<decimal> price { get; set; }
         public string description { get; set; }
         public Nullable<bool> display { get; set; }
+        public Nullable<int> BrandID { get; set; }
     
-        public virtual Category Category { get; set; }
+        public virtual Brand Brand { get; set; }
+        public virtual SubCategory SubCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductDetail> ProductDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

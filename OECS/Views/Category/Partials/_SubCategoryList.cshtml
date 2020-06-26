@@ -1,0 +1,9 @@
+﻿@model IEnumerable<OECS.Models.CategoryModels.SubCategoryModel>
+@foreach (var subCategory in Model)
+{
+    <div class="custom-control custom-radio">
+        <input type="radio" class="custom-control-input" id="@subCategory.SubCategoryID" name="subCategory" />
+        <label class="custom-control-label" for="@subCategory.SubCategoryID">@subCategory.SubCategory</label>
+    </div>
+    <br />
+}

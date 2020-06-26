@@ -6,6 +6,7 @@
     @{
         oecsEntities dbContext = new oecsEntities();
         var product = Model.GroupBy(c => new { c.Product, c.ProductImage });
+        var calculatedDateForLast2Weeks = DateTime.Now.AddDays(-14);
 
         foreach (var p in product)
         {
@@ -19,7 +20,7 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card">
                     <div class="view overlay">
-                        <img src="@p.Key.ProductImage.Image.path" class="card-img-top" id="card-img-@p.Key.Product.ProductID" alt="No images available">
+                        <img src="@p.Key.ProductImage.Image.path" class="card-img-top" id="card-img-@p.Key.Product.ProductID" alt="No image available">
                         <a>
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -27,7 +28,7 @@
                     @if (icon.Count() > 1)
                     {
                         <div class="col-sm-6">
-                            <a class="badge badge-light float-left myPopover" tabindex="0" role="button" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
+                            <a class="float-left myPopover" tabindex="0" role="button" item="@p.Key.Product.ProductID" data-toggle="popover" data-template="<div class='popover'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div><div class='popover-footer'></div></div>">
                                 @icon.Count() Colours
                             </a>
                             <div class="d-none" id="popover-@p.Key.Product.ProductID" role="tooltip">
@@ -42,15 +43,18 @@
                             </div>
                         </div>
                     }
-                    <hr />
                     <div class="card-body text-center">
                         <a href="" class="grey-text">
-                            <h5>@p.Key.Product.Category.category1</h5>
+                            <h5>@p.Key.Product.SubCategory.subCategory1</h5>
                         </a>
                         <h5>
                             <strong>
                                 <a href="" class="dark-grey-text">
                                     @p.Key.Product.productName
+                                    @if (Convert.ToDateTime(@p.Key.Product.date) >= calculatedDateForLast2Weeks)
+                                    {
+                                        <span class="badge badge-pill danger-color">NEW</span>
+                                    }
                                 </a>
                             </strong>
                         </h5>
@@ -59,14 +63,15 @@
                             <strong>$ @p.Key.Product.price</strong>
                         </h4>
 
-                        <div class="container">
-                            <div class="col-xs-6">
-                                <button class="btn btn-primary btn-sm" type="button">BUY NOW</button>
-                            </div>
-                            <div class="col-xs-6">
-                                <button class="btn btn-warning btn-sm" type="button">ADD TO CART</button>
-                            </div>
-                        </div>
+                        @*<div class="container">
+                                <div class="col-xs-6">
+                                    <button class="btn btn-primary btn-sm" type="button">BUY NOW</button>
+                                </div>
+                                <div class="col-xs-6">
+                                    <button class="btn btn-warning btn-sm" type="button">ADD TO CART</button>
+                                </div>
+                            </div>*@
+
                     </div>
                 </div>
             </div>

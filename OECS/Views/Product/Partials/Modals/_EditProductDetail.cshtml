@@ -1,9 +1,9 @@
 ﻿@model OECS.Models.ProductModels.ProductDetailModel
 @using OECS.Models;
-@using (Ajax.BeginForm("EditProductDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm("EditProductDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)", OnComplete = "Complete()" }, new { enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
-        <h5 class="modal-title">Edit Color</h5>
+        <h5 class="modal-title">Edit Product Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -64,7 +64,6 @@
                                 @Html.TextBoxFor(i => i.Files, new { type = "file", @class = "file-edit-img-input d-none", @id = "fileEdit-" + c })
                                 <img class="img-display" src="@path.Image.path" imgID="@path.ImageID" id="imgEdit-@c" />
                             </label>
-                            @path.ImageID
                         </td>
                         { c++; }
                     }
@@ -129,15 +128,15 @@
         <div class="container">
             @foreach (var i in icon)
             {
-                <a onclick="EditColorImages(@Model.ProductID, parseInt(@i.ColorID), parseInt(@i.IconID))">
+                <a onclick="EditProductDetail(@Model.ProductID, parseInt(@i.ColorID), parseInt(@i.IconID))">
                     <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="edit-icon-@i.IconID" />
                 </a>
             }
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary d-none" type="submit" id="BtnConfirmSaveEditProductColor"></button>
-        <button class="btn btn-primary" type="button" id="BtnSaveEditProductColor">Save</button>
+        <button class="btn btn-primary d-none" type="submit" id="BtnConfirmSaveEditProductDetail"></button>
+        <button class="btn btn-primary" type="button" id="BtnSaveEditProductDetail">Save</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
     </div>
 }

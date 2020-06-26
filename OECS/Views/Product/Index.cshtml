@@ -1,15 +1,19 @@
-﻿@{
+﻿@using OECS.Models
+@using OECS.ClassServices
+@{
     ViewBag.Title = "Index";
+    oecsEntities dbContext = new oecsEntities();
+    _Product _product = new _Product(dbContext);
 }
 <div class="container-fluid">
     <button class="btn btn-success" type="button" id="BtnTriggerModalForm" data-toggle="modal" data-target="#modalNewProduct">NEW PRODUCT</button>
     <div class="custom-control custom-checkbox float-right">
         <input class="custom-control-input" type="checkbox" id="chkNewlyAddedProduct" />
         <label class="custom-control-label" for="chkNewlyAddedProduct">Newly Added</label>
-        <span class="badge badge-danger ml-2">@ViewBag.NewlyAddedProductCount</span>
+        <span class="badge badge-danger ml-2">@_product.ViewListingNewlyAddedProduct().Count()</span>
     </div>
     <div id="ProductTableList">
-        
+
     </div>
 </div>
 
@@ -32,27 +36,18 @@
 </div>
 
 <!-- Modal Add New Product Color -->
-<div class="modal fade" id="modalNewProductColor" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalNewProductDetail" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" id="NewProductColorForm">
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal Add New Product Size -->
-<div class="modal fade" id="modalNewProductSize" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="NewProductSizeForm">
+        <div class="modal-content" id="NewProductDetailForm">
 
         </div>
     </div>
 </div>
 
 <!-- Modal Edit Product Color/Image -->
-<div class="modal fade" id="modalEditProductColor" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalEditProductDetail" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" id="EditProductColorForm">
+        <div class="modal-content" id="EditProductDetailForm">
 
         </div>
     </div>
@@ -77,5 +72,6 @@
             });
         }); //closing our doc ready
     </script>
+
     <script src="~/Scripts/Custom_Scripts/Main_Scripts/Product.js"></script>
 }

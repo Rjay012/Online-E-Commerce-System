@@ -1,5 +1,5 @@
 ﻿@model OECS.Models.ProductModels.ProductModel
-@using (Ajax.BeginForm("Create", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "success(data)" }))
+@using (Ajax.BeginForm("Create", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)", OnComplete = "Complete()" }))
 {
     <div class="modal-header">
         <h5 class="modal-title">New Product</h5>
@@ -13,8 +13,19 @@
         @Html.LabelFor(p => p.ProductName)
         @Html.TextBoxFor(p => p.ProductName, new { @class = "form-control mb-4", @placeholder = "Product Name" })
 
-        @Html.LabelFor(p => p.Category.Category)
-        @Html.DropDownListFor(p => p.Category.CategoryID, Model.CategoryList, "Select Category", new { @class = "browser-default mdb-select form-control mb-4" })
+        <div class="row">
+            <div class="col-md-12 select-outline">
+                @Html.DropDownListFor(p => p.SubCategoryID, Model.CategorySelectList, "Select Category", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary mdb-searchable", @searchable = "Search here..." })
+                @Html.LabelFor(p => p.SubCategoryID)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 select-outline">
+                @Html.DropDownListFor(p => p.BrandID, Model.BrandSelectList, "Select Brand", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary mdb-searchable", @searchable = "Search here..." })
+                @Html.LabelFor(p => p.BrandID)
+            </div>
+        </div>
 
         @Html.LabelFor(p => p.Date)
         @Html.TextBoxFor(p => p.Date, new { @class = "form-control datepicker mb-4", @placeholder = "Date" })

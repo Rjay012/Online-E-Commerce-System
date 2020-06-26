@@ -1,4 +1,5 @@
 ﻿using OECS.Models;
+using OECS.Models.ProductDetailModels.SizeModels;
 using OECS.Models.ProductModels;
 using System;
 using System.Collections.Generic;
@@ -19,24 +20,21 @@ namespace OECS.Controllers
             return View();
         }
 
-        public ActionResult ShowProductSize(int? productCategoryID)
+        public ActionResult ShowProductSize(int? categoryID, int? subCategoryID)
         {
-            if (productCategoryID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            List<SizeModel> sizeModel = dbContext.ProductDetail
+                                                 .Select(s => new SizeModel
+                                                 {
+                                                     SideID = (int)s.SizeID,
+                                                     Size = s.Size.size1,
+                                                     CategoryID = categoryID == 0 ? null : s.Product.SubCategory.CategoryID,
+                                                     SubCategoryID = subCategoryID == 0 ? null : s.Product.SubCategoryID
+                                                 }).Distinct().ToList();
 
-            List<ViewProductModel> productSize = dbContext.ProductDetail
-                                                          .Select(s => new ViewProductModel
-                                                          {
-                                                              Size = s.Size,
-                                                              Category = (productCategoryID != 0 ? s.Product.Category : null)
-                                                          }).Distinct().ToList();
-            if (productCategoryID != 0)
-            {
-                productSize = productSize.Where(s => s.Category.CategoryID == productCategoryID).ToList();
-            }
-            return PartialView("Partials/_ProductSize", productSize);
+            if (categoryID != 0) { sizeModel = sizeModel.Where(pd => pd.CategoryID == categoryID).ToList(); }
+            if (subCategoryID != 0) { sizeModel = sizeModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); }
+
+            return PartialView("Partials/_ProductSize", sizeModel);
         }
     }
 }

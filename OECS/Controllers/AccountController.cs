@@ -70,11 +70,10 @@ namespace OECS.Controllers
                     var authenticationManager = ctx.Authentication;
                     authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
 
-                    //return Json(new { action = "Index", controller = "Dashboard" }, JsonRequestBehavior.AllowGet);
-                    return Json(new { controller = "Product" }, JsonRequestBehavior.AllowGet);  //bypass main target module
+                    return Json(new { controller = "Product" }, JsonRequestBehavior.AllowGet);  //bypassed main target module
                 }
             }
-            return Json("failed", JsonRequestBehavior.AllowGet);
+            return View(nameof(Index)); //Json("failed", JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult LoginForm(LoginModel loginModel)
@@ -128,5 +127,15 @@ namespace OECS.Controllers
             return Json(customer, JsonRequestBehavior.AllowGet);
         }
         #endregion("/REGISTER")
+
+        [HttpPost]
+        public ActionResult Logout()
+        {
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignOut();
+
+            return RedirectToAction("Index", "Account");
+        }
     }
 }

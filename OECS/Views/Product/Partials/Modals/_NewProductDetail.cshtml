@@ -1,8 +1,8 @@
 ﻿@model OECS.Models.ProductModels.ProductDetailModel
-@using (Ajax.BeginForm("CreateNewProductColor", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)" }, new { enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm("CreateNewProductDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)", OnComplete = "Complete()" }, new { enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
-        <h5 class="modal-title">New Color</h5>
+        <h5 class="modal-title">New Product Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -113,8 +113,8 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button class="d-none" type="submit" id="BtnConfirmSaveNewProductColor"></button>
-        <button class="btn btn-primary" type="button" id="BtnSaveNewProductColor">Save</button>
+        <button class="d-none" type="submit" id="BtnConfirmSaveNewProductDetail"></button>
+        <button class="btn btn-primary" type="button" id="BtnSaveNewProductDetail">SAVE</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
     </div>
 }

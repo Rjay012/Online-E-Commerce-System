@@ -11,5 +11,6 @@
         public DisplaySize DisplaySize { get; set; }
         public Category Category { get; set; }
         public Icon Icon { get; set; }
+        public SubCategory SubCategory { get; set; }
     }
 }

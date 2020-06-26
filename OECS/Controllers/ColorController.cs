@@ -1,5 +1,6 @@
 ﻿using OECS.Models;
-using OECS.Models.ProductModels;
+using OECS.Models.ProductDetailModels.ColorModels;
+using OECS.Models.ProductDetailModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,23 +20,21 @@ namespace OECS.Controllers
             return View();
         }
 
-        public ActionResult ShowProductColor(int productCategoryID)
+        public ActionResult ShowProductColor(int? categoryID, int? subCategoryID)
         {
-            List<ViewProductModel> productColor = (from pr in dbContext.ProductDetail
-                                                   join c in dbContext.Color on pr.ColorID equals c.ColorID
-                                                   join p in dbContext.Product on pr.ProductID equals p.ProductID
-                                                   join cat in dbContext.Category on p.CategoryID equals cat.CategoryID
-                                                   select new ViewProductModel
+            List<ColorModel> colorModel = dbContext.ProductDetail
+                                                   .Select(s => new ColorModel
                                                    {
-                                                       Color = c, 
-                                                       Category = (productCategoryID != 0 ? cat : null),
+                                                       ColorID = (int)s.ColorID,
+                                                       Color = s.Color.color1,
+                                                       CategoryID = categoryID == 0 ? null : s.Product.SubCategory.CategoryID,
+                                                       SubCategoryID = subCategoryID == 0 ? null : s.Product.SubCategoryID
                                                    }).Distinct().ToList();
 
-            if(productCategoryID != 0)
-            {
-                productColor = productColor.Where(c => c.Category.CategoryID == productCategoryID).Distinct().ToList();
-            }
-            return PartialView("Partials/_ProductColor", productColor);
+            if (categoryID != 0) { colorModel = colorModel.Where(pd => pd.CategoryID == categoryID).ToList(); }
+            if (subCategoryID != 0) { colorModel = colorModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); }
+
+            return PartialView("Partials/_ProductColor", colorModel);
         }
     }
 }

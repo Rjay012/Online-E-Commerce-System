@@ -2,15 +2,21 @@
 using OECS.Models.ProductModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace OECS.ClassServices
 {
     public class _Product
     {
-        private readonly oecsEntities dbContext;
+        protected oecsEntities dbContext;
         public _Product(oecsEntities _dbContext)
         {
             dbContext = _dbContext;
+        }
+
+        public _Product()
+        {
+            //default constructor
         }
 
         public List<ViewProductDetailModel> ViewListingNewlyAddedProduct()
@@ -21,7 +27,7 @@ namespace OECS.ClassServices
                                                     {
                                                         ProductID = p.ProductID,
                                                         ProductName = p.productName,
-                                                        CategoryName = p.Category.category1,
+                                                        CategoryName = p.SubCategory.subCategory1,
                                                         Date = p.date,
                                                         Price = p.price
                                                     }).ToList();
@@ -39,7 +45,7 @@ namespace OECS.ClassServices
                                                                 isMainDisplay = pi.isMainDisplay,
                                                                 IconID = pi.Image.IconID,
                                                                 ProductName = pi.ProductDetail.Product.productName,
-                                                                CategoryName = pi.ProductDetail.Product.Category.category1,
+                                                                CategoryName = pi.ProductDetail.Product.SubCategory.subCategory1,
                                                                 Date = pi.ProductDetail.Product.date,
                                                                 Price = pi.ProductDetail.Product.price
                                                             }).Where(pi => pi.isMainDisplay == true).ToList();
@@ -83,6 +89,42 @@ namespace OECS.ClassServices
                     break;
             }
             return viewProduct;
+        }
+
+        public List<ViewProductModel> OnFilter(List<ViewProductModel> product, int? categoryID, int? subCategoryID, int? brandID, int? colorID, int? sizeID)
+        {
+            if (categoryID != 0 && subCategoryID == 0)
+            {
+                product = product.Where(p => p.Product.SubCategory.Category.CategoryID == categoryID).ToList();
+            }
+            else if (categoryID == 0 && subCategoryID != 0)
+            {
+                product = product.Where(p => p.Product.SubCategoryID == subCategoryID).ToList();
+            }
+            else if (categoryID != 0 && subCategoryID != 0)
+            {
+                product = product.Where(p => p.Product.SubCategory.CategoryID == categoryID && p.Product.SubCategoryID == subCategoryID).ToList();
+            }
+
+            return OnFilter(product, brandID, colorID, sizeID);
+        }
+
+        private List<ViewProductModel> OnFilter(List<ViewProductModel> product, int? brandID, int? colorID, int? sizeID)
+        {
+            if (colorID != 0 && sizeID == 0)
+            {
+                product = product.Where(p => p.ProductDetail.ColorID == colorID && p.DisplayColor.isDisplay == true).ToList();
+            }
+            else if (colorID == 0 && sizeID != 0)
+            {
+                product = product.Where(p => p.ProductDetail.SizeID == sizeID && p.DisplaySize.isDisplay == true).ToList();
+            }
+
+            if(brandID != 0)
+            {
+                product = product.Where(p => p.Product.BrandID == brandID).ToList();
+            }
+            return product;
         }
     }
 }
