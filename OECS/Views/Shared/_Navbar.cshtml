@@ -1,13 +1,13 @@
 ﻿@if (Request.IsAuthenticated)
 {
-    using (Ajax.BeginForm("Logout", "Account", new AjaxOptions { HttpMethod = "post" }))
+    using (Html.BeginForm("Logout", "Account", new AjaxOptions { HttpMethod = "post" }))
     {
         <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
             <div class="float-left">
                 <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
             </div>
             <div class="breadcrumb-dn mr-auto">
-                <p>Dashboard</p>
+                <p>@ViewBag.ModuleTitle</p>
             </div>
             <ul class="nav navbar-nav nav-flex-icons ml-auto">
                 <li class="nav-item dropdown notifications-nav">

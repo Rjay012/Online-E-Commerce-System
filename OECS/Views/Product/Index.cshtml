@@ -1,16 +1,14 @@
 ﻿@using OECS.Models
-@using OECS.ClassServices
 @{
     ViewBag.Title = "Index";
-    oecsEntities dbContext = new oecsEntities();
-    _Product _product = new _Product(dbContext);
+
 }
 <div class="container-fluid">
-    <button class="btn btn-success" type="button" id="BtnTriggerModalForm" data-toggle="modal" data-target="#modalNewProduct">NEW PRODUCT</button>
+    <button class="btn btn-success" type="button" id="BtnTriggerAddNewProductModalForm" data-toggle="modal" data-target="#modalNewProduct">NEW PRODUCT</button>
     <div class="custom-control custom-checkbox float-right">
         <input class="custom-control-input" type="checkbox" id="chkNewlyAddedProduct" />
         <label class="custom-control-label" for="chkNewlyAddedProduct">Newly Added</label>
-        <span class="badge badge-danger ml-2">@_product.ViewListingNewlyAddedProduct().Count()</span>
+        <span class="badge badge-danger ml-2"></span>
     </div>
     <div id="ProductTableList">
 
@@ -21,6 +19,15 @@
 <div class="modal fade" id="modalNewProduct" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" id="NewProductForm">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Product -->
+<div class="modal fade" id="modalEditProduct" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="EditProductForm">
 
         </div>
     </div>

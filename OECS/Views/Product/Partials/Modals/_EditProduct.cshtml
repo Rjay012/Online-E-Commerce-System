@@ -1,0 +1,46 @@
+﻿@model OECS.Models.ProductModels.ProductModel
+@using (Ajax.BeginForm("Edit", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)", OnComplete = "Complete()" }))
+{
+    <div class="modal-header">
+        <h5 class="modal-title">Edit Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(p => p.ProductID)
+
+        @Html.LabelFor(p => p.ProductName)
+        @Html.TextBoxFor(p => p.ProductName, new { @class = "form-control mb-4", @placeholder = "Product Name" })
+
+        <div class="row">
+            <div class="col-md-12 select-outline">
+                @Html.DropDownListFor(p => p.SubCategoryID, Model.CategorySelectList, "Select Category", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary mdb-searchable", @searchable = "Search here..." })
+                @Html.LabelFor(p => p.SubCategoryID)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 select-outline">
+                @Html.DropDownListFor(p => p.BrandID, Model.BrandSelectList, "Select Brand", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary mdb-searchable", @searchable = "Search here..." })
+                @Html.LabelFor(p => p.BrandID)
+            </div>
+        </div>
+
+        @Html.LabelFor(p => p.Date)
+        @Html.TextBoxFor(p => p.Date, new { @class = "form-control datepicker mb-4", @placeholder = "Date" })
+
+        @Html.LabelFor(p => p.Price)
+        @Html.TextBoxFor(p => p.Price, new { @class = "form-control mb-4", @placeholder = "Price" })
+
+        @Html.LabelFor(p => p.Description)
+        @Html.TextBoxFor(p => p.Description, new { @class = "form-control mb-4", @placeholder = "Description" })
+    </div>
+    <div class="modal-footer">
+        <button class="d-none" type="submit" id="BtnConfirmSaveChanges"></button>
+        <button class="btn btn-primary" type="button" id="BtnSaveChanges">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+}

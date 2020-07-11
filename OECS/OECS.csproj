@@ -164,9 +164,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ClassServices\_File.cs" />
-    <Compile Include="ClassServices\_Product.cs" />
-    <Compile Include="ClassServices\_ProductService.cs" />
+    <Compile Include="Repository\BrandRepository\BrandRepository.cs" />
+    <Compile Include="Repository\BrandRepository\IBrandRepository.cs" />
+    <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
+    <Compile Include="Repository\CategoryRepository\ICategoryRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductGalleryRepository\ProductGalleryRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductGalleryRepository\IProductGalleryRepository.cs" />
+    <Compile Include="Repository\ProductRepository\IProductDetailRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository.cs" />
+    <Compile Include="Services\FileMng.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -240,15 +246,17 @@
     <Compile Include="Models\ProductDetail.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductDetailModels\ColorModels\ColorModel.cs" />
-    <Compile Include="Models\ProductDetailModels\SizeModels\SizeModel.cs" />
+    <Compile Include="Models\ProductModels\ProductDetailModels\ColorModels\ColorModel.cs" />
+    <Compile Include="Models\ProductModels\ProductDetailModels\SizeModels\SizeModel.cs" />
     <Compile Include="Models\ProductImage.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductModels\ProductDetailModel.cs" />
+    <Compile Include="Models\ProductModels\ProductDetailModels\ProductDetailModel.cs" />
     <Compile Include="Models\ProductModels\ProductModel.cs" />
+    <Compile Include="Repository\ProductRepository\IProductRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductRepository.cs" />
     <Compile Include="Models\ProductModels\ProductSizeModel.cs" />
-    <Compile Include="Models\ProductModels\ViewProductDetailModel.cs" />
+    <Compile Include="Models\ProductModels\ProductDetailModels\ViewProductDetailModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\Role.cs">
       <DependentUpon>oecs.tt</DependentUpon>
@@ -2415,6 +2423,7 @@
     <Content Include="Views\Brand\Index.cshtml" />
     <Content Include="Views\Brand\Partials\_BrandList.cshtml" />
     <Content Include="Views\Category\Partials\_SubCategoryList.cshtml" />
+    <Content Include="Views\Product\Partials\Modals\_EditProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

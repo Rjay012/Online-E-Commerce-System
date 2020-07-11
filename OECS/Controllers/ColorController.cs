@@ -1,6 +1,5 @@
 ﻿using OECS.Models;
-using OECS.Models.ProductDetailModels.ColorModels;
-using OECS.Models.ProductDetailModels;
+using OECS.Models.ProductModels.ProductDetailModels.ColorModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,7 @@ namespace OECS.Controllers
         // GET: Color
         public ActionResult Index()
         {
+            ViewBag.ModuleTitle = "Size";
             return View();
         }
 

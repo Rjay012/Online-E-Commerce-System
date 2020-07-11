@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OECS.Models.ProductModels
+namespace OECS.Models.ProductModels.ProductDetailModels
 {
     public class ProductDetailModel
     {

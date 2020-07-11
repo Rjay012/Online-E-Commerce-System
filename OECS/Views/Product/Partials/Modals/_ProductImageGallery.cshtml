@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OECS.Models.ProductModels.ViewProductModel>
+﻿@model IEnumerable<OECS.Models.ProductImage>
 @using OECS.Models;
 <div class="modal-header">
     <h5 class="modal-title">Gallery</h5>
@@ -27,18 +27,18 @@
                     var defaultImg = "";
                     var isMainDisplay = "";
 
-                    var display = Model.Where(d => d.ProductImage.DisplayColor.Count() > 0).FirstOrDefault();
-                    isMainDisplay = (display.ProductImage.isMainDisplay == true ? "main-display" : "");
-                    defaultImg = display.ProductImage.Image.path;
-                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImage.ProductImageID" data-full="@defaultImg">
+                    var display = Model.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
+                    isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
+                    defaultImg = display.Image.path;
+                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
                         <img src="@defaultImg" />
                     </a>
 
-                    foreach (var img in Model.Where(i => i.ProductImage.DisplayColor.Count() == 0).Take(4))
+                    foreach (var img in Model.Where(i => i.DisplayColor.Count() == 0).Take(4))
                     {
-                        isMainDisplay = (img.ProductImage.isMainDisplay == true ? "main-display" : "");
-                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImage.ProductImageID" data-full="@img.ProductImage.Image.path">
-                            <img src="@img.ProductImage.Image.path" />
+                        isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
+                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
+                            <img src="@img.Image.path" />
                         </a>
                     }
                 }

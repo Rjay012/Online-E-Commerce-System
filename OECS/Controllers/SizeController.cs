@@ -1,6 +1,6 @@
 ﻿using OECS.Models;
-using OECS.Models.ProductDetailModels.SizeModels;
 using OECS.Models.ProductModels;
+using OECS.Models.ProductModels.ProductDetailModels.SizeModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -17,6 +17,7 @@ namespace OECS.Controllers
         // GET: Size
         public ActionResult Index()
         {
+            ViewBag.ModuleTitle = "Size";
             return View();
         }
 

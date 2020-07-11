@@ -14,6 +14,7 @@ namespace OECS.Controllers
         // GET: Category
         public ActionResult Index()
         {
+            ViewBag.ModuleTitle = "Category";
             return View();
         }
 

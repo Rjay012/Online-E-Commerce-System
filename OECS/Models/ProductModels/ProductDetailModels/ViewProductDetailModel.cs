@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace OECS.Models.ProductModels
+namespace OECS.Models.ProductModels.ProductDetailModels
 {
     public class ViewProductDetailModel
     {
@@ -12,6 +9,7 @@ namespace OECS.Models.ProductModels
         public DateTime? Date { get; set; }
         public Decimal? Price { get; set; }
         public string CategoryName { get; set; }
+        public string BrandName { get; set; }
         public int? ColorID { get; set; }
         public int? IconID { get; set; }
         public bool? isMainDisplay { get; set; }

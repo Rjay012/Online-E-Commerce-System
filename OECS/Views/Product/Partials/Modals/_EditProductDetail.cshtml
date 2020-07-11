@@ -1,4 +1,4 @@
-﻿@model OECS.Models.ProductModels.ProductDetailModel
+﻿@model OECS.Models.ProductModels.ProductDetailModels.ProductDetailModel
 @using OECS.Models;
 @using (Ajax.BeginForm("EditProductDetail", "Product", new AjaxOptions { HttpMethod = "POST", OnSuccess = "Success(data)", OnComplete = "Complete()" }, new { enctype = "multipart/form-data" }))
 {

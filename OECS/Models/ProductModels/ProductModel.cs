@@ -38,46 +38,8 @@ namespace OECS.Models.ProductModels
         [DisplayName("Brand:")]
         public int? BrandID { get; set; }
 
-        public IEnumerable<SelectListItem> CategorySelectList
-        {
-            get
-            {
-                oecsEntities dbContext = new oecsEntities();
-                List<SelectListItem> CategoryListTempStorage = new List<SelectListItem>();
-                var subCategory = dbContext.SubCategory
-                                           .OrderBy(c => c.Category.category1)
-                                           .ToList();
-                foreach (var item in subCategory)
-                {
-                    CategoryListTempStorage.Add(new SelectListItem
-                    {
-                        Value = item.SubCategoryID.ToString(),
-                        Text = item.Category.category1 + " • " + item.subCategory1
-                    });
-                }
+        public IEnumerable<SelectListItem> CategorySelectList { get; set; }
 
-                return CategoryListTempStorage;
-            }
-        }
-
-        public IEnumerable<SelectListItem> BrandSelectList
-        {
-            get
-            {
-                oecsEntities dbContext = new oecsEntities();
-                List<SelectListItem> BrandListTempStorage = new List<SelectListItem>();
-                var subCategory = dbContext.Brand.ToList();
-                foreach (var item in subCategory)
-                {
-                    BrandListTempStorage.Add(new SelectListItem
-                    {
-                        Value = item.BrandID.ToString(),
-                        Text = item.BrandName
-                    });
-                }
-
-                return BrandListTempStorage;
-            }
-        }
+        public IEnumerable<SelectListItem> BrandSelectList { get; set; }
     }
 }

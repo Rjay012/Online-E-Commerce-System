@@ -2,14 +2,10 @@
     ReadyProductTableList();
 });
 
-$(document).on("click", "#BtnTriggerModalForm", function () {
+$(document).on("click", "#BtnTriggerAddNewProductModalForm", function () {
     FetchData("/Product/NewProductModalForm", null).done(function (content) {
         $("#NewProductForm").html(content);
-        $('.datepicker').pickadate({
-            format: 'yyyy-mm-dd'
-        });
-
-        $('.mdb-select').materialSelect();
+        ManagePluginContent();
     });
 });
 
@@ -21,6 +17,9 @@ $(document).on("click", "#BtnSaveNew", function () {
     if (confirm("Sure you want to add this product?") == true) {
         ButtonLoader($(this));
         $("#BtnConfirmSaveNew").click();
+        if ($("#chkNewlyAddedProduct").is(":checked")) {
+            ReadyNewlyAddedProducts();
+        }
     }
 });
 
@@ -210,7 +209,7 @@ function ReadyNewlyAddedProducts() {
 }
 
 function LoadNewlyAddedProducts() {
-    var columns = [{ 'data': 'ProductID' }, { 'data': 'ProductName' }, { 'data': 'CategoryName' },
+    var columns = [{ 'data': 'ProductID' }, { 'data': 'ProductName' }, { 'data': 'BrandName' }, { 'data': 'CategoryName' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
             return "<button class='btn btn-success btn-sm btn-block' data-toggle='modal' data-target='#modalNewProductDetail' onclick='AddNewProductDetail(" + parseInt(productID) + ")'>ADD DETAILS</button>";
@@ -219,13 +218,14 @@ function LoadNewlyAddedProducts() {
     { 'data': 'Date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'Price' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-primary btn-sm btn-block'>EDIT</button>";
+            return "<button class='btn btn-primary btn-sm' type='button' data-toggle='modal' data-target='#modalEditProduct' onclick='TriggerEditProductModalForm(" + parseInt(productID) + ")'>EDIT</button>";
         }
     }];
     var columnDefs = [{
         targets: [0],
         visible: false,
-        searchable: false
+        searchable: false,
+        orderable: false
     }];
     LoadTableViaServerSide("ShowNewlyAddedProductList", "/Product/ShowProduct", columns, columnDefs, { name: "isNewlyAdded", value: true });
 }
@@ -239,10 +239,10 @@ function LoadTable() {
                 "</div>";
         }
     },
-    { 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'IconID' }, { 'data': 'ProductName', 'width': '30%' }, { 'data': 'CategoryName', 'width': '20%' },
+        { 'data': 'ProductID' }, { 'data': 'ColorID' }, { 'data': 'IconID' }, { 'data': 'ProductName', 'width': '30%' }, { 'data': 'BrandName'}, { 'data': 'CategoryName', 'width': '20%' },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>VIEW GALLERY</button>";
+            return "<button class='btn btn-success btn-sm' type='button' data-toggle='modal' data-target='#modalProductImageGallery' onclick='ViewProductPhotoGallery(" + parseInt(productID) + ", " + parseInt(row.ColorID) + ", " + parseInt(row.IconID) + ")'>VIEW</button>";
         }
     },
     { 'data': 'Date', "render": function (value) { return moment(value).format('YYYY-MM-DD'); } }, { 'data': 'Price' },
@@ -257,7 +257,7 @@ function LoadTable() {
     },
     {
         'data': 'ProductID', render: function (productID, type, row) {
-            return "<button class='btn btn-primary btn-sm' type='button' data-toggle='modal' data-target='#modalProductEdit' onclick=''>EDIT</button>";
+            return "<button class='btn btn-primary btn-sm' type='button' data-toggle='modal' data-target='#modalEditProduct' onclick='TriggerEditProductModalForm(" + parseInt(productID) + ")'>EDIT</button>";
         }
     }];
 
@@ -265,6 +265,7 @@ function LoadTable() {
         targets: [1, 2, 3],
         visible: false,
         searchable: false,
+        orderable: false
     }];
     LoadTableViaServerSide("ShowProductList", "/Product/ShowProduct", columns, columnDefs, { name: "isNewlyAdded", value: false });
 }
@@ -288,6 +289,13 @@ function AddNewProductDetail(productID) {
     });
 }
 
+function TriggerEditProductModalForm(productID) {
+    FetchData("/Product/EditProductModalForm", { productID: productID }).done(function (content) {
+        $("#EditProductForm").html(content);
+        ManagePluginContent();
+    });
+}
+
 function EditProductDetail(productID, colorID, iconID) {
     $("#NewProductDetailForm").html("");  //clear other form to avoid conflicts on properties
     FetchData("/Product/EditProductDetailModalForm", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
@@ -308,6 +316,13 @@ function EditProductDetail(productID, colorID, iconID) {
             $("#hid-strongly-typed-img-" + $(this).val()).val($(this).val());
         });
     });
+}
+
+function ManagePluginContent() {
+    $('.datepicker').pickadate({
+        format: 'yyyy-mm-dd'
+    });
+    $('.mdb-select').materialSelect();
 }
 
 function ViewProductPhotoGallery(productID, colorID, iconID) {

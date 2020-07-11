@@ -1,7 +1,7 @@
 ﻿using OECS.Models.CategoryModels;
 using System.ComponentModel.DataAnnotations;
 
-namespace OECS.Models.ProductDetailModels.ColorModels
+namespace OECS.Models.ProductModels.ProductDetailModels.ColorModels
 {
     public class ColorModel : SubCategoryModel
     {
