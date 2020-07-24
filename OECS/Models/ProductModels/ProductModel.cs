@@ -1,14 +1,7 @@
-﻿using OECS.Models.BrandModels;
-using OECS.Models.CategoryModels;
-using OECS.Models.StockModels;
-using OECS.Models.SupplyModels;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace OECS.Models.ProductModels

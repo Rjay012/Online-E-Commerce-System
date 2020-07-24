@@ -1,16 +1,18 @@
 ﻿using OECS.Models;
-using OECS.Models.CategoryModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using OECS.Repository.CategoryRepository;
+using OECS.Services.CategoryServices;
 using System.Web.Mvc;
 
 namespace OECS.Controllers
 {
     public class CategoryController : Controller
     {
-        oecsEntities dbContext = new oecsEntities();
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController()
+        {
+            _categoryService = new CategoryService(new CategoryRepository(new oecsEntities()));
+        }
         // GET: Category
         public ActionResult Index()
         {
@@ -20,34 +22,12 @@ namespace OECS.Controllers
 
         public ActionResult CategoryList()
         {
-            List<CategoryModel> categories = dbContext.ProductDetail
-                                                      .Select(s => new CategoryModel
-                                                      {
-                                                          CategoryID = s.Product.SubCategory.Category.CategoryID,
-                                                          Category = s.Product.SubCategory.Category.category1
-                                                      }).Distinct().ToList();
-            return PartialView("Partials/_CategoryList", categories);
+            return PartialView("Partials/_CategoryList", _categoryService.ViewListingCategory());
         }
 
         public ActionResult SubCategoryList(int? categoryID)
         {
-            List<SubCategoryModel> subCategoryModels = dbContext.ProductDetail
-                                                                .Select(s => new SubCategoryModel
-                                                                {
-                                                                    SubCategoryID = s.Product.SubCategory.SubCategoryID,
-                                                                    SubCategory = s.Product.SubCategory.subCategory1
-                                                                }).Distinct().ToList();
-            if (categoryID != 0)
-            {
-                subCategoryModels = dbContext.ProductDetail
-                                             .Where(pd => pd.Product.SubCategory.CategoryID == categoryID)
-                                             .Select(s => new SubCategoryModel
-                                             {
-                                                 SubCategoryID = s.Product.SubCategory.SubCategoryID,
-                                                 SubCategory = s.Product.SubCategory.subCategory1
-                                             }).Distinct().ToList();
-            }
-            return PartialView("Partials/_SubCategoryList", subCategoryModels);
+            return PartialView("Partials/_SubCategoryList", _categoryService.ViewListingSubCategory((int)categoryID));
         }
     }
 }

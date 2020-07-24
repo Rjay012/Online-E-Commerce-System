@@ -1,9 +1,6 @@
 ﻿using OECS.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace OECS.Repository.CategoryRepository
 {
@@ -15,22 +12,11 @@ namespace OECS.Repository.CategoryRepository
             _dbContext = dbContext;
         }
 
-        public IEnumerable<SelectListItem> ListCategory()
+        public List<SubCategory> ListCategory()
         {
-            List<SelectListItem> CategoryListTempStorage = new List<SelectListItem>();
-            var subCategory = _dbContext.SubCategory
-                                        .OrderBy(c => c.Category.category1)
-                                        .ToList();
-            foreach (var item in subCategory)
-            {
-                CategoryListTempStorage.Add(new SelectListItem
-                {
-                    Value = item.SubCategoryID.ToString(),
-                    Text = item.Category.category1 + " • " + item.subCategory1
-                });
-            }
-
-            return CategoryListTempStorage;
+            return _dbContext.SubCategory
+                             .OrderBy(c => c.Category.category1)
+                             .ToList();
         }
     }
 }

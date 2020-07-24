@@ -1,8 +1,8 @@
-﻿@using OECS.Models
-@{
+﻿@{
     ViewBag.Title = "Index";
 
 }
+
 <div class="container-fluid">
     <button class="btn btn-success" type="button" id="BtnTriggerAddNewProductModalForm" data-toggle="modal" data-target="#modalNewProduct">NEW PRODUCT</button>
     <div class="custom-control custom-checkbox float-right">
@@ -61,24 +61,6 @@
 </div>
 
 @section scripts{
-    <script>
-        //Photo Gallery
-        $(document).ready(function () {
-            $(document).on("click", 'a', function () {
-                var largeImage = $(this).attr('data-full');
-                $('.selected').removeClass("selected");
-                $(this).addClass('selected');
-                $('.full img').hide();
-                $('.full img').attr('src', largeImage);
-                $('.full img').fadeIn();
-            }); // closing the listening on a click
-
-            $(document).on('click', '.full img', function () {
-                var modalImage = $(this).attr('src');
-                $.fancybox.open(modalImage);
-            });
-        }); //closing our doc ready
-    </script>
-
+    <script src="~/MDB/VerticalGallery/js/PhotoGallery.js"></script>
     <script src="~/Scripts/Custom_Scripts/Main_Scripts/Product.js"></script>
 }

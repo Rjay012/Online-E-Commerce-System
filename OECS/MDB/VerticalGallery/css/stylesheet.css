@@ -54,3 +54,11 @@ clear: both;
     height: 100px;
     width: 100px;
 }
+
+.product-gallery-details {
+    width: 300px;
+}
+
+.product-gallery-details p > strong {
+    font-weight: bold;
+}

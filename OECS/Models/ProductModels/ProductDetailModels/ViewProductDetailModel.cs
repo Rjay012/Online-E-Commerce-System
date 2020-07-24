@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OECS.Models.ProductModels.ProductDetailModels
 {
@@ -14,5 +15,7 @@ namespace OECS.Models.ProductModels.ProductDetailModels
         public int? IconID { get; set; }
         public bool? isMainDisplay { get; set; }
         public bool? display { get; set; }
+        public string Description { get; set; }
+        public IEnumerable<ProductImage> ProductImages { get; set; }
     }
 }

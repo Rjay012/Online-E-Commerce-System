@@ -8,30 +8,27 @@ using System.Data.Entity;
 using System.Net;
 using System.Web.UI.WebControls;
 using System.Linq.Dynamic;
-using OECS.Repository.ProductRepository;
+using OECS.Repository.ProductRepository.ProductDetailRepository;
 using OECS.Repository.ProductRepository.ProductGalleryRepository;
 using OECS.Models.ProductModels.ProductDetailModels;
-using OECS.Repository.CategoryRepository;
-using OECS.Repository.BrandRepository;
+using OECS.Repository.ProductRepository;
+using OECS.Services.ProductServices;
+using OECS.Services.ProductServices.ProductDetailServices;
+using OECS.Services.ProductServices.ProductGalleryServices;
 
 namespace OECS.Controllers
 {
     public class ProductController : Controller
     {
-        readonly oecsEntities dbContext = new oecsEntities();
-        private readonly IProductRepository _productRepository;
-        private readonly IProductDetailRepository _productDetailRepository;
-        private readonly IProductGalleryRepository _productGalleryRepository;
-        private readonly IBrandRepository _brandRepository;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IProductService _productService;
+        private readonly IProductDetailService _productDetailService;
+        private readonly IProductGalleryService _productGalleryService;
 
         public ProductController()
         {
-            _productRepository = new ProductRepository(new oecsEntities());
-            _productDetailRepository = new ProductDetailRepository(new oecsEntities());
-            _productGalleryRepository = new ProductGalleryRepository(new oecsEntities());
-            _brandRepository = new BrandRepository(new oecsEntities());
-            _categoryRepository = new CategoryRepository(new oecsEntities());
+            _productService = new ProductService(new ProductRepository(new oecsEntities()));
+            _productDetailService = new ProductDetailService(new ProductDetailRepository(new oecsEntities()));
+            _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
         }
 
         // GET: Product
@@ -42,12 +39,38 @@ namespace OECS.Controllers
             return View();
         }
 
+        public ActionResult ViewFullDetail(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ProductDetailModel productDetailModels = _productGalleryService.GetColorAndIcon((int)id).SingleOrDefault();
+
+            if(productDetailModels == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewProductDetailModel viewProductDetailModel = _productGalleryService.ViewListingProductImage((int)id, productDetailModels.ColorID, productDetailModels.IconID);
+            
+            ViewBag.ProductID = (int)id;
+            
+            if(viewProductDetailModel == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(viewProductDetailModel);
+        }
+
         [AllowAnonymous]
         public ActionResult Show(int? categoryID, int? subCategoryID, int? brandID, int? colorID, int? sizeID, string searchString)
         {
-            List<ViewProductModel> product = _productRepository.ShowProductList(1);
-            if (colorID != 0) product = _productRepository.ShowProductList(2);
-            if (sizeID != 0) product = _productRepository.ShowProductList(3);
+            List<ViewProductModel> product = _productService.ShowProductList(1);
+            if (colorID != 0) product = _productService.ShowProductList(2);
+            if (sizeID != 0) product = _productService.ShowProductList(3);
 
             if (!String.IsNullOrEmpty(searchString)) //search string
             {
@@ -55,8 +78,12 @@ namespace OECS.Controllers
                                              p.Product.productName.Contains(searchString)).ToList();  //you removed color searching
             }
 
-            product = _productRepository.OnFilter(product, categoryID, subCategoryID, brandID, colorID, sizeID);
-            if (colorID != 0 || sizeID != 0) return PartialView("Partials/_ProductList", product);
+            product = _productService.OnFilter(product, categoryID, subCategoryID, brandID, colorID, sizeID);
+
+            if (colorID != 0 || sizeID != 0)
+            {
+                return PartialView("Partials/_ProductList", product);
+            }
            
             //PagedList<Product> newProduct = new PagedList<Product>(product, page, pageSize);
             return PartialView("Partials/_ProductList", product.Where(i => i.ProductImage.isMainDisplay == true).ToList());
@@ -72,44 +99,32 @@ namespace OECS.Controllers
         {
             return PartialView("Partials/Tables/_NewlyAddedProduct");
         }
+
         public ActionResult NewProductModalForm(ProductModel productModel)
         {
-            productModel.BrandSelectList = _brandRepository.ListBrands();
-            productModel.CategorySelectList = _categoryRepository.ListCategory();
-            productModel.Date = DateTime.Now.ToString("yyyy-MM-dd");
-            return PartialView("Partials/Modals/_NewProduct", productModel);
+            return PartialView("Partials/Modals/_NewProduct", _productService.AssignProductDetail(productModel));
         }
 
-        public ActionResult EditProductModalForm(int? productID, ProductModel productModel)
+        public ActionResult EditProductModalForm(int? productID)
         {
             if(productID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Product product = dbContext.Product.Find(productID);
+            Product product = _productService.FindByID((int)productID);
 
             if(product == null)
             {
                 return HttpNotFound();
             }
 
-            productModel.ProductID = product.ProductID;
-            productModel.ProductName = product.productName;
-            productModel.SubCategoryID = product.SubCategoryID;
-            productModel.BrandID = product.BrandID;
-            productModel.Date = Convert.ToDateTime(product.date.ToString()).ToString("yyyy-MM-dd");
-            productModel.Price = product.price;
-            productModel.Description = product.description;
-            productModel.BrandSelectList = _brandRepository.ListBrands();
-            productModel.CategorySelectList = _categoryRepository.ListCategory();
-
-            return PartialView("Partials/Modals/_EditProduct", productModel);
+            return PartialView("Partials/Modals/_EditProduct", _productService.AssignProduct(product));
         }
 
         public ActionResult NewProductDetailModalForm(ProductDetailModel productDetailModel)
         {
-            return PartialView("Partials/Modals/_NewProductDetail", productDetailModel);
+            return PartialView("Partials/Modals/_NewProductDetail", _productService.AssignProductDetail(productDetailModel));
         }
 
         public ActionResult EditProductDetailModalForm(int? productID, int? colorID, int? iconID)
@@ -118,19 +133,8 @@ namespace OECS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            List<ProductImage> productImage = _productGalleryRepository.ViewListingProductImage((int)productID, (int)colorID, (int)iconID);
-
-            ProductDetailModel productDetailModel = new ProductDetailModel
-            {
-                ProductImage = productImage.ToList(),
-                ProductID = (int)productID,
-                ColorID = (int)colorID,
-                IconID = (int)iconID,
-                IconPath = productImage.Select(pi => new { pi.Image.Icon.icon1 }).FirstOrDefault().icon1,
-                ProductDetailID = (int)productImage.Select(c => new { c.ProductDetailID }).FirstOrDefault().ProductDetailID
-            };
-            return PartialView("Partials/Modals/_EditProductDetail", productDetailModel);
+            
+            return PartialView("Partials/Modals/_EditProductDetail", _productDetailService.GetProductDetail((int)productID, (int)colorID, (int)iconID));
         }
         #endregion ("END MODAL FORMS")
 
@@ -142,7 +146,7 @@ namespace OECS.Controllers
         {
             if(ModelState.IsValid)
             {
-                if(_productRepository.CreateProduct(productModel) == true)
+                if(_productService.CreateProduct(productModel) == true)
                 {
                     return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
                 }
@@ -162,7 +166,7 @@ namespace OECS.Controllers
 
             if (ModelState.IsValid)
             {
-                _productDetailRepository.CreateProductDetail(productDetailModel);
+                _productDetailService.CreateProductDetail(productDetailModel);
                 return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
             }
             return View();
@@ -177,7 +181,7 @@ namespace OECS.Controllers
         {
             if (ModelState.IsValid)
             {
-                _productDetailRepository.EditProductDetail(productDetailModel);
+                _productDetailService.EditProductDetail(productDetailModel);
                 return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
             }
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
@@ -192,9 +196,8 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            List<ProductImage> productImages = _productGalleryRepository.ViewListingProductImage((int)productID, (int)colorID, (int)iconID);
-            ViewBag.ProductID = productID;
-            return PartialView("Partials/Modals/_ProductImageGallery", productImages);
+            ViewProductDetailModel productDetailModel = _productGalleryService.ViewListingProductImage((int)productID, (int)colorID, (int)iconID);
+            return PartialView("Partials/Modals/_ProductImageGallery", productDetailModel);
         }
 
         [Authorize(Roles = "1")]
@@ -205,7 +208,7 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _productGalleryRepository.SetImageDisplay(defaultDisplayID, selectedDisplayID);
+            _productGalleryService.SetImageDisplay((int)defaultDisplayID, (int)selectedDisplayID);
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
 
@@ -217,8 +220,8 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _productGalleryRepository.UpdatePreviousMainDisplay(productID);
-            _productGalleryRepository.SetNewMainDisplay(selectedMainDisplayID);
+            _productGalleryService.UpdatePreviousMainDisplay((int)productID);
+            _productGalleryService.SetNewMainDisplay((int)selectedMainDisplayID);
             return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
         #endregion ("END VIEWING AND MANAGING GALLERY")
@@ -228,7 +231,7 @@ namespace OECS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var product = param.isNewlyAdded == false ? _productRepository.ViewListingProduct(param.iSortCol_0, param.sSortDir_0) : _productRepository.ViewListingNewlyAddedProduct(param.iSortCol_0, param.sSortDir_0);
+                var product = param.isNewlyAdded == false ? _productService.ViewListingProduct(param.iSortCol_0, param.sSortDir_0) : _productService.ViewListingNewlyAddedProduct(param.iSortCol_0, param.sSortDir_0);
 
                 if (!String.IsNullOrEmpty(param.sSearch))
                 {

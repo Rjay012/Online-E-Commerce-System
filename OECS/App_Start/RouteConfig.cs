@@ -13,10 +13,19 @@ namespace OECS
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //Enabling Attribute Routing
+            //routes.MapMvcAttributeRoutes();
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Account", action = "Index", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "ViewFullDetail", 
+                url: "Product/ViewFullDetail/{id}",
+                defaults: new { controller = "Product", action = "ViewFullDetail", id = UrlParameter.Optional }
             );
         }
     }

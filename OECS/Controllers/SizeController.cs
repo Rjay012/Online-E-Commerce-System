@@ -1,19 +1,22 @@
 ﻿using OECS.Models;
-using OECS.Models.ProductModels;
 using OECS.Models.ProductModels.ProductDetailModels.SizeModels;
-using System;
+using OECS.Repository.ProductRepository.ProductDetailRepository.SizeRepository;
+using OECS.Services.ProductServices.ProductDetailServices.SizeServices;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace OECS.Controllers
 {
     public class SizeController : Controller
     {
-        oecsEntities dbContext = new oecsEntities();
+        private readonly ISizeService _sizeService;
+        public SizeController()
+        {
+            _sizeService = new SizeService(new SizeRepository(new oecsEntities()));
+        }
+
         // GET: Size
         public ActionResult Index()
         {
@@ -23,17 +26,22 @@ namespace OECS.Controllers
 
         public ActionResult ShowProductSize(int? categoryID, int? subCategoryID)
         {
-            List<SizeModel> sizeModel = dbContext.ProductDetail
-                                                 .Select(s => new SizeModel
-                                                 {
-                                                     SideID = (int)s.SizeID,
-                                                     Size = s.Size.size1,
-                                                     CategoryID = categoryID == 0 ? null : s.Product.SubCategory.CategoryID,
-                                                     SubCategoryID = subCategoryID == 0 ? null : s.Product.SubCategoryID
-                                                 }).Distinct().ToList();
+            if (categoryID == null || subCategoryID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-            if (categoryID != 0) { sizeModel = sizeModel.Where(pd => pd.CategoryID == categoryID).ToList(); }
-            if (subCategoryID != 0) { sizeModel = sizeModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); }
+            List<SizeModel> sizeModel = _sizeService.ViewListingSize((int)categoryID, (int)subCategoryID);
+
+            if (categoryID != 0) 
+            { 
+                sizeModel = sizeModel.Where(pd => pd.CategoryID == categoryID).ToList(); 
+            }
+            
+            if (subCategoryID != 0) 
+            { 
+                sizeModel = sizeModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); 
+            }
 
             return PartialView("Partials/_ProductSize", sizeModel);
         }

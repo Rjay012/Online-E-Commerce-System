@@ -26,18 +26,32 @@
     <link href="~/MDB/css/style.css" rel="stylesheet" />
 </head>
 <body class="fixed-sn white-skin">
-    @if (Session["Modules"] != null && Request.IsAuthenticated)
-    {
-        @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
-        @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
-    }
-    else
-    {
-        @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
+    @{
+        string url = Request.Url.ToString();
+        string viewDetailsUrl = "https://localhost:44395/Product/ViewFullDetail/";
+
+        if (Session["Modules"] != null && Request.IsAuthenticated)
+        {
+            @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
+            @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
+        }
+        else
+        {
+            url = url.Remove(url.Length - 1, 1);
+
+            if (url != viewDetailsUrl)
+            {
+                
+                @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
+            }
+        }
     }
 
     <div class="container-fluid body-content">
-        <br /><br /><br /><br />
+        @if (url != viewDetailsUrl)
+        {
+            <br /><br /><br /><br />
+        }
         @RenderBody()
         <hr />
         <footer>
@@ -73,6 +87,7 @@
     <script src="~/Scripts/Custom_Scripts/Dashboard.js"></script>
     <script src="~/Scripts/Custom_Scripts/Category.js"></script>
     <script src="~/Scripts/Custom_Scripts/Product.js"></script>
+    <script src="~/Scripts/Custom_Scripts/ProductDetail.js"></script>
     <script src="~/Scripts/Custom_Scripts/Color.js"></script>
     <script src="~/Scripts/Custom_Scripts/Size.js"></script>
     <script src="~/Scripts/Custom_Scripts/Brand.js"></script>

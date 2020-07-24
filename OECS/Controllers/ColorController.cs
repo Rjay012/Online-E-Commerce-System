@@ -1,10 +1,10 @@
 ﻿using OECS.Models;
 using OECS.Models.ProductModels.ProductDetailModels.ColorModels;
-using System;
+using OECS.Repository.ProductRepository.ProductDetailRepository.ColorRepository;
+using OECS.Services.ProductServices.ProductDetailServices.ColorServices;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Web;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
@@ -12,7 +12,12 @@ namespace OECS.Controllers
 {
     public class ColorController : Controller
     {
-        oecsEntities dbContext = new oecsEntities();
+        private readonly IColorService _colorService;
+        public ColorController()
+        {
+            _colorService = new ColorService(new ColorRepository(new oecsEntities())); 
+        }
+
         // GET: Color
         public ActionResult Index()
         {
@@ -22,17 +27,22 @@ namespace OECS.Controllers
 
         public ActionResult ShowProductColor(int? categoryID, int? subCategoryID)
         {
-            List<ColorModel> colorModel = dbContext.ProductDetail
-                                                   .Select(s => new ColorModel
-                                                   {
-                                                       ColorID = (int)s.ColorID,
-                                                       Color = s.Color.color1,
-                                                       CategoryID = categoryID == 0 ? null : s.Product.SubCategory.CategoryID,
-                                                       SubCategoryID = subCategoryID == 0 ? null : s.Product.SubCategoryID
-                                                   }).Distinct().ToList();
+            if(categoryID == null || subCategoryID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-            if (categoryID != 0) { colorModel = colorModel.Where(pd => pd.CategoryID == categoryID).ToList(); }
-            if (subCategoryID != 0) { colorModel = colorModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); }
+            List<ColorModel> colorModel = _colorService.ViewListingColor((int)categoryID, (int)subCategoryID);
+
+            if (categoryID != 0) 
+            { 
+                colorModel = colorModel.Where(pd => pd.CategoryID == categoryID).ToList(); 
+            }
+
+            if (subCategoryID != 0) 
+            { 
+                colorModel = colorModel.Where(pd => pd.SubCategoryID == subCategoryID).ToList(); 
+            }
 
             return PartialView("Partials/_ProductColor", colorModel);
         }

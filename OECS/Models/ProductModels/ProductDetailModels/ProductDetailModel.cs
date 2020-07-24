@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -27,43 +26,9 @@ namespace OECS.Models.ProductModels.ProductDetailModels
         public HttpPostedFileBase IconFile { get; set; }
         public HttpPostedFileBase[] Files { get; set; }
 
-        public IEnumerable<SelectListItem> ColorList
-        {
-            get
-            {
-                oecsEntities dbContext = new oecsEntities();
-                List<SelectListItem> ColorListTempStorage = new List<SelectListItem>();
-                var color = dbContext.Color.ToList();
-                foreach (var item in color)
-                {
-                    ColorListTempStorage.Add(new SelectListItem
-                    {
-                        Value = item.ColorID.ToString(),
-                        Text = item.color1
-                    });
-                }
-                return ColorListTempStorage;
-            }
-        }
+        public IEnumerable<SelectListItem> ColorList { get; set; }
 
-        public IEnumerable<SelectListItem> SizeList
-        {
-            get
-            {
-                oecsEntities dbContext = new oecsEntities();
-                List<SelectListItem> SizeListTempStorage = new List<SelectListItem>();
-                var size = dbContext.Size.ToList();
-                foreach (var item in size)
-                {
-                    SizeListTempStorage.Add(new SelectListItem
-                    {
-                        Value = item.SideID.ToString(),
-                        Text = item.size1
-                    });
-                }
-                return SizeListTempStorage;
-            }
-        }
+        public IEnumerable<SelectListItem> SizeList { get; set; }
 
         public List<ProductImage> ProductImage { get; set; }
     }

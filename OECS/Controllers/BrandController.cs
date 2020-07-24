@@ -1,6 +1,7 @@
 ﻿using OECS.Models;
 using OECS.Models.BrandModels;
 using OECS.Repository.BrandRepository;
+using OECS.Services.BrandServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -9,10 +10,10 @@ namespace OECS.Controllers
 {
     public class BrandController : Controller
     {
-        private readonly IBrandRepository _brandRepository;
+        private readonly IBrandService _brandService;
         public BrandController()
         {
-            _brandRepository = new BrandRepository(new oecsEntities());
+            _brandService = new BrandService(new BrandRepository(new oecsEntities()));
         }
 
         // GET: Brand
@@ -24,7 +25,7 @@ namespace OECS.Controllers
 
         public ActionResult BrandList(int? categoryID, int? subCategoryID)
         {
-            List<BrandModel> brandModel = _brandRepository.ViewListingBrands((int)categoryID, (int)subCategoryID);
+            List<BrandModel> brandModel = _brandService.ViewListingBrands((int)categoryID, (int)subCategoryID);
 
             if (categoryID != 0) 
             { 

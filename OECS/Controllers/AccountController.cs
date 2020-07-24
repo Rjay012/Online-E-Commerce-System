@@ -133,6 +133,7 @@ namespace OECS.Controllers
         {
             var ctx = Request.GetOwinContext();
             var authenticationManager = ctx.Authentication;
+            Session["Modules"] = null;
             authenticationManager.SignOut();
 
             return RedirectToAction("Index", "Account");

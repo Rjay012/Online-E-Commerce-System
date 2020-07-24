@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OECS.Repository.ProductRepository
+namespace OECS.Repository.ProductRepository.ProductDetailRepository
 {
     public class ProductDetailRepository : IProductDetailRepository
     {
@@ -17,38 +17,35 @@ namespace OECS.Repository.ProductRepository
         {
             _dbContext = dbContext;
         }
+
         #region START ADD PRODUCT DETAIL
-        public void CreateProductDetail(ProductDetailModel productDetailModel)
+        public void CreateProductDetail(ProductDetailModel productDetailModel, List<int> lstProductDetailID, Dictionary<int, bool> lstImageID)
         {
             ProductImage productImage = new ProductImage();
-            string fname = productDetailModel.Path;
-
-            //upload new icon
-            productDetailModel.IconPath = "Images\\AddImageIcon\\" + FileMng.UploadFile(productDetailModel.IconFile, "/Images/AddImageIcon");
-            CreateNewIcon(new ProductDetailModel() { IconPath = productDetailModel.IconPath });
-            List<int> lstProductDetailID = CreateProductSizeAndColor(new ProductDetailModel { ProductID = productDetailModel.ProductID, ColorID = productDetailModel.ColorID, SizeID = productDetailModel.SizeID });
-            Dictionary<int, bool> lstImageID = UploadImage(new ProductDetailModel { Files = productDetailModel.Files, IsDisplayPosition = productDetailModel.IsDisplayPosition });
 
             foreach (int productDetailID in lstProductDetailID)
             {
                 foreach (int imageID in lstImageID.Keys)
                 {
-                    bool findMainDisplay = _dbContext.ProductImage
-                                                     .Where(pi => pi.ProductDetail.ProductID == productDetailModel.ProductID && pi.isMainDisplay == true).Any();
+                    bool isFoundMainDisplay = FindMainDisplay(productDetailModel);
                     productImage.ProductDetailID = productDetailID;
                     productImage.ImageID = imageID;
-                    productImage.isMainDisplay = (findMainDisplay == true ? false : true);  //for each product color, only 1 color can be set to main display
+                    productImage.isMainDisplay = (isFoundMainDisplay == true ? false : true);  //for each product color, only 1 color can be set to main display
 
                     _dbContext.ProductImage.Add(productImage);
                     _dbContext.SaveChanges();
                 }
             }
-
-            //add display color and size's
-            CreateDisplayDetail(new ProductDetailModel { ProductID = productDetailModel.ProductID }, lstImageID.Where(i => i.Value == true).FirstOrDefault().Key);
         }
 
-        private bool CreateNewIcon([Bind(Include = "IconPath")] ProductDetailModel productDetailModel)
+        private bool FindMainDisplay([Bind(Include = "ProductID")]ProductDetailModel productDetailModel)
+        {
+            return _dbContext.ProductImage
+                             .Where(pi => pi.ProductDetail.ProductID == productDetailModel.ProductID && pi.isMainDisplay == true)
+                             .Any();
+        }
+
+        public bool CreateNewIcon([Bind(Include = "IconPath")] ProductDetailModel productDetailModel)
         {
             Icon icon = new Icon();
             icon.icon1 = productDetailModel.IconPath;
@@ -64,7 +61,7 @@ namespace OECS.Repository.ProductRepository
             }
         }
 
-        private List<int> CreateProductSizeAndColor([Bind(Include = "ProductID, ColorID, SizeID")] ProductDetailModel productDetailModel)
+        public List<int> CreateProductSizeAndColor([Bind(Include = "ProductID, ColorID, SizeID")] ProductDetailModel productDetailModel)
         {
             ProductDetail productDetail = new ProductDetail();
             List<int> lstProductDetailID = new List<int>();
@@ -82,7 +79,7 @@ namespace OECS.Repository.ProductRepository
             return lstProductDetailID;
         }
 
-        private Dictionary<int, bool> UploadImage([Bind(Include = "Files, IsDisplayPosition")] ProductDetailModel productDetailModel)
+        public Dictionary<int, bool> UploadImage([Bind(Include = "Files, IsDisplayPosition")] ProductDetailModel productDetailModel)
         {
             Image image = new Image();
             Dictionary<int, bool> lstImageID = new Dictionary<int, bool>();
@@ -108,7 +105,7 @@ namespace OECS.Repository.ProductRepository
             return lstImageID;
         }
 
-        private void CreateDisplayDetail([Bind(Include = "ProductID")] ProductDetailModel productDetailModel, int imgID)
+        public void CreateDisplayDetail([Bind(Include = "ProductID")] ProductDetailModel productDetailModel, int imgID)
         {
             List<ProductDetailModel> productImage = _dbContext.ProductImage
                                                               .Where(pi => pi.ImageID == imgID)
@@ -126,12 +123,12 @@ namespace OECS.Repository.ProductRepository
         private void CreateDisplayColor([Bind(Include = "ProductImageID, ProductID, ColorID")] ProductDetailModel productDetailModel)
         {
             DisplayColor displayColor;
-            bool hasColor = HasColor(productDetailModel.ProductID, productDetailModel.ColorID);  //moved to class _ProductService
+            bool hasColor = HasColor(productDetailModel.ProductID, productDetailModel.ColorID); 
 
             if (hasColor == true)
             {
                 displayColor = new DisplayColor();
-                displayColor.DisplayColorID = GetDisplayColorKey(productDetailModel.ProductID, productDetailModel.ColorID); //moved to class _ProductService
+                displayColor.DisplayColorID = GetDisplayColorKey(productDetailModel.ProductID, productDetailModel.ColorID); 
                 displayColor.isDisplay = false;
                 _dbContext.DisplayColor.Attach(displayColor);
                 _dbContext.Entry(displayColor).Property(dc => dc.isDisplay).IsModified = true;
@@ -170,32 +167,29 @@ namespace OECS.Repository.ProductRepository
 
         #region START EDIT PRODUCT DETAIL
 
-        public void EditProductDetail([Bind]ProductDetailModel productDetailModel)
-        {
-            /** UNCOMMENT THOSE LINES BELOW IF THE UPDATE FEATURE FOR THE PRODUCT DETAIL HAS BEEN FINISHED **/
-            CreateNewProductSize(productDetailModel);      //check if new size has been added/selected by the admin
-            //RemoveProductSize(productDetailModel);
-            ChangeImageIcon(productDetailModel);
-            ChangeProductColor(productDetailModel);
-            ChangeProductImage(productDetailModel);
-        }
-
         //YOU STOPPED HERE, YOU CAN CONTROL TO REMOVE THE NUMBER OF QUANTITY BY USING TAKE METHOD 
-        private void RemoveProductSize([Bind(Include = "ToRemoveSizeID, ColorID, ProductID, IconID")] ProductDetailModel productDetailModel)
+        public void RemoveProductSize([Bind(Include = "ToRemoveSizeID, ColorID, ProductID, IconID")] ProductDetailModel productDetailModel)
         {
             foreach (var item in productDetailModel.ToRemoveSizeID.Where(s => s > 0).ToList())
             {
-                var pdToRemove = _dbContext.ProductImage
-                                           .Where(pi => pi.ProductDetail.SizeID == item && pi.ProductDetail.ColorID == productDetailModel.ColorID && pi.ProductDetail.ProductID == productDetailModel.ProductID && pi.Image.IconID == productDetailModel.IconID)
-                                           .Select(pi => new { pi.ProductDetailID }).Distinct().ToList();
-                foreach (var pdID in pdToRemove)
+                List<ProductDetailModel> ListingProductImageID = GetProductImageID(productDetailModel, item);
+                foreach (var pdID in ListingProductImageID)
                 {
                     ProductDetail productDetail = _dbContext.ProductDetail.Find(pdID.ProductDetailID);
                 }
             }
         }
 
-        private void CreateNewProductSize([Bind(Include = "ProductID, ProductDetailID, ColorID, SizeID, ImageID, NewSizeQuantity")] ProductDetailModel productDetailModel)  //creating/adding new product size in update area
+        private List<ProductDetailModel> GetProductImageID([Bind(Include = "ToRemoveSizeID, ColorID, ProductID, IconID")] ProductDetailModel productDetailModel, int sizeID)
+        {
+            return _dbContext.ProductImage
+                             .Where(pi => pi.ProductDetail.SizeID == sizeID && pi.ProductDetail.ColorID == productDetailModel.ColorID && pi.ProductDetail.ProductID == productDetailModel.ProductID && pi.Image.IconID == productDetailModel.IconID)
+                             .Select(pi => new ProductDetailModel { ProductDetailID = pi.ProductDetailID })
+                             .Distinct()
+                             .ToList();
+        }
+
+        public void CreateNewProductSize([Bind(Include = "ProductID, ProductDetailID, ColorID, SizeID, ImageID, NewSizeQuantity")] ProductDetailModel productDetailModel)  //creating/adding new product size in update area
         {
             if (productDetailModel.NewSizeQuantity.Any(s => s != ""))
             {
@@ -263,7 +257,7 @@ namespace OECS.Repository.ProductRepository
             return lstNewProductDetailID;
         }
 
-        private void ChangeImageIcon([Bind(Include = "IconID, IconPath, IconFile")] ProductDetailModel productDetailModel)
+        public void ChangeImageIcon([Bind(Include = "IconID, IconPath, IconFile")] ProductDetailModel productDetailModel)
         {
             FileMng.RemoveFile(System.Web.HttpContext.Current.Server.MapPath("~\\" + productDetailModel.IconPath));
             ChangeIconAndDirectoryPath(productDetailModel);   //update the icon inside the directory and its path to the database
@@ -281,7 +275,7 @@ namespace OECS.Repository.ProductRepository
             _dbContext.SaveChanges();
         }
 
-        private void ChangeProductColor([Bind(Include = "ProductID, ColorID, IconID, NewColorID")]ProductDetailModel productDetailModel)
+        public void ChangeProductColor([Bind(Include = "ProductID, ColorID, IconID, NewColorID")]ProductDetailModel productDetailModel)
         {
             if (productDetailModel.NewColorID != 0)
             {
@@ -307,10 +301,13 @@ namespace OECS.Repository.ProductRepository
                              {
                                  ProductDetailID = pd.ProductDetailID,
                                  IconID = (int)pi.Image.IconID
-                             }).Where(pi => pi.IconID == productDetailModel.IconID).Distinct().ToList();
+                             })
+                             .Where(pi => pi.IconID == productDetailModel.IconID)
+                             .Distinct()
+                             .ToList();
         }
 
-        private void ChangeProductImage(ProductDetailModel productDetailModel)
+        public void ChangeProductImage(ProductDetailModel productDetailModel)
         {
             RemoveOldImage(productDetailModel);
             ChangeImage(productDetailModel);
@@ -399,6 +396,22 @@ namespace OECS.Repository.ProductRepository
                                  pi.ProductImageID
                              })
                             .FirstOrDefault().ProductImageID;
+        }
+
+        public IQueryable<ProductDetailModel> GetColorAndIcon(int productID)
+        {
+            return _dbContext.ProductImage
+                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.isMainDisplay == true)
+                             .Select(s => new ProductDetailModel
+                             {
+                                 ColorID = (int)s.ProductDetail.ColorID,
+                                 IconID = (int)s.Image.IconID
+                             });
+        }
+
+        public IQueryable<ProductDetail> ProductDetail()
+        {
+            return _dbContext.ProductDetail;
         }
     }
 }

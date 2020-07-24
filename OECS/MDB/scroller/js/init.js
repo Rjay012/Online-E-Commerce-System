@@ -7,7 +7,7 @@ $(function(){
 		},
 		options: {
 			margin: 10,
-			zoom: 1.5,
+			//zoom: 1.5,
 			easing: ['easeInSine', 'easeOutElastic'],
 			duration: [200, 1000]
 		},

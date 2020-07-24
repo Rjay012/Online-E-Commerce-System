@@ -168,10 +168,18 @@
     <Compile Include="Repository\BrandRepository\IBrandRepository.cs" />
     <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
     <Compile Include="Repository\CategoryRepository\ICategoryRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\ColorRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\IColorRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\SizeRepository\ISizeRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\SizeRepository\SizeRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductGalleryRepository\ProductGalleryRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductGalleryRepository\IProductGalleryRepository.cs" />
-    <Compile Include="Repository\ProductRepository\IProductDetailRepository.cs" />
-    <Compile Include="Repository\ProductRepository\ProductDetailRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\IProductDetailRepository.cs" />
+    <Compile Include="Repository\ProductRepository\ProductDetailRepository\ProductDetailRepository.cs" />
+    <Compile Include="Services\BrandServices\BrandService.cs" />
+    <Compile Include="Services\BrandServices\IBrandService.cs" />
+    <Compile Include="Services\CategoryServices\CategoryService.cs" />
+    <Compile Include="Services\CategoryServices\ICategoryService.cs" />
     <Compile Include="Services\FileMng.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
@@ -255,7 +263,6 @@
     <Compile Include="Models\ProductModels\ProductModel.cs" />
     <Compile Include="Repository\ProductRepository\IProductRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductRepository.cs" />
-    <Compile Include="Models\ProductModels\ProductSizeModel.cs" />
     <Compile Include="Models\ProductModels\ProductDetailModels\ViewProductDetailModel.cs" />
     <Compile Include="Models\ProductModels\ViewProductModel.cs" />
     <Compile Include="Models\Role.cs">
@@ -289,6 +296,16 @@
     <Compile Include="Models\SupplyModels\SupplyModel.cs" />
     <Compile Include="Models\ViewModuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ProductServices\IProductService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\ColorServices\ColorService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\ColorServices\IColorService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\IProductDetailService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\ProductDetailService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\SizeServices\ISizeService.cs" />
+    <Compile Include="Services\ProductServices\ProductDetailServices\SizeServices\SizeService.cs" />
+    <Compile Include="Services\ProductServices\ProductGalleryServices\IProductGalleryService.cs" />
+    <Compile Include="Services\ProductServices\ProductGalleryServices\ProductGalleryService.cs" />
+    <Compile Include="Services\ProductServices\ProductService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2137,6 +2154,7 @@
     <Content Include="MDB\VerticalGallery\images\top5large.jpg" />
     <Content Include="MDB\VerticalGallery\images\top5small.jpg" />
     <Content Include="MDB\VerticalGallery\js\jquery.fancybox.js" />
+    <Content Include="MDB\VerticalGallery\js\PhotoGallery.js" />
     <Content Include="Models\oecs.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>oecs.Context.cs</LastGenOutput>
@@ -2365,6 +2383,7 @@
     <Content Include="Scripts\Custom_Scripts\Brand.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
+    <Content Include="Scripts\Custom_Scripts\ProductDetail.js" />
     <Content Include="Scripts\Custom_Scripts\Size.js" />
     <Content Include="Scripts\Custom_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\Register.js" />
@@ -2424,6 +2443,8 @@
     <Content Include="Views\Brand\Partials\_BrandList.cshtml" />
     <Content Include="Views\Category\Partials\_SubCategoryList.cshtml" />
     <Content Include="Views\Product\Partials\Modals\_EditProduct.cshtml" />
+    <Content Include="Views\Product\ViewFullDetail.cshtml" />
+    <Content Include="Views\Product\Partials\_PreviewImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

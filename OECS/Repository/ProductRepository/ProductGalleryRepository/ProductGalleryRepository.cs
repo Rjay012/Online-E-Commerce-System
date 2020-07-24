@@ -1,4 +1,5 @@
 ﻿using OECS.Models;
+using OECS.Models.ProductModels.ProductDetailModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
             _dbContext = dbContext;
         }
 
-        public void UpdatePreviousMainDisplay(int? productID)
+        public void UpdatePreviousMainDisplay(int productID)
         {
             ProductImage productImage = new ProductImage();
             productImage.ProductImageID = _dbContext.ProductImage
@@ -25,17 +26,17 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
             _dbContext.SaveChanges();
         }
 
-        public void SetNewMainDisplay(int? selectedMainDisplayID)
+        public void SetNewMainDisplay(int selectedMainDisplayID)
         {
             ProductImage productImage = new ProductImage();
-            productImage.ProductImageID = (int)selectedMainDisplayID;
+            productImage.ProductImageID = selectedMainDisplayID;
             productImage.isMainDisplay = true;   //setting new main display
             _dbContext.ProductImage.Attach(productImage);
             _dbContext.Entry(productImage).Property(pi => pi.isMainDisplay).IsModified = true;
             _dbContext.SaveChanges();
         }
 
-        public void SetImageDisplay(int? defaultDisplayID, int? selectedDisplayID)
+        public void SetImageDisplay(int defaultDisplayID, int selectedDisplayID)
         {
             DisplayColor displayColor = new DisplayColor();
             displayColor.DisplayColorID = _dbContext.DisplayColor
@@ -48,10 +49,29 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
             _dbContext.SaveChanges();
         }
 
-        public List<ProductImage> ViewListingProductImage(int productID, int colorID, int iconID)
+        public ViewProductDetailModel ViewListingProductImage(int productID, int colorID, int iconID)
+        {
+            IEnumerable<ProductImage> productImages = ProductImageList(productID, colorID, iconID);
+            ViewProductDetailModel productDetail = _dbContext.Product
+                                                             .Where(p => p.ProductID == productID)
+                                                             .Select(s => new ViewProductDetailModel
+                                                             {
+                                                                 ProductID = productID,
+                                                                 ProductName = s.productName,
+                                                                 BrandName = s.Brand.BrandName,
+                                                                 Description = s.description,
+                                                                 Price = s.price,
+                                                                 ProductImages = productImages,
+                                                                 IconID = iconID,
+                                                                 ColorID = colorID
+                                                             }).FirstOrDefault();
+            return productDetail;
+        }
+
+        public IEnumerable<ProductImage> ProductImageList(int productID, int colorID, int iconID)
         {
             return _dbContext.ProductImage
-                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.ProductDetail.ColorID == colorID && pi.Image.IconID == iconID).ToList();
+                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.ProductDetail.ColorID == colorID && pi.Image.IconID == iconID);
         }
     }
 }

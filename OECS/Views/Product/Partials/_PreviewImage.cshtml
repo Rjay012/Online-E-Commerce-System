@@ -1,0 +1,33 @@
+﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
+@using OECS.Models;
+@{
+    oecsEntities dbContext = new oecsEntities();
+    int productID = Convert.ToInt32(ViewBag.ProductID);
+    var icon = dbContext.DisplayColor
+                        .Where(i => i.ProductImage.ProductDetail.ProductID == productID)
+                        .Select(i => new
+                        {
+                            i.ProductImage.Image.IconID,
+                            i.ProductImage.ProductDetail.ProductID,
+                            i.ProductImage.ProductDetail.ColorID,
+                            i.ProductImage.Image.Icon.icon1
+                        }).Distinct().ToList();
+
+    var defaultImg = "";
+    var isMainDisplay = "";
+
+    var display = Model.ProductImages.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
+    isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
+    defaultImg = display.Image.path;
+    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
+        <img src="@defaultImg" />
+    </a>
+
+    foreach (var img in Model.ProductImages.Where(i => i.DisplayColor.Count() == 0).Take(4))
+    {
+        isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
+        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
+            <img src="@img.Image.path" />
+        </a>
+    }
+}

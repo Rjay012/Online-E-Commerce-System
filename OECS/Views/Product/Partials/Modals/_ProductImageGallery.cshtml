@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OECS.Models.ProductImage>
+﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
 @using OECS.Models;
 <div class="modal-header">
     <h5 class="modal-title">Gallery</h5>
@@ -27,14 +27,14 @@
                     var defaultImg = "";
                     var isMainDisplay = "";
 
-                    var display = Model.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
+                    var display = Model.ProductImages.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
                     isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
                     defaultImg = display.Image.path;
                     <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
                         <img src="@defaultImg" />
                     </a>
 
-                    foreach (var img in Model.Where(i => i.DisplayColor.Count() == 0).Take(4))
+                    foreach (var img in Model.ProductImages.Where(i => i.DisplayColor.Count() == 0).Take(4))
                     {
                         isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
                         <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
@@ -46,6 +46,28 @@
             <div class="full">
                 <img src="@defaultImg" />
             </div>
+        </div>
+        <div class="container product-gallery-details">
+            <p>
+                <strong>Product:</strong>
+                @Model.ProductName
+            </p>
+            <p>
+                <strong>Brand:</strong>
+                @Model.BrandName
+            </p>
+            <p>
+                <strong>Color Quantity:</strong>
+                @icon.Count()
+            </p>
+            <p>
+                <strong>Size Quantity:</strong>
+                @Model.ProductImages.Where(pi => pi.DisplaySize.Count() != 0).Count()
+            </p>
+            <p>
+                <strong>Description:</strong>
+                @Model.Description
+            </p>
         </div>
     </div>
     <div class="container">
