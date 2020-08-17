@@ -15,6 +15,8 @@ using OECS.Repository.ProductRepository;
 using OECS.Services.ProductServices;
 using OECS.Services.ProductServices.ProductDetailServices;
 using OECS.Services.ProductServices.ProductGalleryServices;
+using OECS.Services.ProductServices.ProductDetailServices.SizeServices;
+using OECS.Repository.ProductRepository.ProductDetailRepository.SizeRepository;
 
 namespace OECS.Controllers
 {
@@ -23,12 +25,14 @@ namespace OECS.Controllers
         private readonly IProductService _productService;
         private readonly IProductDetailService _productDetailService;
         private readonly IProductGalleryService _productGalleryService;
+        private readonly ISizeService _sizeService;
 
         public ProductController()
         {
             _productService = new ProductService(new ProductRepository(new oecsEntities()));
             _productDetailService = new ProductDetailService(new ProductDetailRepository(new oecsEntities()));
             _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
+            _sizeService = new SizeService(new SizeRepository(new oecsEntities()));
         }
 
         // GET: Product
@@ -36,7 +40,7 @@ namespace OECS.Controllers
         public ActionResult Index()
         {
             ViewBag.ModuleTitle = "Product";
-            return View();
+            return View(nameof(Index));
         }
 
         public ActionResult ViewFullDetail(int? id)
@@ -46,23 +50,46 @@ namespace OECS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ProductDetailModel productDetailModels = _productGalleryService.GetColorAndIcon((int)id).SingleOrDefault();
+            return View(nameof(ViewFullDetail));
+        }
 
-            if(productDetailModels == null)
+        public ActionResult PreviewProductDetails(int? productID, int? colorID, int? iconID)
+        {
+            if(productID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ProductDetailModel productDetailModel = new ProductDetailModel();
+            if (colorID == null && iconID == null)
+            {
+                productDetailModel = _productGalleryService.GetColorAndIcon((int)productID).SingleOrDefault();
+
+                if(productDetailModel == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                productDetailModel.ColorID = (int)colorID;
+                productDetailModel.IconID = (int)iconID;
+            }
+
+            ViewProductDetailModel viewProductDetailModel = _productGalleryService.ViewListingProductImage((int)productID, productDetailModel.ColorID, productDetailModel.IconID);
+            ViewBag.SizeList = _sizeService.SizeList((int)productID, productDetailModel.ColorID, productDetailModel.IconID);
+
+            if (viewProductDetailModel == null)
             {
                 return HttpNotFound();
             }
 
-            ViewProductDetailModel viewProductDetailModel = _productGalleryService.ViewListingProductImage((int)id, productDetailModels.ColorID, productDetailModels.IconID);
-            
-            ViewBag.ProductID = (int)id;
-            
-            if(viewProductDetailModel == null)
-            {
-                return HttpNotFound();
-            }
+            return PartialView("Partials/_PreviewProductDetails", viewProductDetailModel);
+        }
 
-            return View(viewProductDetailModel);
+        public ActionResult ViewTab()
+        {
+            return PartialView("Partials/_TabList");
         }
 
         [AllowAnonymous]
@@ -197,6 +224,12 @@ namespace OECS.Controllers
             }
 
             ViewProductDetailModel productDetailModel = _productGalleryService.ViewListingProductImage((int)productID, (int)colorID, (int)iconID);
+
+            if(productDetailModel == null)
+            {
+                return HttpNotFound();
+            }
+
             return PartialView("Partials/Modals/_ProductImageGallery", productDetailModel);
         }
 

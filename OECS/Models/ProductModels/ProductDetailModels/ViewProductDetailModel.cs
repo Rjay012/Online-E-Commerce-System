@@ -11,6 +11,7 @@ namespace OECS.Models.ProductModels.ProductDetailModels
         public Decimal? Price { get; set; }
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
+        public int? SizeID { get; set; }
         public int? ColorID { get; set; }
         public int? IconID { get; set; }
         public bool? isMainDisplay { get; set; }

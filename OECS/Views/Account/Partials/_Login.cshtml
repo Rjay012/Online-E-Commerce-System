@@ -10,7 +10,7 @@
     </div>
     <div class="modal-body">
         @Html.AntiForgeryToken()
-
+        @Html.HiddenFor(l => l.ShopNow)
         @Html.DropDownListFor(l => l.RoleID, Model.RoleList, "Select Role", new { @class = "browser-default mdb-select form-control mb-4" })
 
         @Html.TextBoxFor(l => l.UserID, new { @class = "form-control mb-4", @placeholder = "AdminID/E-mail" })

@@ -62,3 +62,7 @@ clear: both;
 .product-gallery-details p > strong {
     font-weight: bold;
 }
+
+.product-image-gallery > .clearfix {
+    width: 960px;
+}

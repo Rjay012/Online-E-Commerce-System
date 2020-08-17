@@ -2,7 +2,6 @@
 using Microsoft.Owin.Security;
 using OECS.Models;
 using OECS.Models.LoginModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -33,7 +32,6 @@ namespace OECS.Controllers
 
             if (ModelState.IsValid)
             {
-                List<Claim> claims = new List<Claim>();
                 bool isExist = false;
                 switch (loginModel.RoleID)
                 {
@@ -63,6 +61,7 @@ namespace OECS.Controllers
                     Session["Modules"] = module;  //store modules
 
                     //user login credentials
+                    List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(ClaimTypes.Name, loginModel.UserID));
                     claims.Add(new Claim(ClaimTypes.Role, loginModel.RoleID.ToString()));
                     var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
@@ -70,10 +69,15 @@ namespace OECS.Controllers
                     var authenticationManager = ctx.Authentication;
                     authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, claimIdentities);
 
-                    return Json(new { controller = "Product" }, JsonRequestBehavior.AllowGet);  //bypassed main target module
+                    if(loginModel.ShopNow == true && loginModel.RoleID == 3)
+                    {
+                        Session["ShopNow"] = loginModel.ShopNow;  //activate session for customer shopping
+                        return Json(new { data = "success", shopNow = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    return Json(new { controller = "Dashboard" }, JsonRequestBehavior.AllowGet);  //bypassed main target module
                 }
             }
-            return View(nameof(Index)); //Json("failed", JsonRequestBehavior.AllowGet);
+            return View();
         }
 
         public ActionResult LoginForm(LoginModel loginModel)

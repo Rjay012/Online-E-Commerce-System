@@ -11,6 +11,7 @@ namespace OECS.Models.LoginModels
         public string Password { get; set; }
         public int? RoleID { get; set; }
         public string Role { get; set; }
+        public bool ShopNow { get; set; }
 
         public IEnumerable<SelectListItem> RoleList { get; set; }
     }

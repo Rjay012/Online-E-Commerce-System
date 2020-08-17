@@ -1,87 +1,32 @@
-﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
-@using OECS.Models;
-@{
+﻿@{
     ViewBag.Title = "ViewFullDetail";
-    /*
-     * NOTE: TO FIND THE IMAGES INSIDE FOLDER USE (..\..\) TO CHANGE THE IMAGE URL
-    */
 }
+<div class="container-fluid product-image-gallery">
 
-<h2>ViewFullDetail</h2>
+</div>
+<hr />
+<h4>Descriptions / Details</h4>
+<div class="container-fluid description">
 
-<div class="container-fluid">
-    <div class="container-fluid clearfix">
-        <div class="gallery text-center">
-            <div class="previews">
-                @{
-                    oecsEntities dbContext = new oecsEntities();
-                    int productID = Convert.ToInt32(ViewBag.ProductID);
-                    var icon = dbContext.DisplayColor
-                                        .Where(i => i.ProductImage.ProductDetail.ProductID == productID)
-                                        .Select(i => new
-                                        {
-                                            i.ProductImage.Image.IconID,
-                                            i.ProductImage.ProductDetail.ProductID,
-                                            i.ProductImage.ProductDetail.ColorID,
-                                            i.ProductImage.Image.Icon.icon1
-                                        }).Distinct().ToList();
+</div>
+<hr />
+<div class="container-fluid tab-list">
 
-                    var defaultImg = "";
-                    var display = Model.ProductImages.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
-                    var isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
-                    defaultImg = display.Image.path;
-                    <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
-                        <img src="..\..\@defaultImg" />
-                    </a>
-
-                    foreach (var img in Model.ProductImages.Where(i => i.DisplayColor.Count() == 0).Take(4))
-                    {
-                        isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
-                        <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
-                            <img src="..\..\@img.Image.path" />
-                        </a>
-                    }
-                }
-            </div>
-            <div class="full">
-                <img src="..\..\@defaultImg" />
-            </div>
-        </div>
-        <div class="container product-gallery-details" style="width: 300px;">
-            <div class="card">
-                <div class="card-body">
-                    <h4>@Model.ProductName</h4>
-                    <h5>$ @Model.Price</h5>
-                    <br />
-                    <p>
-                        <strong>Brand:</strong>
-                        @Model.BrandName
-                    </p>
-                    <p>
-                        <strong>Color Quantity:</strong>
-                    </p>
-                    <p>
-                        <strong>Size Quantity:</strong>
-                        @Model.ProductImages.Where(pi => pi.DisplaySize.Count() != 0).Count()
-                    </p>
-                </div>
-            </div>
-            
-            <br /><br />
-            <div class="card">
-                <div class="card-body">
-                    @foreach (var i in icon)
-                    {
-                        <a onclick="ViewProductPhotoGallery(parseInt(@i.ProductID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                            <img src="..\..\@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="icon-@i.IconID">
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
+@Html.Partial("~/Views/Account/Partials/_AccountLogModalFormHolder.cshtml")
+
 @section scripts{
+    <script>
+        var routeID = @ViewContext.RouteData.Values["id"].ToString();
+        $('.mdb-select').materialSelect();
+    </script>
     <script src="~/MDB/VerticalGallery/js/PhotoGallery.js"></script>
+    <script src="~/Scripts/Custom_Scripts/ProductDetail.js"></script>
+
+    @if (Session["Modules"] == null && !Request.IsAuthenticated)
+    {
+        <script src="~/Scripts/Custom_Scripts/Login.js"></script>
+        <script src="~/Scripts/Custom_Scripts/Register.js"></script>
+    }
 }

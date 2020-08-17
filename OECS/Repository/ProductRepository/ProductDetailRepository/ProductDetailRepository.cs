@@ -109,11 +109,11 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
         {
             List<ProductDetailModel> productImage = _dbContext.ProductImage
                                                               .Where(pi => pi.ImageID == imgID)
-                                                              .Select(pi => new ProductDetailModel 
-                                                              { 
-                                                                  ProductImageID = pi.ProductImageID, 
-                                                                  SID = (int)pi.ProductDetail.SizeID, 
-                                                                  ColorID = (int)pi.ProductDetail.ColorID 
+                                                              .Select(pi => new ProductDetailModel
+                                                              {
+                                                                  ProductImageID = pi.ProductImageID,
+                                                                  SID = (int)pi.ProductDetail.SizeID,
+                                                                  ColorID = (int)pi.ProductDetail.ColorID
                                                               }).ToList();
 
             CreateDisplayColor(new ProductDetailModel() { ProductImageID = productImage.FirstOrDefault().ProductImageID, ProductID = productDetailModel.ProductID, ColorID = productImage.FirstOrDefault().ColorID });
@@ -123,12 +123,12 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
         private void CreateDisplayColor([Bind(Include = "ProductImageID, ProductID, ColorID")] ProductDetailModel productDetailModel)
         {
             DisplayColor displayColor;
-            bool hasColor = HasColor(productDetailModel.ProductID, productDetailModel.ColorID); 
+            bool hasColor = HasColor(productDetailModel.ProductID, productDetailModel.ColorID);
 
             if (hasColor == true)
             {
                 displayColor = new DisplayColor();
-                displayColor.DisplayColorID = GetDisplayColorKey(productDetailModel.ProductID, productDetailModel.ColorID); 
+                displayColor.DisplayColorID = GetDisplayColorKey(productDetailModel.ProductID, productDetailModel.ColorID);
                 displayColor.isDisplay = false;
                 _dbContext.DisplayColor.Attach(displayColor);
                 _dbContext.Entry(displayColor).Property(dc => dc.isDisplay).IsModified = true;
@@ -334,6 +334,19 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
             }
         }
         #endregion END EDIT PRODUCT DETAIL
+
+        public List<ProductDetailModel> ViewProductIcon(int productID)
+        {
+            return _dbContext.DisplayColor
+                             .Where(i => i.ProductImage.ProductDetail.ProductID == productID)
+                             .Select(i => new ProductDetailModel
+                             {
+                                 IconID = (int)i.ProductImage.Image.IconID,
+                                 ProductID = (int)i.ProductImage.ProductDetail.ProductID,
+                                 ColorID = (int)i.ProductImage.ProductDetail.ColorID,
+                                 IconPath = i.ProductImage.Image.Icon.icon1
+                             }).Distinct().ToList();
+        }
 
         private bool HasColor(int? productID, int? colorID)
         {

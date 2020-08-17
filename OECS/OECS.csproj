@@ -164,6 +164,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Repository\ApplicationSecurityRepository\ApplicationSecurityRepository.cs" />
+    <Compile Include="Repository\ApplicationSecurityRepository\IApplicationSecurityRepository.cs" />
     <Compile Include="Repository\BrandRepository\BrandRepository.cs" />
     <Compile Include="Repository\BrandRepository\IBrandRepository.cs" />
     <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
@@ -176,6 +178,8 @@
     <Compile Include="Repository\ProductRepository\ProductGalleryRepository\IProductGalleryRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\IProductDetailRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ProductDetailRepository.cs" />
+    <Compile Include="Services\ApplicationSecurityServices\ApplicationSecurityService.cs" />
+    <Compile Include="Services\ApplicationSecurityServices\IApplicationSecurityService.cs" />
     <Compile Include="Services\BrandServices\BrandService.cs" />
     <Compile Include="Services\BrandServices\IBrandService.cs" />
     <Compile Include="Services\CategoryServices\CategoryService.cs" />
@@ -2445,6 +2449,10 @@
     <Content Include="Views\Product\Partials\Modals\_EditProduct.cshtml" />
     <Content Include="Views\Product\ViewFullDetail.cshtml" />
     <Content Include="Views\Product\Partials\_PreviewImage.cshtml" />
+    <Content Include="Views\Product\Partials\_PreviewProductDetails.cshtml" />
+    <Content Include="Views\Product\Partials\_TabList.cshtml" />
+    <Content Include="Views\Shared\_NavbarTop.cshtml" />
+    <Content Include="Views\Account\Partials\_AccountLogModalFormHolder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

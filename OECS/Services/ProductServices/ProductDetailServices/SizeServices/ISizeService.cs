@@ -8,5 +8,6 @@ namespace OECS.Services.ProductServices.ProductDetailServices.SizeServices
     {
         List<SizeModel> ViewListingSize(int categoryID, int subCategoryID);
         IEnumerable<SelectListItem> SizeList();
+        IEnumerable<SelectListItem> SizeList(int productID, int colorID, int iconID);
     }
 }

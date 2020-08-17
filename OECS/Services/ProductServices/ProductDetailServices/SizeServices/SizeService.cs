@@ -4,6 +4,7 @@ using OECS.Repository.ProductRepository.ProductDetailRepository;
 using OECS.Repository.ProductRepository.ProductDetailRepository.SizeRepository;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 
 namespace OECS.Services.ProductServices.ProductDetailServices.SizeServices
@@ -34,18 +35,37 @@ namespace OECS.Services.ProductServices.ProductDetailServices.SizeServices
 
         public IEnumerable<SelectListItem> SizeList()
         {
-            List<SelectListItem> SizeListTempStorage = new List<SelectListItem>();
             List<Size> sizes = _sizeRepository.SizeList();
+            List<SelectListItem> sizeList = new List<SelectListItem>();
 
             foreach (var item in sizes)
             {
-                SizeListTempStorage.Add(new SelectListItem
+                sizeList.Add(new SelectListItem
                 {
                     Value = item.SideID.ToString(),
                     Text = item.size1
                 });
             }
-            return SizeListTempStorage;
+            return sizeList;
+        }
+
+        public IEnumerable<SelectListItem> SizeList(int productID, int colorID, int iconID)
+        {
+            IQueryable<SizeModel> size = _sizeRepository.DisplayProductSize(productID, colorID, iconID);
+            List<SelectListItem> sizeList = new List<SelectListItem>();
+
+            foreach (var item in size.Distinct())
+            {
+                int sizeCount = size.Where(s => s.SideID == item.SideID).Count();
+                string sizeAvailability = sizeCount > 1 ? " --- " + sizeCount + " sizes are available" : "";
+
+                sizeList.Add(new SelectListItem
+                {
+                    Value = item.SideID.ToString(),
+                    Text = item.Size + sizeAvailability
+                });
+            }
+            return sizeList;
         }
     }
 }

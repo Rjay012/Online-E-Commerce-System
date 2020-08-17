@@ -1,0 +1,84 @@
+﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
+@using OECS.Repository.ProductRepository.ProductDetailRepository;
+@using OECS.Models;
+<div class="clearfix">
+    <div class="gallery text-center">
+        <div class="previews">
+            @{
+                /*
+                 * NOTE: TO FIND THE IMAGES INSIDE FOLDER USE (..\..\) TO CHANGE THE IMAGE URL
+                */
+
+                IProductDetailRepository _productDetailRepository = new ProductDetailRepository(new oecsEntities());
+                var icon = _productDetailRepository.ViewProductIcon(Model.ProductID);
+
+                var defaultImg = "";
+                var display = Model.ProductImages.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
+                var isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
+                defaultImg = display.Image.path;
+                <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
+                    <img src="..\..\@defaultImg" />
+                </a>
+
+                foreach (var img in Model.ProductImages.Where(i => i.DisplayColor.Count() == 0).Take(4))
+                {
+                    isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
+                    <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
+                        <img src="..\..\@img.Image.path" />
+                    </a>
+                }
+
+                string toggleLoginModal = (!Request.IsAuthenticated && Session["Module"] == null) ? "#modalLoginOrRegister" : "";
+            }
+        </div>
+        <div class="full">
+            <img src="..\..\@defaultImg" />
+        </div>
+    </div>
+    <div class="container product-gallery-details">
+        <div class="card">
+            <div class="card-body">
+                <h5>@Model.ProductName</h5>
+                <h6>$ @Model.Price</h6>
+                <hr />
+                <p>
+                    <strong>Brand:</strong>
+                    @Model.BrandName
+                </p>
+            </div>
+        </div>
+        <hr />
+        <strong>Size:</strong>
+        <div class="card">
+            @Html.DropDownListFor(i => Model.SizeID, ViewBag.SizeList as IEnumerable<SelectListItem>, "Select Size", new { @class = "browser-default mdb-select form-control" })
+        </div>
+        <hr />
+        <strong>Color:</strong><br />
+        @foreach (var i in icon)
+        {
+            <a onclick="PreviewImages(parseInt(@i.ProductID), parseInt(@i.ColorID), parseInt(@i.IconID))">
+                <img src="..\..\@i.IconPath" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="icon-@i.IconID">
+            </a>
+        }
+        <hr />
+        <strong>Quantity:</strong><br />
+        <div class="def-number-input number-input safari_only">
+            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus" disabled></button>
+            <input class="quantity" min="1" name="quantity" type="number" disabled>
+            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus" disabled></button>
+        </div>
+        <hr />
+        <div class="form-inline">
+            <div class="col">
+                <button class="btn btn-primary btn-block @(toggleLoginModal != "" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">
+                    BUY NOW
+                </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-info btn-block @(toggleLoginModal != "" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">
+                    ADD TO CART
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

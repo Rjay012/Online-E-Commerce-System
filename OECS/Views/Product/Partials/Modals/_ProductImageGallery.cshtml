@@ -1,4 +1,5 @@
 ﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
+@using OECS.Repository.ProductRepository.ProductDetailRepository;
 @using OECS.Models;
 <div class="modal-header">
     <h5 class="modal-title">Gallery</h5>
@@ -9,20 +10,11 @@
 <div class="modal-body">
     <div class="container-fluid clearfix">
         <div class="gallery text-center">
-            <input type="hidden" id="txtHidProductID" value="@ViewBag.ProductID" />
+            <input type="hidden" id="txtHidProductID" value="@Model.ProductID" />
             <div class="previews">
                 @{
-                    oecsEntities dbContext = new oecsEntities();
-                    int productID = Convert.ToInt32(ViewBag.ProductID);
-                    var icon = dbContext.DisplayColor
-                                        .Where(i => i.ProductImage.ProductDetail.ProductID == productID)
-                                        .Select(i => new
-                                        {
-                                            i.ProductImage.Image.IconID,
-                                            i.ProductImage.ProductDetail.ProductID,
-                                            i.ProductImage.ProductDetail.ColorID,
-                                            i.ProductImage.Image.Icon.icon1
-                                        }).Distinct().ToList();
+                    IProductDetailRepository _productDetailRepository = new ProductDetailRepository(new oecsEntities());
+                    var icon = _productDetailRepository.ViewProductIcon(Model.ProductID);
 
                     var defaultImg = "";
                     var isMainDisplay = "";
@@ -74,7 +66,7 @@
         @foreach (var i in icon)
         {
             <a onclick="ViewProductPhotoGallery(parseInt(@i.ProductID), parseInt(@i.ColorID), parseInt(@i.IconID))">
-                <img src="@i.icon1" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="icon-@i.IconID">
+                <img src="@i.IconPath" class="img-fluid z-depth-1 rounded-circle img-thumbnail icon" id="icon-@i.IconID">
             </a>
         }
     </div>

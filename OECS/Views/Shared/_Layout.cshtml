@@ -29,29 +29,41 @@
     @{
         string url = Request.Url.ToString();
         string viewDetailsUrl = "https://localhost:44395/Product/ViewFullDetail/";
+        url = url.Remove(url.Length - 1, 1);
 
         if (Session["Modules"] != null && Request.IsAuthenticated)
         {
-            @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
-            @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
+            if ((bool)Session["ShopNow"] == false)
+            {
+                @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
+                @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
+            }
+            else
+            {
+                if (url != viewDetailsUrl)
+                {
+                    @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
+                }
+                else
+                {
+                    @Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
+                }
+            }
         }
         else
         {
-            url = url.Remove(url.Length - 1, 1);
-
             if (url != viewDetailsUrl)
             {
-                
                 @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
+            }
+            else
+            {
+                @Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
             }
         }
     }
 
     <div class="container-fluid body-content">
-        @if (url != viewDetailsUrl)
-        {
-            <br /><br /><br /><br />
-        }
         @RenderBody()
         <hr />
         <footer>
@@ -87,7 +99,6 @@
     <script src="~/Scripts/Custom_Scripts/Dashboard.js"></script>
     <script src="~/Scripts/Custom_Scripts/Category.js"></script>
     <script src="~/Scripts/Custom_Scripts/Product.js"></script>
-    <script src="~/Scripts/Custom_Scripts/ProductDetail.js"></script>
     <script src="~/Scripts/Custom_Scripts/Color.js"></script>
     <script src="~/Scripts/Custom_Scripts/Size.js"></script>
     <script src="~/Scripts/Custom_Scripts/Brand.js"></script>

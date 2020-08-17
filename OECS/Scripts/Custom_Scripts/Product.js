@@ -8,6 +8,10 @@ function ShowProduct(categoryID, subCategoryID, brandID, colorID, sizeID, search
     });
 }
 
+function ViewProductDetail(productID) {
+    window.open("Product/ViewFullDetail/" + productID, "_blank");
+}
+
 $(document).on("keyup", "#txtSearchProduct", function () {
     ShowProduct(0, 0, 0, 0, 0, $(this).val());
 });

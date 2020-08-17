@@ -1,6 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+@using System.Security.Claims;
+@{
     ViewBag.Title = "Index";
 
+    var identity = (ClaimsIdentity)User.Identity;
+    var role = identity.FindFirstValue(ClaimTypes.Role);
 }
 
 <div class="container-fluid">
@@ -15,50 +19,53 @@
     </div>
 </div>
 
-<!-- Modal Add New Product -->
-<div class="modal fade" id="modalNewProduct" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="NewProductForm">
+@if (role == "1")
+{
+    <!-- Modal Add New Product -->
+    <div class="modal fade" id="modalNewProduct" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="NewProductForm">
 
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Edit Product -->
-<div class="modal fade" id="modalEditProduct" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="EditProductForm">
+    <!-- Modal Edit Product -->
+    <div class="modal fade" id="modalEditProduct" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="EditProductForm">
 
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Product Image Gallery -->
-<div class="modal fade" id="modalProductImageGallery" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" id="ProductImageGalleryForm">
+    <!-- Modal Product Image Gallery -->
+    <div class="modal fade" id="modalProductImageGallery" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="ProductImageGalleryForm">
 
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Add New Product Color -->
-<div class="modal fade" id="modalNewProductDetail" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" id="NewProductDetailForm">
+    <!-- Modal Add New Product Color -->
+    <div class="modal fade" id="modalNewProductDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="NewProductDetailForm">
 
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Edit Product Color/Image -->
-<div class="modal fade" id="modalEditProductDetail" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" id="EditProductDetailForm">
+    <!-- Modal Edit Product Color/Image -->
+    <div class="modal fade" id="modalEditProductDetail" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="EditProductDetailForm">
 
+            </div>
         </div>
     </div>
-</div>
+}
 
 @section scripts{
     <script src="~/MDB/VerticalGallery/js/PhotoGallery.js"></script>
