@@ -164,6 +164,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Repository\ApplicationSecurityRepository\ApplicationSecurityRepository.cs" />
     <Compile Include="Repository\ApplicationSecurityRepository\IApplicationSecurityRepository.cs" />
     <Compile Include="Repository\BrandRepository\BrandRepository.cs" />
@@ -2385,6 +2386,7 @@
     <Content Include="Scripts\Custom_Scripts\Loader.js" />
     <Content Include="Scripts\Custom_Scripts\Login.js" />
     <Content Include="Scripts\Custom_Scripts\Brand.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\Cart.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\ProductDetail.js" />
@@ -2453,10 +2455,15 @@
     <Content Include="Views\Product\Partials\_TabList.cshtml" />
     <Content Include="Views\Shared\_NavbarTop.cshtml" />
     <Content Include="Views\Account\Partials\_AccountLogModalFormHolder.cshtml" />
+    <Content Include="Views\Shared\Modals\_Cart.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\Partials\Tables\_Item.cshtml" />
+    <Content Include="Views\Cart\Partials\Cards\_OrderSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Icons\" />
+    <Folder Include="Views\Cart\Partials\Modals\" />
     <Folder Include="Views\Dashboard\Partials\" />
     <Folder Include="Views\Size\Partials\Modals\" />
     <Folder Include="Views\Supplier\" />

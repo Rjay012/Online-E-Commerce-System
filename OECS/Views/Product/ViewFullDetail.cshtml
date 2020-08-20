@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "ViewFullDetail";
 }
+@Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
+
 <div class="container-fluid product-image-gallery">
 
 </div>
@@ -16,6 +18,10 @@
 
 @Html.Partial("~/Views/Account/Partials/_AccountLogModalFormHolder.cshtml")
 
+@if (Request.IsAuthenticated && Session["Modules"] != null && (bool)Session["ShopNow"] == true)
+{
+    @Html.Partial("~/Views/Shared/Modals/_Cart.cshtml")
+}
 @section scripts{
     <script>
         var routeID = @ViewContext.RouteData.Values["id"].ToString();

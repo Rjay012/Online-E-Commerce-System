@@ -9,6 +9,22 @@
     cursor: pointer;
 }
 
+.cart-added-item, .cart-added-item + div {
+    padding-top: 18px;
+    height: 215px;
+}
+
+.cart-added-item + div {
+    border-left: solid gray 1px;
+}
+
+.cart-added-item h6, .right-section-checkout {
+    font-weight: bold;
+}
+
+.cart-number-item {
+    font-size: 12px;
+}
 
 .number-input input[type="number"] {
     -webkit-appearance: textfield;

@@ -28,7 +28,7 @@
                     </a>
                 }
 
-                string toggleLoginModal = (!Request.IsAuthenticated && Session["Module"] == null) ? "#modalLoginOrRegister" : "";
+                string toggleLoginModal = (!Request.IsAuthenticated && Session["Module"] == null && (Session["ShopNow"] == null || (bool)Session["ShopNow"] == false)) ? "#modalLoginOrRegister" : "#modalCart";
             }
         </div>
         <div class="full">
@@ -75,7 +75,7 @@
                 </button>
             </div>
             <div class="col">
-                <button class="btn btn-info btn-block @(toggleLoginModal != "" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">
+                <button class="btn btn-info btn-block @(toggleLoginModal != "#modalCart" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">
                     ADD TO CART
                 </button>
             </div>

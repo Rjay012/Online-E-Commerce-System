@@ -1,0 +1,61 @@
+﻿<div class="card">
+    <div class="card-body">
+        <div class="custom-control custom-checkbox float-left">
+            <input type="checkbox" class="custom-control-input" id="defaultUnchecked1">
+            <label class="custom-control-label" for="defaultUnchecked1">
+                SELECT ALL (1 ITEM(S))
+            </label>
+        </div>
+
+        <a class="float-right" href="">
+            <i class="fas fa-trash-alt"></i> DELETE
+        </a>
+    </div>
+</div>
+<br />
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center"></th>
+                    <th class="text-center" colspan="2">Item</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-center"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                            <label class="custom-control-label" for="defaultUnchecked"></label>
+                        </div>
+                    </td>
+                    <td style="width: 60px;">
+                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" />
+                    </td>
+                    <td>
+                        <p>JS&CO jewelry 14k Saudi Gold Plated Jewelry Set NSD010+ESD017</p>
+                        <p>Brand: Nike, Color: Black, Size: 5xl</p>
+                    </td>
+                    <td>$00.00</td>
+                    <td>
+                        <div class="def-number-input number-input safari_only">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus" disabled></button>
+                            <input class="quantity" min="1" name="quantity" type="number" disabled>
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus" disabled></button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" type="button">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

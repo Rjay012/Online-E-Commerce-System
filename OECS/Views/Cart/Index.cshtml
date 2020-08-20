@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
+
+<div class="form-inline">
+    <div class="col-lg-8 cart-item" style="min-height: 320px;"></div>
+
+    <div class="col-lg-4 order-summary"></div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/Custom_Scripts/Main_Scripts/Cart.js"></script>
+} 

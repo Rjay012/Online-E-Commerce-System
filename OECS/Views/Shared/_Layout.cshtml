@@ -37,28 +37,21 @@
             {
                 @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
                 @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
+                @Html.Partial("~/Views/Shared/Modals/_Cart.cshtml")  @* modal for customer cart *@
             }
             else
             {
-                if (url != viewDetailsUrl)
+                if (url != viewDetailsUrl && url != "https://localhost:44395/Car")
                 {
                     @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
-                }
-                else
-                {
-                    @Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
                 }
             }
         }
         else
         {
-            if (url != viewDetailsUrl)
+            if (url != viewDetailsUrl && url != "https://localhost:44395/Car")
             {
                 @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
-            }
-            else
-            {
-                @Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
             }
         }
     }

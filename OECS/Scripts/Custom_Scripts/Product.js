@@ -9,7 +9,7 @@ function ShowProduct(categoryID, subCategoryID, brandID, colorID, sizeID, search
 }
 
 function ViewProductDetail(productID) {
-    window.open("Product/ViewFullDetail/" + productID, "_blank");
+    window.location.href = "Product/ViewFullDetail/" + productID;
 }
 
 $(document).on("keyup", "#txtSearchProduct", function () {
