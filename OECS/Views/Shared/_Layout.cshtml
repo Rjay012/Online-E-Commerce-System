@@ -27,9 +27,7 @@
 </head>
 <body class="fixed-sn white-skin">
     @{
-        string url = Request.Url.ToString();
-        string viewDetailsUrl = "https://localhost:44395/Product/ViewFullDetail/";
-        url = url.Remove(url.Length - 1, 1);
+        var activePage = this.ViewContext.RouteData.Values["controller"] as string;
 
         if (Session["Modules"] != null && Request.IsAuthenticated)
         {
@@ -37,11 +35,13 @@
             {
                 @Html.Partial("~/Views/Shared/_SideMenu.cshtml") @* side menu *@
                 @Html.Partial("~/Views/Shared/_Navbar.cshtml") @* top navigation bar *@
-                @Html.Partial("~/Views/Shared/Modals/_Cart.cshtml")  @* modal for customer cart *@
+                @Html.Partial("~/Views/Shared/Modals/_Cart.cshtml") @* modal for customer cart *@
             }
             else
             {
-                if (url != viewDetailsUrl && url != "https://localhost:44395/Car")
+                if (!activePage.Equals("Cart", StringComparison.CurrentCultureIgnoreCase) &&
+                    !activePage.Equals("Product", StringComparison.CurrentCultureIgnoreCase) &&
+                    !activePage.Equals("CheckOut", StringComparison.CurrentCultureIgnoreCase))
                 {
                     @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
                 }
@@ -49,7 +49,9 @@
         }
         else
         {
-            if (url != viewDetailsUrl && url != "https://localhost:44395/Car")
+            if (!activePage.Equals("Cart", StringComparison.CurrentCultureIgnoreCase) &&
+                !activePage.Equals("Product", StringComparison.CurrentCultureIgnoreCase) &&
+                !activePage.Equals("CheckOut", StringComparison.CurrentCultureIgnoreCase))
             {
                 @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
             }
