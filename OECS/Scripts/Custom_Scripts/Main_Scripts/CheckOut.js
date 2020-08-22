@@ -3,14 +3,20 @@
     LoadShippingAndOrderSummary();
 });
 
+$(document).on("click", "#BtnPaymentMethodConfirmation", function () {
+    LoadPartials("PaymentMethodConfirmationModal", "#paymentMethodConfirmation");
+});
+
 function LoadPackage() {
-    FetchData("/CheckOut/LoadPackage", null).done(function (content) {
-        $(".checkout-package").html(content);
-    });
+    LoadPartials("LoadPackage", ".checkout-package");
 }
 
 function LoadShippingAndOrderSummary() {
-    FetchData("/CheckOut/ShippingAndOrderSummary", null).done(function (content) {
-        $(".checkout-shipping-order-summary").html(content);
+    LoadPartials("ShippingAndOrderSummary", ".checkout-shipping-order-summary");
+}
+
+function LoadPartials(actionMethod, container) {
+    FetchData("/CheckOut/" + actionMethod, null).done(function (content) {
+        $(container).html(content);
     });
 }

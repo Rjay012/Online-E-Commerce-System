@@ -23,5 +23,10 @@ namespace OECS.Controllers
         {
             return PartialView("Partials/Cards/_ShippingAndOrderSummary");
         }
+
+        public ActionResult PaymentMethodConfirmationModal()
+        {
+            return PartialView("Partials/Modals/_PaymentMethodConfirmation");
+        }
     }
 }

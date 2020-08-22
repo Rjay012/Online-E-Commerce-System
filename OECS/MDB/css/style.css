@@ -18,6 +18,14 @@
     border-left: solid gray 1px;
 }
 
+.final-order-summary {
+    border: solid gray 1px;
+    border-radius: 5px;
+    padding-left: 13px;
+    padding-right: 13px;
+    padding-top: 45px;
+}
+
 .cart-added-item h6, .right-section-checkout {
     font-weight: bold;
 }
