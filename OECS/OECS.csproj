@@ -166,6 +166,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
+    <Compile Include="Controllers\OrderPurchasedController.cs" />
     <Compile Include="Repository\ApplicationSecurityRepository\ApplicationSecurityRepository.cs" />
     <Compile Include="Repository\ApplicationSecurityRepository\IApplicationSecurityRepository.cs" />
     <Compile Include="Repository\BrandRepository\BrandRepository.cs" />
@@ -2390,6 +2391,7 @@
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Cart.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\CheckOut.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\OrderPurchased.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\ProductDetail.js" />
     <Content Include="Scripts\Custom_Scripts\Size.js" />
@@ -2465,6 +2467,11 @@
     <Content Include="Views\CheckOut\Partials\Tables\_Package.cshtml" />
     <Content Include="Views\CheckOut\Partials\Cards\_ShippingAndOrderSummary.cshtml" />
     <Content Include="Views\CheckOut\Partials\Modals\_PaymentMethodConfirmation.cshtml" />
+    <Content Include="Views\OrderPurchased\Index.cshtml" />
+    <Content Include="Views\OrderPurchased\Partials\Cards\_PurchasedGreetings.cshtml" />
+    <Content Include="Views\OrderPurchased\Partials\Cards\_OrderDetails.cshtml" />
+    <Content Include="Views\OrderPurchased\Partials\Tables\_PurchasedItem.cshtml" />
+    <Content Include="Views\OrderPurchased\Partials\Accordions\_OrderSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
