@@ -35,6 +35,10 @@ namespace OECS.Models
         public virtual DbSet<Icon> Icon { get; set; }
         public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Module> Module { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
+        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<PaymentType> PaymentType { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductDetail> ProductDetail { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }

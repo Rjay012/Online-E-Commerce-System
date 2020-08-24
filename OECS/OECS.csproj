@@ -167,6 +167,18 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\OrderPurchasedController.cs" />
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderDetail.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Payment.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaymentType.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Repository\ApplicationSecurityRepository\ApplicationSecurityRepository.cs" />
     <Compile Include="Repository\ApplicationSecurityRepository\IApplicationSecurityRepository.cs" />
     <Compile Include="Repository\BrandRepository\BrandRepository.cs" />

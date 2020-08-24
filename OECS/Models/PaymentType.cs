@@ -12,26 +12,18 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class PaymentType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customer()
+        public PaymentType()
         {
-            this.Order = new HashSet<Order>();
+            this.Payment = new HashSet<Payment>();
         }
     
-        public int CustomerID { get; set; }
-        public string fname { get; set; }
-        public string mname { get; set; }
-        public string lname { get; set; }
-        public string email { get; set; }
-        public string address { get; set; }
-        public string phone { get; set; }
-        public string password { get; set; }
-        public int RoleID { get; set; }
+        public int PaymentTypeID { get; set; }
+        public string Type { get; set; }
     
-        public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Order { get; set; }
+        public virtual ICollection<Payment> Payment { get; set; }
     }
 }

@@ -92,6 +92,47 @@
           <Property Name="hasChild" Type="bit" />
           <Property Name="orderBy" Type="int" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderNumber" />
+          </Key>
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="ProductID" Type="int" />
+          <Property Name="OrderDate" Type="date" />
+          <Property Name="ShippingAddress" Type="varchar(max)" />
+          <Property Name="PaymentDate" Type="date" />
+          <Property Name="Status" Type="varchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailID" />
+          </Key>
+          <Property Name="OrderDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Price" Type="money" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentTypeID" Type="int" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="PaymentDate" Type="date" />
+          <Property Name="CreditCardNumber" Type="int" />
+          <Property Name="CreditCardExpirationDate" Type="date" />
+          <Property Name="CardHoldersName" Type="varchar(max)" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PaymentType">
+          <Key>
+            <PropertyRef Name="PaymentTypeID" />
+          </Key>
+          <Property Name="PaymentTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -252,6 +293,76 @@
             </Principal>
             <Dependent Role="DisplaySize">
               <PropertyRef Name="ProductImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNumber" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNumber" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="OrderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_PaymentType">
+          <End Role="PaymentType" Type="Self.PaymentType" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentType">
+              <PropertyRef Name="PaymentTypeID" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="PaymentTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -490,6 +601,10 @@
           <EntitySet Name="Icon" EntityType="Self.Icon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentType" EntityType="Self.PaymentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDetail" EntityType="Self.ProductDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
@@ -516,6 +631,26 @@
           <AssociationSet Name="FK_DisplaySize_ProductImage" Association="Self.FK_DisplaySize_ProductImage">
             <End Role="ProductImage" EntitySet="ProductImage" />
             <End Role="DisplaySize" EntitySet="DisplaySize" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Product" Association="Self.FK_Order_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_Order" Association="Self.FK_Payment_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_PaymentType" Association="Self.FK_Payment_PaymentType">
+            <End Role="PaymentType" EntitySet="PaymentType" />
+            <End Role="Payment" EntitySet="Payment" />
           </AssociationSet>
           <AssociationSet Name="FK_Product_Brand" Association="Self.FK_Product_Brand">
             <End Role="Brand" EntitySet="Brand" />
@@ -597,6 +732,10 @@
           <EntitySet Name="Icon" EntityType="oecsModel.Icon" />
           <EntitySet Name="Image" EntityType="oecsModel.Image" />
           <EntitySet Name="Module" EntityType="oecsModel.Module" />
+          <EntitySet Name="Order" EntityType="oecsModel.Order" />
+          <EntitySet Name="OrderDetail" EntityType="oecsModel.OrderDetail" />
+          <EntitySet Name="Payment" EntityType="oecsModel.Payment" />
+          <EntitySet Name="PaymentType" EntityType="oecsModel.PaymentType" />
           <EntitySet Name="Product" EntityType="oecsModel.Product" />
           <EntitySet Name="ProductDetail" EntityType="oecsModel.ProductDetail" />
           <EntitySet Name="ProductImage" EntityType="oecsModel.ProductImage" />
@@ -628,6 +767,10 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Customer" Association="oecsModel.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_Display_ProductImage" Association="oecsModel.FK_Display_ProductImage">
             <End Role="ProductImage" EntitySet="ProductImage" />
             <End Role="DisplayColor" EntitySet="DisplayColor" />
@@ -651,6 +794,22 @@
           <AssociationSet Name="FK_SubModule_Module" Association="oecsModel.FK_SubModule_Module">
             <End Role="Module" EntitySet="Module" />
             <End Role="SubModule" EntitySet="SubModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Product" Association="oecsModel.FK_Order_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="oecsModel.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_Order" Association="oecsModel.FK_Payment_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_PaymentType" Association="oecsModel.FK_Payment_PaymentType">
+            <End Role="PaymentType" EntitySet="PaymentType" />
+            <End Role="Payment" EntitySet="Payment" />
           </AssociationSet>
           <AssociationSet Name="FK_Product_SubCategory" Association="oecsModel.FK_Product_SubCategory">
             <End Role="SubCategory" EntitySet="SubCategory" />
@@ -736,6 +895,7 @@
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RoleID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role" Relationship="oecsModel.FK_Customer_Role" FromRole="Customer" ToRole="Role" />
+          <NavigationProperty Name="Order" Relationship="oecsModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
         </EntityType>
         <EntityType Name="DisplayColor">
           <Key>
@@ -788,6 +948,55 @@
           <NavigationProperty Name="RoleModule" Relationship="oecsModel.FK_RoleModule_Module" FromRole="Module" ToRole="RoleModule" />
           <NavigationProperty Name="SubModule" Relationship="oecsModel.FK_SubModule_Module" FromRole="Module" ToRole="SubModule" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderNumber" />
+          </Key>
+          <Property Name="OrderNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="OrderDate" Type="DateTime" Precision="0" />
+          <Property Name="ShippingAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Customer" Relationship="oecsModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="oecsModel.FK_Order_Product" FromRole="Order" ToRole="Product" />
+          <NavigationProperty Name="OrderDetail" Relationship="oecsModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+          <NavigationProperty Name="Payment" Relationship="oecsModel.FK_Payment_Order" FromRole="Order" ToRole="Payment" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailID" />
+          </Key>
+          <Property Name="OrderDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Order" Relationship="oecsModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentTypeID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="CreditCardNumber" Type="Int32" />
+          <Property Name="CreditCardExpirationDate" Type="DateTime" Precision="0" />
+          <Property Name="CardHoldersName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="oecsModel.FK_Payment_Order" FromRole="Payment" ToRole="Order" />
+          <NavigationProperty Name="PaymentType" Relationship="oecsModel.FK_Payment_PaymentType" FromRole="Payment" ToRole="PaymentType" />
+        </EntityType>
+        <EntityType Name="PaymentType">
+          <Key>
+            <PropertyRef Name="PaymentTypeID" />
+          </Key>
+          <Property Name="PaymentTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Payment" Relationship="oecsModel.FK_Payment_PaymentType" FromRole="PaymentType" ToRole="Payment" />
+        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -801,6 +1010,7 @@
           <Property Name="display" Type="Boolean" />
           <Property Name="BrandID" Type="Int32" />
           <NavigationProperty Name="Brand" Relationship="oecsModel.FK_Product_Brand" FromRole="Product" ToRole="Brand" />
+          <NavigationProperty Name="Order" Relationship="oecsModel.FK_Order_Product" FromRole="Product" ToRole="Order" />
           <NavigationProperty Name="SubCategory" Relationship="oecsModel.FK_Product_SubCategory" FromRole="Product" ToRole="SubCategory" />
           <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductDetail" />
           <NavigationProperty Name="Stock" Relationship="oecsModel.FK_Stock_Product" FromRole="Product" ToRole="Stock" />
@@ -993,6 +1203,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Customer">
+          <End Type="oecsModel.Customer" Role="Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Display_ProductImage">
           <End Type="oecsModel.ProductImage" Role="ProductImage" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1074,6 +1298,62 @@
             </Principal>
             <Dependent Role="SubModule">
               <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Product">
+          <End Type="oecsModel.Product" Role="Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Type="oecsModel.Order" Role="Order" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNumber" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_Order">
+          <End Type="oecsModel.Order" Role="Order" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNumber" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="OrderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_PaymentType">
+          <End Type="oecsModel.PaymentType" Role="PaymentType" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentType">
+              <PropertyRef Name="PaymentTypeID" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="PaymentTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1303,6 +1583,51 @@
                 <ScalarProperty Name="controller" ColumnName="controller" />
                 <ScalarProperty Name="module1" ColumnName="module" />
                 <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="oecsModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetail">
+            <EntityTypeMapping TypeName="oecsModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payment">
+            <EntityTypeMapping TypeName="oecsModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="CardHoldersName" ColumnName="CardHoldersName" />
+                <ScalarProperty Name="CreditCardExpirationDate" ColumnName="CreditCardExpirationDate" />
+                <ScalarProperty Name="CreditCardNumber" ColumnName="CreditCardNumber" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentType">
+            <EntityTypeMapping TypeName="oecsModel.PaymentType">
+              <MappingFragment StoreEntitySet="PaymentType">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
