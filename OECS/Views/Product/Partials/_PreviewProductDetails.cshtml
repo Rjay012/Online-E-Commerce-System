@@ -70,9 +70,9 @@
         <hr />
         <div class="form-inline">
             <div class="col">
-                <button class="btn btn-primary btn-block @(toggleLoginModal != "" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">
+                <a class="btn btn-primary btn-block" href="@(toggleLoginModal != "#modalLoginOrRegister" ? Url.Action("Index", "CheckOut") : "")">
                     BUY NOW
-                </button>
+                </a>
             </div>
             <div class="col">
                 <button class="btn btn-info btn-block @(toggleLoginModal != "#modalCart" ? "btn-shop" : "")" type="button" data-toggle="modal" data-target="@toggleLoginModal">

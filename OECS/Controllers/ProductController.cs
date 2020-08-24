@@ -89,7 +89,7 @@ namespace OECS.Controllers
 
         public ActionResult ViewTab()
         {
-            return PartialView("Partials/_TabList");
+            return PartialView("Partials/Tabs/_TabList");
         }
 
         [AllowAnonymous]

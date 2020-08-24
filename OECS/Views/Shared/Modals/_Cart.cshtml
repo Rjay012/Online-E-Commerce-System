@@ -22,10 +22,14 @@
                         <p><strong>Total:</strong></p>
                         <div class="form-inline">
                             <div class="col">
-                                <button type="button" class="btn btn-outline-primary btn-block">GO TO CART</button>
+                                <a class="btn btn-outline-primary btn-block" href="@Url.Action("Index", "Cart")">
+                                    GO TO CART
+                                </a>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-primary btn-block">CHECK OUT</button>
+                                <a class="btn btn-primary btn-block" href="@Url.Action("Index", "CheckOut")">
+                                    CHECK OUT
+                                </a>
                             </div>
                         </div>
                     </div>
