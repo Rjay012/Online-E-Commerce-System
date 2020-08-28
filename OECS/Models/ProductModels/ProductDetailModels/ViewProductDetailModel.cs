@@ -12,11 +12,11 @@ namespace OECS.Models.ProductModels.ProductDetailModels
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
         public int? SizeID { get; set; }
-        public int? ColorID { get; set; }
+        public int? ColorID { get; set; }  //removed nullable
         public int? IconID { get; set; }
         public bool? isMainDisplay { get; set; }
         public bool? display { get; set; }
         public string Description { get; set; }
-        public IEnumerable<ProductImage> ProductImages { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
         void SetImageDisplay(int defaultDisplayID, int selectedDisplayID);
         ViewProductDetailModel ViewListingProductImage(int productID, int colorID, int iconID);
         IEnumerable<ProductImage> ProductImageList(int productID, int colorID, int iconID);
+        string GetImageDisplayPath(int productID);
     }
 }

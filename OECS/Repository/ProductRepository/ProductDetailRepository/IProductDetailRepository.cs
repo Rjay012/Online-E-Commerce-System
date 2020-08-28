@@ -22,5 +22,6 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
         IQueryable<ProductDetailModel> GetColorAndIcon(int productID);
         IQueryable<ProductDetail> ProductDetail();
         List<ProductDetailModel> ViewProductIcon(int productID);
+        IEnumerable<ProductDetail> ProductDetailList(ViewProductDetailModel viewProductDetailModel);
     }
 }

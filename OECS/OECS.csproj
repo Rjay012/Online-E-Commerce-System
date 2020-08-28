@@ -167,6 +167,10 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\OrderPurchasedController.cs" />
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CartModels\CartModel.cs" />
     <Compile Include="Models\Order.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -183,6 +187,8 @@
     <Compile Include="Repository\ApplicationSecurityRepository\IApplicationSecurityRepository.cs" />
     <Compile Include="Repository\BrandRepository\BrandRepository.cs" />
     <Compile Include="Repository\BrandRepository\IBrandRepository.cs" />
+    <Compile Include="Repository\CartRepository\CartRepository.cs" />
+    <Compile Include="Repository\CartRepository\ICartRepository.cs" />
     <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
     <Compile Include="Repository\CategoryRepository\ICategoryRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\ColorRepository.cs" />
@@ -197,6 +203,8 @@
     <Compile Include="Services\ApplicationSecurityServices\IApplicationSecurityService.cs" />
     <Compile Include="Services\BrandServices\BrandService.cs" />
     <Compile Include="Services\BrandServices\IBrandService.cs" />
+    <Compile Include="Services\CartServices\CartService.cs" />
+    <Compile Include="Services\CartServices\ICartService.cs" />
     <Compile Include="Services\CategoryServices\CategoryService.cs" />
     <Compile Include="Services\CategoryServices\ICategoryService.cs" />
     <Compile Include="Services\FileMng.cs" />
@@ -2484,11 +2492,11 @@
     <Content Include="Views\OrderPurchased\Partials\Cards\_OrderDetails.cshtml" />
     <Content Include="Views\OrderPurchased\Partials\Tables\_PurchasedItem.cshtml" />
     <Content Include="Views\OrderPurchased\Partials\Accordions\_OrderSummary.cshtml" />
+    <Content Include="Views\Cart\Partials\Modals\_AddedItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Icons\" />
-    <Folder Include="Views\Cart\Partials\Modals\" />
     <Folder Include="Views\Dashboard\Partials\" />
     <Folder Include="Views\Size\Partials\Modals\" />
     <Folder Include="Views\Supplier\" />

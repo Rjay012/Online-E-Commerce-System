@@ -17,6 +17,11 @@ namespace OECS.Services.ProductServices.ProductGalleryServices
             _productDetailRepository = new ProductDetailRepository(new oecsEntities());
         }
 
+        public IEnumerable<ProductImage> PreviewProductImages(int productID, int colorID, int iconID)
+        {
+            return _productGalleryRepository.ProductImageList(productID, colorID, iconID);
+        }
+
         public ViewProductDetailModel ViewListingProductImage(int productID, int colorID, int iconID)
         {
             return _productGalleryRepository.ViewListingProductImage(productID, colorID, iconID);
@@ -40,6 +45,11 @@ namespace OECS.Services.ProductServices.ProductGalleryServices
         public IQueryable<ProductDetailModel> GetColorAndIcon(int productID)
         {
             return _productDetailRepository.GetColorAndIcon(productID);
+        }
+
+        public string GetImageDisplayPath(int productID)
+        {
+            return _productGalleryRepository.GetImageDisplayPath(productID);
         }
     }
 }

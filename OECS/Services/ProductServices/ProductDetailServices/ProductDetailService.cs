@@ -70,5 +70,14 @@ namespace OECS.Services.ProductServices.ProductDetailServices
             _productDetailRepository.ChangeProductColor(productDetailModel);
             _productDetailRepository.ChangeProductImage(productDetailModel);
         }
+
+        public IEnumerable<ProductDetailModel> ProductDetailList(ViewProductDetailModel viewProductDetailModel)
+        {
+            return _productDetailRepository.ProductDetailList(viewProductDetailModel)
+                                           .Select(s => new ProductDetailModel
+                                           {
+                                               ProductDetailID = s.ProductDetailID
+                                           }).ToList();
+        }
     }
 }

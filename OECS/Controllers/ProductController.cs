@@ -53,9 +53,9 @@ namespace OECS.Controllers
             return View(nameof(ViewFullDetail));
         }
 
-        public ActionResult PreviewProductDetails(int? productID, int? colorID, int? iconID)
+        public ActionResult PreviewProductImage(int? productID, int? colorID, int? iconID)
         {
-            if(productID == null)
+            if (productID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -65,7 +65,7 @@ namespace OECS.Controllers
             {
                 productDetailModel = _productGalleryService.GetColorAndIcon((int)productID).SingleOrDefault();
 
-                if(productDetailModel == null)
+                if (productDetailModel == null)
                 {
                     return HttpNotFound();
                 }
@@ -74,6 +74,31 @@ namespace OECS.Controllers
             {
                 productDetailModel.ColorID = (int)colorID;
                 productDetailModel.IconID = (int)iconID;
+            }
+
+            TempData["ProductDetail"] = productDetailModel;
+
+            IEnumerable<ProductImage> productImages = _productGalleryService.PreviewProductImages((int)productID, productDetailModel.ColorID, productDetailModel.IconID);
+            return PartialView("Partials/_PreviewImage", productImages);
+        }
+
+        public ActionResult FetchNewSizeList(int productID, int colorID, int iconID)
+        {
+            return Json(_sizeService.SizeList(productID, colorID, iconID));
+        }
+
+        public ActionResult PreviewProductDetails(int? productID)
+        {
+            if (productID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ProductDetailModel productDetailModel = TempData["ProductDetail"] as ProductDetailModel;
+
+            if(productDetailModel == null)
+            {
+                return HttpNotFound();
             }
 
             ViewProductDetailModel viewProductDetailModel = _productGalleryService.ViewListingProductImage((int)productID, productDetailModel.ColorID, productDetailModel.IconID);

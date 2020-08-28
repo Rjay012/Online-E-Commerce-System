@@ -51,7 +51,6 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
 
         public ViewProductDetailModel ViewListingProductImage(int productID, int colorID, int iconID)
         {
-            IEnumerable<ProductImage> productImages = ProductImageList(productID, colorID, iconID);
             ViewProductDetailModel productDetail = _dbContext.Product
                                                              .Where(p => p.ProductID == productID)
                                                              .Select(s => new ViewProductDetailModel
@@ -61,7 +60,6 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
                                                                  BrandName = s.Brand.BrandName,
                                                                  Description = s.description,
                                                                  Price = s.price,
-                                                                 ProductImages = productImages,
                                                                  IconID = iconID,
                                                                  ColorID = colorID
                                                              }).FirstOrDefault();
@@ -72,6 +70,16 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
         {
             return _dbContext.ProductImage
                              .Where(pi => pi.ProductDetail.ProductID == productID && pi.ProductDetail.ColorID == colorID && pi.Image.IconID == iconID);
+        }
+
+        public string GetImageDisplayPath(int productID)
+        {
+            return _dbContext.ProductImage
+                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.isMainDisplay == true)
+                             .Select(s => new
+                             {
+                                 s.Image.path
+                             }).FirstOrDefault().path;
         }
     }
 }

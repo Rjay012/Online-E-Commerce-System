@@ -426,5 +426,12 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
         {
             return _dbContext.ProductDetail;
         }
+
+        public IEnumerable<ProductDetail> ProductDetailList(ViewProductDetailModel viewProductDetailModel)
+        {
+            return _dbContext.ProductDetail
+                             .Where(pd => pd.ProductID == viewProductDetailModel.ProductID && pd.ColorID == (int)viewProductDetailModel.ColorID && pd.SizeID == (int)viewProductDetailModel.SizeID)
+                             .ToList();
+        }
     }
 }

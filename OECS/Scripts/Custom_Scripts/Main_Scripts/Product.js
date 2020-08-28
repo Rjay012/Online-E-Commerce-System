@@ -110,22 +110,13 @@ $(document).on("change", ".add-size", function () {
     $("#txtHidSizeID-" + sizeID).val($(this).is(":checked") ? sizeID : 0);
 });
 
-/** START REVISE THIS CODE LATER **/
 $(document).on("click", ".color-wrapper", function () {
-    var colorID = $(this).children(".add-color").attr("colorID");
-    $("#ColorID").val(colorID);
-    //mark selected
-    $(this).siblings(".color-wrapper").children(".add-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
-    $(this).children(".add-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+    MarkSelectedIcon(".add-color", ".color-wrapper", "#ColorID");
 });
 
 $(document).on("click", ".color-edit-wrapper", function () {
-    var colorID = $(this).children(".edit-color").attr("colorID");
-    $("#NewColorID").val(colorID);
-    $(this).siblings(".color-edit-wrapper").children(".edit-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
-    $(this).children(".edit-color").css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+    MarkSelectedIcon(".edit-color", ".color-edit-wrapper", "#NewColorID");
 });
-/** END REVISE THIS CODE LATER **/
 
 $(document).on("click", ".size-popover", function () {
     var item = parseInt($(this).attr("sizeID"));
@@ -191,6 +182,13 @@ $(document).on("change", "#chkNewlyAddedProduct", function () {
         ReadyProductTableList();
     }
 });
+
+function MarkSelectedIcon(classChildren, classSiblings, idColor) {
+    var colorID = $(this).children(classChildren).attr("colorID");
+    $(idColor).val(colorID);
+    $(this).siblings(classSiblings).children(".edit-color").css({ "width": "30px", "height": "30px", "border-radius": "50%" });
+    $(this).children(classChildren).css({ "width": "40px", "height": "40px", "border-radius": "50%" });
+}
 
 function ReadyProductTableList() {
     MainLoader("#ProductTableList");

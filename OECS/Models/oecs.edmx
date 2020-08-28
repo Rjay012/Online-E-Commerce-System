@@ -20,6 +20,14 @@
           <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BrandName" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="ProductDetailID" Type="int" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -96,9 +104,9 @@
           <Key>
             <PropertyRef Name="OrderNumber" />
           </Key>
-          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerID" Type="int" />
-          <Property Name="ProductID" Type="int" />
+          <Property Name="ProductDetailID" Type="int" />
           <Property Name="OrderDate" Type="date" />
           <Property Name="ShippingAddress" Type="varchar(max)" />
           <Property Name="PaymentDate" Type="date" />
@@ -109,7 +117,7 @@
             <PropertyRef Name="OrderDetailID" />
           </Key>
           <Property Name="OrderDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderNumber" Type="int" />
           <Property Name="Quantity" Type="int" />
           <Property Name="Price" Type="money" />
         </EntityType>
@@ -124,7 +132,7 @@
           <Property Name="CreditCardNumber" Type="int" />
           <Property Name="CreditCardExpirationDate" Type="date" />
           <Property Name="CardHoldersName" Type="varchar(max)" />
-          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderNumber" Type="int" />
         </EntityType>
         <EntityType Name="PaymentType">
           <Key>
@@ -153,8 +161,8 @@
           <Property Name="ProductDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductID" Type="int" />
           <Property Name="ColorID" Type="int" />
-          <Property Name="toDisplay" Type="bit" />
           <Property Name="SizeID" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
@@ -254,6 +262,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cart_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_ProductDetail">
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductDetailID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -310,17 +346,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Order_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+        <Association Name="FK_Order_ProductDetail">
+          <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductID" />
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
             </Principal>
             <Dependent Role="Order">
-              <PropertyRef Name="ProductID" />
+              <PropertyRef Name="ProductDetailID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -593,6 +629,7 @@
         <EntityContainer Name="oecsModelStoreContainer">
           <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Color" EntityType="Self.Color" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
@@ -620,6 +657,14 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
+          <AssociationSet Name="FK_Cart_Customer" Association="Self.FK_Cart_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_ProductDetail" Association="Self.FK_Cart_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_Role" Association="Self.FK_Customer_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Customer" EntitySet="Customer" />
@@ -636,8 +681,8 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK_Order_Product" Association="Self.FK_Order_Product">
-            <End Role="Product" EntitySet="Product" />
+          <AssociationSet Name="FK_Order_ProductDetail" Association="Self.FK_Order_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
@@ -724,6 +769,7 @@
         <EntityContainer Name="oecsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Administrator" EntityType="oecsModel.Administrator" />
           <EntitySet Name="Brand" EntityType="oecsModel.Brand" />
+          <EntitySet Name="Cart" EntityType="oecsModel.Cart" />
           <EntitySet Name="Category" EntityType="oecsModel.Category" />
           <EntitySet Name="Color" EntityType="oecsModel.Color" />
           <EntitySet Name="Customer" EntityType="oecsModel.Customer" />
@@ -754,6 +800,14 @@
           <AssociationSet Name="FK_Product_Brand" Association="oecsModel.FK_Product_Brand">
             <End Role="Brand" EntitySet="Brand" />
             <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Customer" Association="oecsModel.FK_Cart_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_ProductDetail" Association="oecsModel.FK_Cart_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
+            <End Role="Cart" EntitySet="Cart" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategory_Category" Association="oecsModel.FK_SubCategory_Category">
             <End Role="Category" EntitySet="Category" />
@@ -795,8 +849,8 @@
             <End Role="Module" EntitySet="Module" />
             <End Role="SubModule" EntitySet="SubModule" />
           </AssociationSet>
-          <AssociationSet Name="FK_Order_Product" Association="oecsModel.FK_Order_Product">
-            <End Role="Product" EntitySet="Product" />
+          <AssociationSet Name="FK_Order_ProductDetail" Association="oecsModel.FK_Order_ProductDetail">
+            <End Role="ProductDetail" EntitySet="ProductDetail" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetail_Order" Association="oecsModel.FK_OrderDetail_Order">
@@ -865,6 +919,16 @@
           <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Product" Relationship="oecsModel.FK_Product_Brand" FromRole="Brand" ToRole="Product" />
         </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="ProductDetailID" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="oecsModel.FK_Cart_Customer" FromRole="Cart" ToRole="Customer" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_Cart_ProductDetail" FromRole="Cart" ToRole="ProductDetail" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -894,6 +958,7 @@
           <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="oecsModel.FK_Cart_Customer" FromRole="Customer" ToRole="Cart" />
           <NavigationProperty Name="Role" Relationship="oecsModel.FK_Customer_Role" FromRole="Customer" ToRole="Role" />
           <NavigationProperty Name="Order" Relationship="oecsModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
         </EntityType>
@@ -952,15 +1017,15 @@
           <Key>
             <PropertyRef Name="OrderNumber" />
           </Key>
-          <Property Name="OrderNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerID" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
+          <Property Name="ProductDetailID" Type="Int32" />
           <Property Name="OrderDate" Type="DateTime" Precision="0" />
           <Property Name="ShippingAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PaymentDate" Type="DateTime" Precision="0" />
           <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Customer" Relationship="oecsModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
-          <NavigationProperty Name="Product" Relationship="oecsModel.FK_Order_Product" FromRole="Order" ToRole="Product" />
+          <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_Order_ProductDetail" FromRole="Order" ToRole="ProductDetail" />
           <NavigationProperty Name="OrderDetail" Relationship="oecsModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
           <NavigationProperty Name="Payment" Relationship="oecsModel.FK_Payment_Order" FromRole="Order" ToRole="Payment" />
         </EntityType>
@@ -969,7 +1034,7 @@
             <PropertyRef Name="OrderDetailID" />
           </Key>
           <Property Name="OrderDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderNumber" Type="Int32" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="Order" Relationship="oecsModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
@@ -985,7 +1050,7 @@
           <Property Name="CreditCardNumber" Type="Int32" />
           <Property Name="CreditCardExpirationDate" Type="DateTime" Precision="0" />
           <Property Name="CardHoldersName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderNumber" Type="Int32" />
           <NavigationProperty Name="Order" Relationship="oecsModel.FK_Payment_Order" FromRole="Payment" ToRole="Order" />
           <NavigationProperty Name="PaymentType" Relationship="oecsModel.FK_Payment_PaymentType" FromRole="Payment" ToRole="PaymentType" />
         </EntityType>
@@ -1010,7 +1075,6 @@
           <Property Name="display" Type="Boolean" />
           <Property Name="BrandID" Type="Int32" />
           <NavigationProperty Name="Brand" Relationship="oecsModel.FK_Product_Brand" FromRole="Product" ToRole="Brand" />
-          <NavigationProperty Name="Order" Relationship="oecsModel.FK_Order_Product" FromRole="Product" ToRole="Order" />
           <NavigationProperty Name="SubCategory" Relationship="oecsModel.FK_Product_SubCategory" FromRole="Product" ToRole="SubCategory" />
           <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_ProductColor_Product" FromRole="Product" ToRole="ProductDetail" />
           <NavigationProperty Name="Stock" Relationship="oecsModel.FK_Stock_Product" FromRole="Product" ToRole="Stock" />
@@ -1023,9 +1087,11 @@
           <Property Name="ProductDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="ColorID" Type="Int32" />
-          <Property Name="toDisplay" Type="Boolean" />
           <Property Name="SizeID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cart" Relationship="oecsModel.FK_Cart_ProductDetail" FromRole="ProductDetail" ToRole="Cart" />
           <NavigationProperty Name="Color" Relationship="oecsModel.FK_ProductColor_Color" FromRole="ProductDetail" ToRole="Color" />
+          <NavigationProperty Name="Order" Relationship="oecsModel.FK_Order_ProductDetail" FromRole="ProductDetail" ToRole="Order" />
           <NavigationProperty Name="Product" Relationship="oecsModel.FK_ProductColor_Product" FromRole="ProductDetail" ToRole="Product" />
           <NavigationProperty Name="Size" Relationship="oecsModel.FK_ProductColor_Size" FromRole="ProductDetail" ToRole="Size" />
           <NavigationProperty Name="ProductImage" Relationship="oecsModel.FK_ProductImage_ProductDetail" FromRole="ProductDetail" ToRole="ProductImage" />
@@ -1158,6 +1224,34 @@
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Customer">
+          <End Type="oecsModel.Customer" Role="Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_ProductDetail">
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="oecsModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductDetailID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1301,17 +1395,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Order_Product">
-          <End Type="oecsModel.Product" Role="Product" Multiplicity="0..1">
+        <Association Name="FK_Order_ProductDetail">
+          <End Type="oecsModel.ProductDetail" Role="ProductDetail" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="oecsModel.Order" Role="Order" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductID" />
+            <Principal Role="ProductDetail">
+              <PropertyRef Name="ProductDetailID" />
             </Principal>
             <Dependent Role="Order">
-              <PropertyRef Name="ProductID" />
+              <PropertyRef Name="ProductDetailID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1506,6 +1600,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="oecsModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Category">
             <EntityTypeMapping TypeName="oecsModel.Category">
               <MappingFragment StoreEntitySet="Category">
@@ -1593,7 +1696,7 @@
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
               </MappingFragment>
@@ -1648,8 +1751,8 @@
           <EntitySetMapping Name="ProductDetail">
             <EntityTypeMapping TypeName="oecsModel.ProductDetail">
               <MappingFragment StoreEntitySet="ProductDetail">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="toDisplay" ColumnName="toDisplay" />
                 <ScalarProperty Name="ColorID" ColumnName="ColorID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />

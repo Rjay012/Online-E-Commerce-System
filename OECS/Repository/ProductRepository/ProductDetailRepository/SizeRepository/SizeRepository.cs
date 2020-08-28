@@ -21,7 +21,7 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository.SizeReposito
         public IQueryable<SizeModel> DisplayProductSize(int productID, int colorID, int iconID)
         {
             return _dbContext.DisplaySize
-                             .Where(ds => ds.ProductImage.ProductDetail.ProductID == productID && ds.ProductImage.ProductDetail.ColorID == colorID && ds.ProductImage.Image.IconID == iconID)
+                             .Where(ds => ds.ProductImage.ProductDetail.ProductID == productID && ds.ProductImage.ProductDetail.ColorID == colorID && ds.ProductImage.Image.IconID == iconID && ds.ProductImage.ProductDetail.Status == "available")
                              .Select(s => new SizeModel
                              {
                                  SideID = (int)s.ProductImage.ProductDetail.SizeID,

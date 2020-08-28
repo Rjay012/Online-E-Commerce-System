@@ -12,13 +12,13 @@ namespace OECS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderDetail
+    public partial class Cart
     {
-        public int OrderDetailID { get; set; }
-        public Nullable<int> OrderNumber { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public int CartID { get; set; }
+        public Nullable<int> CustomerID { get; set; }
+        public Nullable<int> ProductDetailID { get; set; }
     
-        public virtual Order Order { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual ProductDetail ProductDetail { get; set; }
     }
 }

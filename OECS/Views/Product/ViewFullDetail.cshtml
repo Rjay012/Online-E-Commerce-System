@@ -4,7 +4,12 @@
 @Html.Partial("~/Views/Shared/_NavbarTop.cshtml")
 
 <div class="container-fluid product-image-gallery">
-
+    <div class="clearfix">
+        <div class="gallery">
+            <div class="preview-image-section"></div>
+            <div class="preview-detail-section"></div>
+        </div>
+    </div>
 </div>
 <hr />
 <h4>Descriptions / Details</h4>
@@ -16,11 +21,20 @@
 
 </div>
 
-@Html.Partial("~/Views/Account/Partials/_AccountLogModalFormHolder.cshtml")
-
 @if (Request.IsAuthenticated && Session["Modules"] != null && (bool)Session["ShopNow"] == true)
 {
-    @Html.Partial("~/Views/Shared/Modals/_Cart.cshtml")
+    //@Html.Partial("~/Views/Shared/Modals/_Cart.cshtml")
+    <div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" id="ModalAddedItem">
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Partial("~/Views/Account/Partials/_AccountLogModalFormHolder.cshtml")
 }
 @section scripts{
     <script>

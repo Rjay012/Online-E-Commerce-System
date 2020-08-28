@@ -1,23 +1,27 @@
-﻿@model OECS.Models.ProductModels.ProductDetailModels.ViewProductDetailModel
-    <div class="previews">
-        @{
-            var defaultImg = "";
-            var display = Model.ProductImages.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
-            var isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
-            defaultImg = display.Image.path;
-            <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
-                <img src="..\..\@defaultImg" />
-            </a>
+﻿@model IEnumerable<OECS.Models.ProductImage>
+<div class="previews">
+    @{
+        /*
+         * NOTE: TO FIND THE IMAGES INSIDE FOLDER USE (..\..\) TO CHANGE THE IMAGE URL
+        */
 
-            foreach (var img in Model.ProductImages.Where(i => i.DisplayColor.Count() == 0).Take(4))
-            {
-                isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
-                <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
-                    <img src="..\..\@img.Image.path" />
-                </a>
-            }
+        var defaultImg = "";
+        var display = Model.Where(d => d.DisplayColor.Count() > 0).FirstOrDefault();
+        var isMainDisplay = (display.isMainDisplay == true ? "main-display" : "");
+        defaultImg = display.Image.path;
+        <a class="selected default-img @isMainDisplay" productImageID="@display.ProductImageID" data-full="@defaultImg">
+            <img src="..\..\@defaultImg" />
+        </a>
+
+        foreach (var img in Model.Where(i => i.DisplayColor.Count() == 0).Take(4))
+        {
+            isMainDisplay = (img.isMainDisplay == true ? "main-display" : "");
+            <a class="img-link-wrapper @isMainDisplay" productImageID="@img.ProductImageID" data-full="@img.Image.path">
+                <img src="..\..\@img.Image.path" />
+            </a>
         }
-    </div>
+    }
+</div>
 <div class="full">
     <img src="..\..\@defaultImg" />
 </div>

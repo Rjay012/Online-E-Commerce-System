@@ -27,6 +27,7 @@ namespace OECS.Models
     
         public virtual DbSet<Administrator> Administrator { get; set; }
         public virtual DbSet<Brand> Brand { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Color> Color { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }

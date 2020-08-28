@@ -21,7 +21,7 @@ namespace OECS.Models
         public Nullable<int> CreditCardNumber { get; set; }
         public Nullable<System.DateTime> CreditCardExpirationDate { get; set; }
         public string CardHoldersName { get; set; }
-        public string OrderNumber { get; set; }
+        public Nullable<int> OrderNumber { get; set; }
     
         public virtual Order Order { get; set; }
         public virtual PaymentType PaymentType { get; set; }

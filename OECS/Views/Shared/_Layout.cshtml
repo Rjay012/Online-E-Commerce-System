@@ -27,6 +27,12 @@
 </head>
 <body class="fixed-sn white-skin">
     @{
+        if(!Request.IsAuthenticated)
+        {
+            Session["Modules"] = null;
+            Session["ShopNow"] = null;
+        }
+
         var activePage = this.ViewContext.RouteData.Values["controller"] as string;
 
         if (Session["Modules"] != null && Request.IsAuthenticated)

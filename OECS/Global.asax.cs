@@ -14,7 +14,7 @@ namespace OECS
     {
         protected void Application_Start()
         {
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimsIdentity.DefaultNameClaimType;
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Sid; //ClaimsIdentity.DefaultNameClaimType;
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

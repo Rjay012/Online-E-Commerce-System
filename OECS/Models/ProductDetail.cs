@@ -17,16 +17,22 @@ namespace OECS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProductDetail()
         {
+            this.Cart = new HashSet<Cart>();
+            this.Order = new HashSet<Order>();
             this.ProductImage = new HashSet<ProductImage>();
         }
     
         public int ProductDetailID { get; set; }
         public Nullable<int> ProductID { get; set; }
         public Nullable<int> ColorID { get; set; }
-        public Nullable<bool> toDisplay { get; set; }
         public Nullable<int> SizeID { get; set; }
+        public string Status { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
         public virtual Color Color { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Order { get; set; }
         public virtual Product Product { get; set; }
         public virtual Size Size { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

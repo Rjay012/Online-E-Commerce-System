@@ -1,4 +1,6 @@
-﻿using OECS.Models.ProductModels.ProductDetailModels;
+﻿using OECS.Models;
+using OECS.Models.ProductModels.ProductDetailModels;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OECS.Services.ProductServices.ProductGalleryServices
@@ -10,5 +12,7 @@ namespace OECS.Services.ProductServices.ProductGalleryServices
         void UpdatePreviousMainDisplay(int productID);
         void SetNewMainDisplay(int selectedMainDisplayID);
         IQueryable<ProductDetailModel> GetColorAndIcon(int productID);
+        IEnumerable<ProductImage> PreviewProductImages(int productID, int colorID, int iconID);
+        string GetImageDisplayPath(int productID);
     }
 }

@@ -35,7 +35,7 @@ namespace OECS.Repository.ProductRepository
                             .Select(pi => new ViewProductDetailModel
                             {
                                 ProductID = pi.ProductDetail.Product.ProductID,
-                                ColorID = pi.ProductDetail.ColorID,
+                                ColorID = (int)pi.ProductDetail.ColorID,
                                 display = pi.ProductDetail.Product.display,
                                 isMainDisplay = pi.isMainDisplay,
                                 IconID = pi.Image.IconID,
