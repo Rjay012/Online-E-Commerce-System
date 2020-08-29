@@ -47,9 +47,9 @@ namespace OECS.Services.ProductServices.ProductGalleryServices
             return _productDetailRepository.GetColorAndIcon(productID);
         }
 
-        public string GetImageDisplayPath(int productID)
+        public string GetImageDisplayPath(int productID, int colorID)
         {
-            return _productGalleryRepository.GetImageDisplayPath(productID);
+            return _productGalleryRepository.GetImageDisplayPath(productID, colorID);
         }
     }
 }

@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body">
                 <h5>@Model.ProductName</h5>
-                <h6>$ @Model.Price</h6>
+                <h6>@String.Format("{0:C}", (decimal)Model.Price)</h6>
                 <hr />
                 <p>
                     <strong>Brand:</strong>

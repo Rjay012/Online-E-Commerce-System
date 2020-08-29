@@ -72,14 +72,17 @@ namespace OECS.Repository.ProductRepository.ProductGalleryRepository
                              .Where(pi => pi.ProductDetail.ProductID == productID && pi.ProductDetail.ColorID == colorID && pi.Image.IconID == iconID);
         }
 
-        public string GetImageDisplayPath(int productID)
+        public string GetImageDisplayPath(int productID, int colorID)
         {
             return _dbContext.ProductImage
-                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.isMainDisplay == true)
-                             .Select(s => new
+                             .Where(pi => pi.ProductDetail.ProductID == productID && pi.ProductDetail.ColorID == colorID)
+                             .Join(_dbContext.DisplayColor, pi => pi.ProductImageID, dc => dc.ProductImageID, (pi, dc) => new
                              {
-                                 s.Image.path
-                             }).FirstOrDefault().path;
+                                 pi.Image.path,
+                                 dc.isDisplay
+                             })
+                             .Where(dc => dc.isDisplay == true)
+                             .FirstOrDefault().path;
         }
     }
 }

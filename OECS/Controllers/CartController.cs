@@ -61,7 +61,7 @@ namespace OECS.Controllers
                                                                                    .ToList();
                 int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
                 TempData["ProductID"] = viewProductDetailModel.ProductID;
-
+                TempData["ProductDetailID"] = productDetailModel.FirstOrDefault().ProductDetailID;
                 foreach (var item in productDetailModel)
                 {
                     if(_cartService.CheckDuplicateItem(customerID, (int)item.ProductDetailID) == false)
@@ -80,6 +80,7 @@ namespace OECS.Controllers
             CartModel cartModel = _cartService.ViewAddedItem((int)TempData["ProductID"], customerID, quantity);
 
             ViewBag.ProductID = TempData["ProductID"];
+            ViewBag.ProductDetailID = TempData["ProductDetailID"];
             return PartialView("Partials/Modals/_AddedItem", cartModel);
         }
 

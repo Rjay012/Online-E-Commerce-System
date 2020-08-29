@@ -12,22 +12,24 @@
     @{ 
         IProductGalleryService _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
         int productID = Convert.ToInt32(ViewBag.ProductID);
+        int productDetailID = Convert.ToInt32(ViewBag.ProductDetailID);
         var addedItem = Model.Carts
-                             .Where(c => c.CustomerID == Model.CustomerID)
+                             .Where(c => c.CustomerID == Model.CustomerID && c.ProductDetailID == productDetailID)
                              .LastOrDefault().ProductDetail;
+
     }
     <div class="form-inline">
         <div class="col-md-7 cart-added-item">
-            <img src="..\..\@_productGalleryService.GetImageDisplayPath(productID)" class="rounded float-left" alt="no image" style="padding-right: 10px; width: 80px; height: 80px;">
+            <img src="..\..\@_productGalleryService.GetImageDisplayPath(productID, addedItem.Color.ColorID)" class="rounded float-left" alt="no image" style="padding-right: 10px; width: 80px; height: 80px;">
             <h6>@Model.Cart.ProductDetail.Product.productName</h6>
             <p>@Model.Cart.ProductDetail.Product.Brand.BrandName, Size: @addedItem.Size.size1, Color Family: @addedItem.Color.color1</p>
-            <h5>$@Model.Cart.ProductDetail.Product.price</h5>
+            <h5>@String.Format("{0:C}", (decimal)Model.Cart.ProductDetail.Product.price)</h5>
             <strong class="float-right">Qty: @Model.Quantity</strong>
         </div>
         <div class="col-md-5">
             <p><span class="right-section-checkout">My Shopping Cart</span> <span class="cart-number-item">(@Model.Carts.Count() item(s))</span></p>
-            <p>SubTotal > <span class="float-right">$@(Model.Cart.ProductDetail.Product.price * Model.Quantity)</span></p>
-            <p>Total: <span class="float-right">$@Model.Carts.Sum(c => c.ProductDetail.Product.price)</span></p>
+            <p>SubTotal > <span class="float-right">@String.Format("{0:C}", (decimal)Model.Cart.ProductDetail.Product.price * Model.Quantity)</span></p>
+            <p>Total: <span class="float-right">@String.Format("{0:C}", (decimal)Model.Carts.Sum(c => c.ProductDetail.Product.price))</span></p>
             <div class="form-inline">
                 <div class="col">
                     <a class="btn btn-outline-primary btn-block" href="@Url.Action("Index", "Cart")">

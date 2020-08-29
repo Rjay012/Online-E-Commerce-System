@@ -13,6 +13,6 @@ namespace OECS.Services.ProductServices.ProductGalleryServices
         void SetNewMainDisplay(int selectedMainDisplayID);
         IQueryable<ProductDetailModel> GetColorAndIcon(int productID);
         IEnumerable<ProductImage> PreviewProductImages(int productID, int colorID, int iconID);
-        string GetImageDisplayPath(int productID);
+        string GetImageDisplayPath(int productID, int colorID);
     }
 }
