@@ -1,5 +1,4 @@
-﻿using Microsoft.Owin.Security.Provider;
-using OECS.Models;
+﻿using OECS.Models;
 using OECS.Models.CartModels;
 using OECS.Models.ProductModels.ProductDetailModels;
 using OECS.Repository.CartRepository;
@@ -35,7 +34,12 @@ namespace OECS.Controllers
         [Authorize(Roles = "3")]
         public ActionResult LoadCartTable()
         {
-            return PartialView("Partials/Tables/_Item");
+            int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
+            List<ViewCartItem> viewCartItems = _cartService.LoadCart(customerID)
+                                                           .OrderByDescending(c => c.OrderNo)
+                                                           .ToList();
+
+            return PartialView("Partials/Tables/_Item", viewCartItems);
         }
 
         [Authorize(Roles = "3")]
@@ -44,6 +48,7 @@ namespace OECS.Controllers
             return PartialView("Partials/Cards/_OrderSummary");
         }
 
+        #region "ViewFullDetails Page"
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "3")]
@@ -60,13 +65,16 @@ namespace OECS.Controllers
                                                                                    .Take(viewProductDetailModel.Quantity)
                                                                                    .ToList();
                 int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
+                int orderNo = (int)_cartService.CustomerCartLastOrderNo(customerID) + 1;
+
                 TempData["ProductID"] = viewProductDetailModel.ProductID;
                 TempData["ProductDetailID"] = productDetailModel.FirstOrDefault().ProductDetailID;
+
                 foreach (var item in productDetailModel)
                 {
-                    if(_cartService.CheckDuplicateItem(customerID, (int)item.ProductDetailID) == false)
+                    if (_cartService.CheckDuplicateItem(customerID, (int)item.ProductDetailID) == false)
                     {
-                        _cartService.AddItem(customerID, (int)item.ProductDetailID);
+                        _cartService.AddItem(customerID, (int)item.ProductDetailID, orderNo);
                     }
                 }
             }
@@ -82,6 +90,24 @@ namespace OECS.Controllers
             ViewBag.ProductID = TempData["ProductID"];
             ViewBag.ProductDetailID = TempData["ProductDetailID"];
             return PartialView("Partials/Modals/_AddedItem", cartModel);
+        }
+        #endregion
+
+        [Authorize(Roles = "1,3")]
+        public ActionResult Delete(List<int> orderNo)
+        {
+            if(orderNo == null)
+            {
+                return HttpNotFound();
+            }
+
+            //delete process
+            int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
+            foreach (var item in orderNo)
+            {
+                _cartService.DeleteItem(customerID, item);
+            }
+            return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
         }
 
         private IEnumerable<Claim> GetClaim()

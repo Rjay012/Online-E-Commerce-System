@@ -166,11 +166,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\OrderPurchasedController.cs" />
     <Compile Include="Models\Cart.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartModels\CartModel.cs" />
+    <Compile Include="Models\CartModels\ViewCartItem.cs" />
     <Compile Include="Models\Order.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
@@ -191,6 +193,8 @@
     <Compile Include="Repository\CartRepository\ICartRepository.cs" />
     <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
     <Compile Include="Repository\CategoryRepository\ICategoryRepository.cs" />
+    <Compile Include="Repository\CustomerRepository\CustomerRepository.cs" />
+    <Compile Include="Repository\CustomerRepository\ICustomerRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\ColorRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\IColorRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\SizeRepository\ISizeRepository.cs" />
@@ -207,6 +211,8 @@
     <Compile Include="Services\CartServices\ICartService.cs" />
     <Compile Include="Services\CategoryServices\CategoryService.cs" />
     <Compile Include="Services\CategoryServices\ICategoryService.cs" />
+    <Compile Include="Services\CustomerServices\CustomerService.cs" />
+    <Compile Include="Services\CustomerServices\ICustomerService.cs" />
     <Compile Include="Services\FileMng.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
@@ -2410,6 +2416,7 @@
     <Content Include="Scripts\Custom_Scripts\Brand.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Cart.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\CheckOut.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\Customer.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\OrderPurchased.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
@@ -2493,10 +2500,13 @@
     <Content Include="Views\OrderPurchased\Partials\Tables\_PurchasedItem.cshtml" />
     <Content Include="Views\OrderPurchased\Partials\Accordions\_OrderSummary.cshtml" />
     <Content Include="Views\Cart\Partials\Modals\_AddedItem.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Icons\" />
+    <Folder Include="Views\Customer\Partials\Modals\" />
+    <Folder Include="Views\Customer\Partials\Tables\" />
     <Folder Include="Views\Dashboard\Partials\" />
     <Folder Include="Views\Size\Partials\Modals\" />
     <Folder Include="Views\Supplier\" />

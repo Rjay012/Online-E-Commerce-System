@@ -19,7 +19,6 @@ $(document).on("keyup", "#Quantity", function () {
 
 $(document).on("click", "#BtnAddToCart", function () {
     var modal = $(this).attr("modal");
-    
     if (parseInt($("#ProductID").val()) != 0 && parseInt($("#ColorID").val()) != 0 && parseInt($("#SizeID").val()) != 0 && (parseInt($("#Quantity").val()) != 0 && $("#Quantity").val() != "")) {
         $("#BtnConfirmAddToCart").click();
     }

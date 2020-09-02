@@ -1,9 +1,6 @@
 ﻿using OECS.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OECS.Repository.CartRepository
 {
@@ -11,6 +8,7 @@ namespace OECS.Repository.CartRepository
     {
         bool AddItem(Cart cart);
         bool CheckDuplicateItem(int customerID, int productDetailID);
-        IQueryable<Cart> ViewAddedItem(int customerID);
+        IQueryable<Cart> ViewCart(int customerID);
+        void Delete(List<Cart> carts);
     }
 }

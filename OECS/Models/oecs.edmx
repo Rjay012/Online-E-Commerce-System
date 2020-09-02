@@ -27,6 +27,7 @@
           <Property Name="CartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerID" Type="int" />
           <Property Name="ProductDetailID" Type="int" />
+          <Property Name="orderBy" Type="int" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -926,6 +927,7 @@
           <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerID" Type="Int32" />
           <Property Name="ProductDetailID" Type="Int32" />
+          <Property Name="orderBy" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="oecsModel.FK_Cart_Customer" FromRole="Cart" ToRole="Customer" />
           <NavigationProperty Name="ProductDetail" Relationship="oecsModel.FK_Cart_ProductDetail" FromRole="Cart" ToRole="ProductDetail" />
         </EntityType>
@@ -1603,6 +1605,7 @@
           <EntitySetMapping Name="Cart">
             <EntityTypeMapping TypeName="oecsModel.Cart">
               <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="orderBy" ColumnName="orderBy" />
                 <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="CartID" ColumnName="CartID" />

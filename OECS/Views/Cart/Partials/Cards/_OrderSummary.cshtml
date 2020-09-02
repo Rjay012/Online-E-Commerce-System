@@ -3,14 +3,14 @@
         <p class="emphasize-text">Shipping Address</p>
         <span>
             <i class="fas fa-map-marker-alt"></i>
-            Pangasinan, Sision, Bantay Insik
+            <span id="customer-address"></span>
         </span>
 
         <hr />
-        <h5 class="emphasize-text">Order Summary</h5>
-        <p>SubTotal <span class="float-right">$0.00</span></p>
-        <p>Shipping Fee <span class="float-right">$0.00</span></p>
-        <p class="emphasize-text">Total <span class="float-right">$00.00</span></p>
+        <p><h5 class="emphasize-text">Order Summary</h5></p>
+        <p>Selected Item(s) <span class="float-right" id="selected-item-amount">@String.Format("{0:C}", 0.00)</span></p>
+        @*<p>Shipping Fee <span class="float-right">$0.00</span></p>*@
+        <p class="emphasize-text">All Item(s) <span class="float-right" id="cart-total-amount">@String.Format("{0:C}", 0.00)</span></p>
 
         <a class="btn btn-warning btn-block" href="@Url.Action("Index", "CheckOut")">
             PROCEED TO CHECKOUT

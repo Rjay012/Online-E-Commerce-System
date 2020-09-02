@@ -34,8 +34,9 @@
     font-size: 12px;
 }
 
-.product-purchase-img {
-    width: 60px;
+.produt-img {
+    width: 80px;
+    height: 80px;
 }
 
 .purchased-greeting-card > .card, .order-details > .card {

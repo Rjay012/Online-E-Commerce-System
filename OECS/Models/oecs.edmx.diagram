@@ -5,32 +5,32 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="58488ab084094aab8d916878237c7b9c" Name="Diagram1">
-        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="10.5" PointY="15.5" />
-        <EntityTypeShape EntityType="oecsModel.Brand" Width="1.5" PointX="3" PointY="8.625" />
-        <EntityTypeShape EntityType="oecsModel.Cart" Width="1.5" PointX="12.75" PointY="11.375" />
-        <EntityTypeShape EntityType="oecsModel.Category" Width="1.5" PointX="0.75" PointY="11.625" />
-        <EntityTypeShape EntityType="oecsModel.Color" Width="1.5" PointX="8.25" PointY="8.5" />
+        <EntityTypeShape EntityType="oecsModel.Administrator" Width="1.5" PointX="10.5" PointY="19.25" />
+        <EntityTypeShape EntityType="oecsModel.Brand" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="oecsModel.Cart" Width="1.5" PointX="9.75" PointY="15.375" />
+        <EntityTypeShape EntityType="oecsModel.Category" Width="1.5" PointX="0.75" PointY="12.625" />
+        <EntityTypeShape EntityType="oecsModel.Color" Width="1.5" PointX="5.25" PointY="16.75" />
         <EntityTypeShape EntityType="oecsModel.Customer" Width="1.5" PointX="10.5" PointY="0.75" />
-        <EntityTypeShape EntityType="oecsModel.DisplayColor" Width="1.5" PointX="15" PointY="14.75" />
-        <EntityTypeShape EntityType="oecsModel.DisplaySize" Width="1.5" PointX="15" PointY="7.25" />
-        <EntityTypeShape EntityType="oecsModel.Icon" Width="1.5" PointX="8.25" PointY="5.625" />
-        <EntityTypeShape EntityType="oecsModel.Image" Width="1.5" PointX="10.5" PointY="5.375" />
-        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="11.25" PointY="19" />
-        <EntityTypeShape EntityType="oecsModel.Order" Width="1.5" PointX="15.75" PointY="10.875" />
-        <EntityTypeShape EntityType="oecsModel.OrderDetail" Width="1.5" PointX="18" PointY="15.125" />
-        <EntityTypeShape EntityType="oecsModel.Payment" Width="1.5" PointX="18" PointY="11" />
-        <EntityTypeShape EntityType="oecsModel.PaymentType" Width="1.5" PointX="15.75" PointY="17.625" />
-        <EntityTypeShape EntityType="oecsModel.Product" Width="1.5" PointX="5.25" PointY="10.625" />
-        <EntityTypeShape EntityType="oecsModel.ProductDetail" Width="1.5" PointX="10.5" PointY="10.875" />
-        <EntityTypeShape EntityType="oecsModel.ProductImage" Width="1.5" PointX="12.75" PointY="8.125" />
+        <EntityTypeShape EntityType="oecsModel.DisplayColor" Width="1.5" PointX="12" PointY="15.75" />
+        <EntityTypeShape EntityType="oecsModel.DisplaySize" Width="1.5" PointX="12" PointY="7.25" />
+        <EntityTypeShape EntityType="oecsModel.Icon" Width="1.5" PointX="5.25" PointY="5.625" />
+        <EntityTypeShape EntityType="oecsModel.Image" Width="1.5" PointX="7.5" PointY="5.375" />
+        <EntityTypeShape EntityType="oecsModel.Module" Width="1.5" PointX="11.25" PointY="22.125" />
+        <EntityTypeShape EntityType="oecsModel.Order" Width="1.5" PointX="12.75" PointY="11.875" />
+        <EntityTypeShape EntityType="oecsModel.OrderDetail" Width="1.5" PointX="15" PointY="16.125" />
+        <EntityTypeShape EntityType="oecsModel.Payment" Width="1.5" PointX="15" PointY="12" />
+        <EntityTypeShape EntityType="oecsModel.PaymentType" Width="1.5" PointX="12.75" PointY="18.625" />
+        <EntityTypeShape EntityType="oecsModel.Product" Width="1.5" PointX="5.25" PointY="11.625" />
+        <EntityTypeShape EntityType="oecsModel.ProductDetail" Width="1.5" PointX="7.5" PointY="11.875" />
+        <EntityTypeShape EntityType="oecsModel.ProductImage" Width="1.5" PointX="9.75" PointY="8.125" />
         <EntityTypeShape EntityType="oecsModel.Role" Width="1.5" PointX="8.25" PointY="2.375" />
         <EntityTypeShape EntityType="oecsModel.RoleModule" Width="1.5" PointX="13.5" PointY="2.375" />
-        <EntityTypeShape EntityType="oecsModel.Size" Width="1.5" PointX="8.25" PointY="17.75" />
-        <EntityTypeShape EntityType="oecsModel.Stock" Width="1.5" PointX="7.5" PointY="14.5" />
-        <EntityTypeShape EntityType="oecsModel.SubCategory" Width="1.5" PointX="3" PointY="11.375" />
-        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="13.5" PointY="19" />
-        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="5.25" PointY="5.875" />
-        <EntityTypeShape EntityType="oecsModel.Supply" Width="1.5" PointX="7.5" PointY="11.375" />
+        <EntityTypeShape EntityType="oecsModel.Size" Width="1.5" PointX="5.25" PointY="8.5" />
+        <EntityTypeShape EntityType="oecsModel.Stock" Width="1.5" PointX="7.5" PointY="19.375" />
+        <EntityTypeShape EntityType="oecsModel.SubCategory" Width="1.5" PointX="3" PointY="12.375" />
+        <EntityTypeShape EntityType="oecsModel.SubModule" Width="1.5" PointX="13.5" PointY="22.125" />
+        <EntityTypeShape EntityType="oecsModel.Supplier" Width="1.5" PointX="8.25" PointY="22.875" />
+        <EntityTypeShape EntityType="oecsModel.Supply" Width="1.5" PointX="10.5" PointY="12.375" />
         <AssociationConnector Association="oecsModel.FK_Administrator_Role" />
         <AssociationConnector Association="oecsModel.FK_Product_Brand" />
         <AssociationConnector Association="oecsModel.FK_Cart_Customer" />

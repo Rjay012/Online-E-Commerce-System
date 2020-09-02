@@ -1,13 +1,23 @@
-﻿<div class="card">
+﻿@model IEnumerable<OECS.Models.CartModels.ViewCartItem>
+@using OECS.Models;
+@using OECS.Services.ProductServices.ProductGalleryServices;
+@using OECS.Repository.ProductRepository.ProductGalleryRepository;
+
+@{
+    IProductGalleryService _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
+    decimal totalAmount = 0.0m;
+}
+
+<div class="card">
     <div class="card-body">
         <div class="custom-control custom-checkbox float-left">
-            <input type="checkbox" class="custom-control-input" id="defaultUnchecked1">
-            <label class="custom-control-label" for="defaultUnchecked1">
-                SELECT ALL (1 ITEM(S))
+            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+            <label class="custom-control-label" for="defaultUnchecked">
+                SELECT ALL (@Model.Count() ITEM(S))
             </label>
         </div>
 
-        <a class="float-right" href="">
+        <a class="float-right" role="button" id="BtnDeleteSelectedItem">
             <i class="fas fa-trash-alt"></i> DELETE
         </a>
     </div>
@@ -27,35 +37,43 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label" for="defaultUnchecked"></label>
-                        </div>
-                    </td>
-                    <td class="product-purchase-img">
-                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" />
-                    </td>
-                    <td>
-                        <p>JS&CO jewelry 14k Saudi Gold Plated Jewelry Set NSD010+ESD017</p>
-                        <p>Brand: Nike, Color: Black, Size: 5xl</p>
-                    </td>
-                    <td>$00.00</td>
-                    <td>
-                        <div class="def-number-input number-input safari_only">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus" disabled></button>
-                            <input class="quantity" min="1" name="quantity" type="number" disabled>
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus" disabled></button>
-                        </div>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" type="button">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
+                @foreach (var item in Model)
+                {
+                    string imagePath = _productGalleryService.GetImageDisplayPath((int)item.ProductID, (int)item.ColorID);
+                    <tr>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input chk-cart-item" OrderNo="@item.OrderNo" ItemPrice="@((decimal)item.Price)" id="defaultUnchecked-@item.OrderNo">
+                                <label class="custom-control-label" for="defaultUnchecked-@item.OrderNo"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <img class="produt-img" src="..\..\@imagePath" />
+                        </td>
+                        <td>
+                            <p class="emphasize-text">@item.ProductName</p>
+                            <p>Brand: @item.BrandName, Color: @item.Color, Size: @item.Size</p>
+                        </td>
+                        <td class="td-price">@String.Format("{0:C}", (decimal)item.Price * item.Quantity)</td>
+                        <td>
+                            <div class="def-number-input number-input safari_only">
+                                <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(), ChangeQuantity(parseFloat(@item.Price), $(this))" class="minus"></button>
+                                @Html.TextBoxFor(c => item.Quantity, new { @class = "quantity", @min = "1", @max = item.Quantity, @type = "number", @disabled = true })
+                                <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(), ChangeQuantity(parseFloat(@item.Price), $(this))" class="plus"></button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" type="button" onclick="DeleteItem(parseInt(@item.OrderNo))">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    totalAmount += (decimal)item.Price * item.Quantity;
+                }
             </tbody>
         </table>
+        <input type="hidden" id="hidSelectedItemAmount" value="0.0" />  @* hold total selected item amount *@
+        <input type="hidden" id="hidTotalAmount" value="@totalAmount" />   @* hold total amount in cart *@
     </div>
 </div>

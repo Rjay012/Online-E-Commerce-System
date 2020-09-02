@@ -1,17 +1,15 @@
-﻿using OECS.Models;
-using OECS.Models.CartModels;
-using System;
+﻿using OECS.Models.CartModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OECS.Services.CartServices
 {
     public interface ICartService
     {
-        bool AddItem(int customerID, int productDetailID);
+        bool AddItem(int customerID, int productDetailID, int orderNo);
         bool CheckDuplicateItem(int customerID, int productDetailID);
         CartModel ViewAddedItem(int productID, int customerID, int quantity);
+        List<ViewCartItem> LoadCart(int customerID);
+        int? CustomerCartLastOrderNo(int customerID);
+        void DeleteItem(int customerID, int orderNo);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using OECS.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace OECS.Repository.CartRepository
 {
@@ -31,15 +29,24 @@ namespace OECS.Repository.CartRepository
 
         public bool CheckDuplicateItem(int customerID, int productDetailID)
         {
-            return _dbContext.Cart
-                             .Where(c => c.CustomerID == customerID && c.ProductDetailID == productDetailID)
-                             .Any();
+            return ViewCart(customerID).Where(c => c.ProductDetailID == productDetailID)
+                                       .Any();
         }
 
-        public IQueryable<Cart> ViewAddedItem(int customerID)
+        public IQueryable<Cart> ViewCart(int customerID)
         {
             return _dbContext.Cart
                              .Where(c => c.CustomerID == customerID);
+        }
+
+        public void Delete(List<Cart> carts)
+        {
+            foreach (var item in carts)
+            {
+                Cart cart = _dbContext.Cart.Find(item.CartID);
+                _dbContext.Cart.Remove(cart);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
