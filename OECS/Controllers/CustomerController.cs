@@ -24,6 +24,7 @@ namespace OECS.Controllers
             return View();
         }
 
+        [Authorize(Roles = "3")]
         public ActionResult GetCustomerAddress()
         {
             int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);

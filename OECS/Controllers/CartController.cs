@@ -20,7 +20,7 @@ namespace OECS.Controllers
         private readonly IProductDetailService _productDetailService;
         public CartController()
         {
-            _cartService = new CartService(new CartRepository(new oecsEntities()));
+            _cartService = new CartService(new CartRepository(new oecsEntities()), new ProductDetailRepository(new oecsEntities()));
             _productDetailService = new ProductDetailService(new ProductDetailRepository(new oecsEntities()));
         }
 
@@ -36,6 +36,7 @@ namespace OECS.Controllers
         {
             int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
             List<ViewCartItem> viewCartItems = _cartService.LoadCart(customerID)
+                                                           .Where(c => c.Status == "on process")
                                                            .OrderByDescending(c => c.OrderNo)
                                                            .ToList();
 
@@ -45,7 +46,10 @@ namespace OECS.Controllers
         [Authorize(Roles = "3")]
         public ActionResult LoadOrderSummary()
         {
-            return PartialView("Partials/Cards/_OrderSummary");
+            int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
+            return PartialView("Partials/Cards/_OrderSummary", _cartService.LoadCart(customerID)
+                                                                           .Where(c => c.Status == "on process")
+                                                                           .ToList());
         }
 
         #region "ViewFullDetails Page"
@@ -108,6 +112,25 @@ namespace OECS.Controllers
                 _cartService.DeleteItem(customerID, item);
             }
             return Json(new { data = "success" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize(Roles = "3")]
+        public ActionResult MarkFinalItem(List<string> item)   //customer will be choosing some item to be checkout and finalize as order
+        {
+            if(item == null)
+            {
+                return HttpNotFound();
+            }
+
+            int customerID = Convert.ToInt32(GetClaim().ElementAt(0).Value);
+            foreach (var i in item)
+            {
+                var itemArr = i.Split('-');
+                _cartService.Checkout(customerID, Convert.ToInt32(itemArr[0]), Convert.ToInt32(itemArr[1]));
+            }
+
+            _cartService.Discard(customerID);  //discard unselected item(s) in cart
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
 
         private IEnumerable<Claim> GetClaim()

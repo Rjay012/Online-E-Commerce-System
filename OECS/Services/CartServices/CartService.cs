@@ -1,6 +1,8 @@
 ﻿using OECS.Models;
 using OECS.Models.CartModels;
+using OECS.Models.ProductModels.ProductDetailModels;
 using OECS.Repository.CartRepository;
+using OECS.Repository.ProductRepository.ProductDetailRepository;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +11,16 @@ namespace OECS.Services.CartServices
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
-        public CartService(ICartRepository cartRepository)
+        private readonly IProductDetailRepository _productDetailRepository;
+        public CartService(ICartRepository cartRepository, IProductDetailRepository productDetailRepository)
         {
             _cartRepository = cartRepository;
+            _productDetailRepository = productDetailRepository;
+        }
+
+        public CartService(IProductDetailRepository productDetailRepository)
+        {
+            _productDetailRepository = productDetailRepository;
         }
 
         public bool AddItem(int customerID, int productDetailID, int orderNo)
@@ -20,7 +29,8 @@ namespace OECS.Services.CartServices
             {
                 CustomerID = customerID,
                 ProductDetailID = productDetailID,
-                orderBy = orderNo
+                orderBy = orderNo,
+                status = "on process"
             };
 
             return _cartRepository.AddItem(cart);
@@ -59,6 +69,7 @@ namespace OECS.Services.CartServices
                                       c.ProductDetail.Size.size1,
                                       c.ProductDetail.Product.price,
                                       c.ProductDetail.Product.Brand.BrandName,
+                                      c.status,
                                       c.orderBy
                                   })
                                   .Select(s => new ViewCartItem
@@ -71,6 +82,7 @@ namespace OECS.Services.CartServices
                                       Size = s.Key.size1,
                                       Price = (decimal)s.Key.price,
                                       BrandName = s.Key.BrandName,
+                                      Status = s.Key.status,
                                       OrderNo = (int)s.Key.orderBy,
                                       Quantity = s.Distinct().Count()
                                   }).ToList();
@@ -92,6 +104,40 @@ namespace OECS.Services.CartServices
                                               .Where(c => c.orderBy == orderNo)
                                               .ToList();
             _cartRepository.Delete(carts);
+        }
+
+        public void Checkout(int customerID, int orderNo, int quantity)
+        {
+            _cartRepository.Checkout(customerID, orderNo, quantity);
+        }
+
+        public void Discard(int customerID)
+        {
+            _cartRepository.Discard(customerID);
+        }
+
+        public void GetCheckoutItem(int customerID)  //get checkout item and set product detail status to unavailable
+        {
+            List<Cart> carts = _cartRepository.ViewCart(customerID)
+                                              .Where(c => c.status == "checkout")
+                                              .ToList();
+            foreach(var item in carts)
+            {
+                _productDetailRepository.SetProductDetailStatus((int)item.ProductDetailID, "unavailable");
+            }
+        }
+
+        public int GetProductQuantity(int productID, int colorID, int sizeID)
+        {
+            ViewProductDetailModel viewProductDetailModel = new ViewProductDetailModel()
+            {
+                ProductID = productID,
+                ColorID = colorID,
+                SizeID = sizeID
+            };
+
+            return _productDetailRepository.ProductDetailList(viewProductDetailModel)
+                                           .Count();
         }
     }
 }

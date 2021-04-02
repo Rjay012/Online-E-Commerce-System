@@ -4,7 +4,6 @@
 
 $(document).on("change", "#defaultUnchecked", function () {
     if ($(this).is(":checked")) {
-        var amount = 0.0;
         $(".chk-cart-item").prop("checked", true);
         CalculateAmount();
     }
@@ -44,6 +43,30 @@ $(document).on("change", ".chk-cart-item", function () {
     }
     $("#selected-item-amount").text(CurrencyFormat(amount));
 });
+
+$(document).on("click", "#BtnCheckout", function () {
+    var item = [];
+    var isCheck = false;
+    $(".chk-cart-item:checked").each(function (indx) {
+        var orderNo = parseInt($(this).attr("OrderNo"));
+        var quantity = parseInt($(this).parent("div").parent("td").siblings("td").children("div").children(".quantity").val());
+
+        item[indx] = orderNo + "-" + quantity;
+        isCheck = true;
+    });
+
+    //proceed to checkout if customer selected an item
+    if (isCheck === true) {
+        MarkFinalSelectedItem(...item);
+        window.location.href = "Checkout/Index";
+    }
+});
+
+function MarkFinalSelectedItem(...item) {   //proceed to checkout
+    FetchData("/Cart/MarkFinalItem", { item: item }).done(function () {
+
+    });
+}
 
 function DeleteSelectedItem(...itemArr) {
     DeleteItem(itemArr);

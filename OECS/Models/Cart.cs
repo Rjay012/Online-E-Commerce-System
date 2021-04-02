@@ -18,6 +18,7 @@ namespace OECS.Models
         public Nullable<int> CustomerID { get; set; }
         public Nullable<int> ProductDetailID { get; set; }
         public Nullable<int> orderBy { get; set; }
+        public string status { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual ProductDetail ProductDetail { get; set; }

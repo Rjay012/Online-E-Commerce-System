@@ -23,5 +23,6 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
         IQueryable<ProductDetail> ProductDetail();
         List<ProductDetailModel> ViewProductIcon(int productID);
         IEnumerable<ProductDetail> ProductDetailList(ViewProductDetailModel viewProductDetailModel);
+        void SetProductDetailStatus(int productDetailID, string status);
     }
 }

@@ -1,25 +1,30 @@
-﻿<div class="card">
+﻿@model OECS.Models.CustomerModels.CustomerModel
+@using System.Globalization
+@{ 
+    string fullname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.Lastname + ", " + Model.Firstname + " " + Model.Middlename[0] + ".");
+}
+<div class="card">
     <div class="card-body">
         <h5 class="emphasize-text">Shipping & Billing</h5>
         <p>
-            <i class="fas fa-map-marker-alt"> Delia B. Baterina</i><br />
+            <i class="fas fa-map-marker-alt"> @fullname</i><br />
             <span class="badge badge-info">Home</span>
-            Cadulayan Street, Bantay Insik, Sison, Pangasinan
+            <span id="checkout-shipping-address">@Model.Address</span>
         </p>
         <p>
-            Bill to the same address <span class="float-right"><a href="#">EDIT</a></span>
+            <span id="checkout-address">Bill to the same address</span> <span class="float-right"><a href="#">EDIT</a></span>
         </p>
         <p>
-            09954557682 <span class="float-right"><a href="#">EDIT</a></span>
+            <span id="checkout-number">@Model.Phone</span> <span class="float-right"><a href="#">EDIT</a></span>
         </p>
         <p>
-            rjhaybaterina12@gmail.com <span class="float-right"><a href="#">EDIT</a></span>
+            <span id="checkout-email">@Model.Email</span> <span class="float-right"><a href="#">EDIT</a></span>
         </p>
 
         <h5 class="emphasize-text">Order Summary</h5>
-        <p>SubTotal <span class="float-right">$0.00</span></p>
-        <p>Shipping Fee <span class="float-right">$0.00</span></p>
-        <p class="emphasize-text">Total <span class="float-right">$00.00</span></p>
+        @*<p>SubTotal <span class="float-right">$0.00</span></p>
+        <p>Shipping Fee <span class="float-right">$0.00</span></p>*@
+        <p class="emphasize-text">Total Item(s) <span class="float-right" id="checkout-total-amount">@String.Format("{0:C}", 0.00)</span></p>
 
         <button class="btn btn-primary btn-block" type="button" id="BtnPaymentMethodConfirmation" data-toggle="modal" data-target="#modalPaymentMethodConfirmation">
             PLACE ORDER

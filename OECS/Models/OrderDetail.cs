@@ -15,7 +15,7 @@ namespace OECS.Models
     public partial class OrderDetail
     {
         public int OrderDetailID { get; set; }
-        public Nullable<int> OrderNumber { get; set; }
+        public string OrderNumber { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> Price { get; set; }
     

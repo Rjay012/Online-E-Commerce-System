@@ -32,9 +32,13 @@
                             var identity = (ClaimsIdentity)User.Identity;
                             var claims = identity.Claims;
 
-                            int noOfItems = _cartRepository.ViewCart(Convert.ToInt32(claims.ElementAt(0).Value)).Count();
-
-                            <span class="badge red z-depth-1 mr-1"> @noOfItems </span>
+                            int noOfItems = _cartRepository.ViewCart(Convert.ToInt32(claims.ElementAt(0).Value))
+                                                           .Where(c => c.status == "on process")
+                                                           .Count();
+                            if (noOfItems != 0)
+                            {
+                                <span class="badge red z-depth-1 mr-1"> @noOfItems </span>
+                            }
                         }
                         <i class="fas fa-shopping-cart"></i>
                         <span class="clearfix d-none d-sm-inline-block"> Cart </span>

@@ -12,6 +12,8 @@ namespace OECS.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class oecsEntities : DbContext
     {
@@ -38,6 +40,7 @@ namespace OECS.Models
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
+        public virtual DbSet<OrderPayment> OrderPayment { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }
         public virtual DbSet<PaymentType> PaymentType { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -51,5 +54,36 @@ namespace OECS.Models
         public virtual DbSet<SubModule> SubModule { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
         public virtual DbSet<Supply> Supply { get; set; }
+    
+        public virtual int spUpdateSelectedCartItemStatus(Nullable<int> customerID, Nullable<int> quantity, Nullable<int> orderNo, string status)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("customerID", customerID) :
+                new ObjectParameter("customerID", typeof(int));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("quantity", quantity) :
+                new ObjectParameter("quantity", typeof(int));
+    
+            var orderNoParameter = orderNo.HasValue ?
+                new ObjectParameter("orderNo", orderNo) :
+                new ObjectParameter("orderNo", typeof(int));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spUpdateSelectedCartItemStatus", customerIDParameter, quantityParameter, orderNoParameter, statusParameter);
+        }
+    
+        [DbFunction("oecsEntities", "CustomerOrder")]
+        public virtual IQueryable<CustomerOrder_Result> CustomerOrder(Nullable<int> customerID)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<CustomerOrder_Result>("[oecsEntities].[CustomerOrder](@CustomerID)", customerIDParameter);
+        }
     }
 }

@@ -433,5 +433,18 @@ namespace OECS.Repository.ProductRepository.ProductDetailRepository
                              .Where(pd => pd.ProductID == viewProductDetailModel.ProductID && pd.ColorID == (int)viewProductDetailModel.ColorID && pd.SizeID == (int)viewProductDetailModel.SizeID)
                              .ToList();
         }
+
+        public void SetProductDetailStatus(int productDetailID, string status)  //set product detail status
+        {
+            ProductDetail productDetail = new ProductDetail()
+            {
+                ProductDetailID = productDetailID,
+                Status = status
+            };
+
+            _dbContext.ProductDetail.Attach(productDetail);
+            _dbContext.Entry(productDetail).Property(pd => pd.Status).IsModified = true;
+            _dbContext.SaveChanges();
+        }
     }
 }

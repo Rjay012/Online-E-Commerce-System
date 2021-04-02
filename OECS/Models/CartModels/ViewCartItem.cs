@@ -11,6 +11,7 @@
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string BrandName { get; set; }
+        public string Status { get; set; }  //checout/discarded 
         public int OrderNo { get; set; }   //order of each item's on each customer's cart
     }
 }

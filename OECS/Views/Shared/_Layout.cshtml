@@ -48,7 +48,7 @@
                 if (!activePage.Equals("Cart", StringComparison.CurrentCultureIgnoreCase) &&
                     !activePage.Equals("Product", StringComparison.CurrentCultureIgnoreCase) &&
                     !activePage.Equals("CheckOut", StringComparison.CurrentCultureIgnoreCase) &&
-                    !activePage.Equals("OrderPurchased", StringComparison.CurrentCultureIgnoreCase))
+                    !activePage.Equals("Order", StringComparison.CurrentCultureIgnoreCase))
                 {
                     @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
                 }
@@ -59,7 +59,7 @@
             if (!activePage.Equals("Cart", StringComparison.CurrentCultureIgnoreCase) &&
                 !activePage.Equals("Product", StringComparison.CurrentCultureIgnoreCase) &&
                 !activePage.Equals("CheckOut", StringComparison.CurrentCultureIgnoreCase) &&
-                !activePage.Equals("OrderPurchased", StringComparison.CurrentCultureIgnoreCase))
+                !activePage.Equals("Order", StringComparison.CurrentCultureIgnoreCase))
             {
                 @Html.Partial("~/Views/Shared/_NavbarShop.cshtml")
             }

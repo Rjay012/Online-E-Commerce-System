@@ -47,7 +47,7 @@
         <hr />
         <div class="form-inline">
             <div class="col">
-                <a class="btn btn-primary btn-block" href="@(toggleLoginModal != "#modalLoginOrRegister" ? Url.Action("Index", "CheckOut") : "")" data-toggle="@(toggleLoginModal == "#modalLoginOrRegister" ? "modal" : "")" data-target="@(toggleLoginModal == "#modalLoginOrRegister" ? toggleLoginModal : "")">
+                <a class="btn btn-primary btn-block" href="@(toggleLoginModal != "#modalLoginOrRegister" ? Url.Action("Index", "CheckOut") : "")" id="BtnBuyNow" data-toggle="@(toggleLoginModal == "#modalLoginOrRegister" ? "modal" : "")" data-target="@(toggleLoginModal == "#modalLoginOrRegister" ? toggleLoginModal : "")">
                     BUY NOW
                 </a>
             </div>

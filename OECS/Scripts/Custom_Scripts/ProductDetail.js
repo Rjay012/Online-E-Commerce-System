@@ -61,10 +61,17 @@ function PreviewImages(productID, colorID, iconID, element) {
 function RefreshSizeList(productID, colorID, iconID) {
     FetchData("/Product/FetchNewSizeList", { productID: productID, colorID: colorID, iconID: iconID }).done(function (content) {
         $("#SizeID").html("");
-        $.each(content, function (indx) {
-            $("#SizeID").append("<option value='" + parseInt(content[indx].Value) + "'>" + content[indx].Text + "</option>");
-        });
-        SetQuantity();
+        if (content.length > 0) {
+            $.each(content, function (indx) {
+                $("#SizeID").append("<option value='" + parseInt(content[indx].Value) + "'>" + content[indx].Text + "</option>");
+            });
+            SetQuantity();
+            $("#BtnAddToCart, #BtnBuyNow").attr("disabled", false);
+        }
+        else {
+            $("#SizeID").append("<option>OUT OF STOCK</option>");
+            $("#BtnAddToCart, #BtnBuyNow").attr("disabled", true);
+        }
     });
 }
 

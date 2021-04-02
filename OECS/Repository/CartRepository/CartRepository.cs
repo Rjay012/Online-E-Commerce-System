@@ -1,4 +1,5 @@
 ﻿using OECS.Models;
+using OECS.Models.OrderModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +48,16 @@ namespace OECS.Repository.CartRepository
                 _dbContext.Cart.Remove(cart);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public void Checkout(int customerID, int orderNo, int quantity)
+        {
+            _dbContext.spUpdateSelectedCartItemStatus(customerID, quantity, orderNo, "checkout");
+        }
+
+        public void Discard(int customerID)
+        {
+            _dbContext.spUpdateSelectedCartItemStatus(customerID, null, null, "discarded");
         }
     }
 }

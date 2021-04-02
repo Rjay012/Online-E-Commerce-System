@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OECS.Models.OrderModels.OrderModel>
+@using OECS.Models;
+@using OECS.Services.ProductServices.ProductGalleryServices;
+@using OECS.Repository.ProductRepository.ProductGalleryRepository;
+
+@{
+    IProductGalleryService _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center" colspan="3">EST.25 Aug-26 Aug</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var order in Model)
+        {
+            string imagePath = _productGalleryService.GetImageDisplayPath((int)order.ProductID, (int)order.ColorID);
+            <tr>
+                <td class="product-purchase-img">
+                    <img class="product-img" src="..\..\@imagePath" />
+                </td>
+                <td>
+                    <p>@order.ProductName</p>
+                    <p>Brand: @order.BrandName, Color: @order.Color, Size: @order.Size</p>
+                    @if (Model.Count() > 1)
+                    {
+                        <p>Order Number: <span id="">@order.OrderNumber</span></p>
+                    }
+                </td>
+                <td>
+                    <p>Qty: @order.Quantity</p>
+                    <p>Price: @String.Format("{0:C}", order.Price * order.Quantity)</p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

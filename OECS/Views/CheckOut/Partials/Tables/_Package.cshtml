@@ -1,6 +1,16 @@
-﻿<div class="card">
+﻿@model IEnumerable<OECS.Models.CartModels.ViewCartItem>
+@using OECS.Models;
+@using OECS.Services.ProductServices.ProductGalleryServices;
+@using OECS.Repository.ProductRepository.ProductGalleryRepository;
+
+@{ 
+    IProductGalleryService _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
+    decimal amount = 0.0m;
+}
+
+<div class="card">
     <div class="card-body">
-        <h6 class="emphasize-text">Package 1 of 1</h6>
+        <h6 class="emphasize-text">Package @(Model.Count() != 0 ? 1 : 0) of @Model.Count()</h6>
         <hr />
         <table class="table">
             <thead>
@@ -12,18 +22,25 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>
-                        <img class="product-img" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" />
-                    </td>
-                    <td>
-                        <p>JS&CO jewelry 14k Saudi Gold Plated Jewelry Set NSD010+ESD017</p>
-                        <p>Brand: Nike, Color: Black, Size: 5xl</p>
-                    </td>
-                    <td>$00.00</td>
-                    <td>1</td>
-                </tr>
+                @foreach (var item in Model)
+                {
+                    string imagePath = _productGalleryService.GetImageDisplayPath((int)item.ProductID, (int)item.ColorID);
+                    <tr>
+                        <td>
+                            <img class="product-img" src="..\..\@imagePath" />
+                        </td>
+                        <td>
+                            <p class="emphasize-text">@item.ProductName</p>
+                            <p>Brand: @item.BrandName, Color: @item.Color, Size: @item.Size</p>
+                        </td>
+                        <td>@String.Format("{0:C}", (decimal)item.Price * item.Quantity)</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+
+                    amount += (decimal)item.Price * item.Quantity;
+                }
             </tbody>
         </table>
+        <input type="hidden" id="hidTotalAmountCheckout" value="@amount" />
     </div>
 </div>

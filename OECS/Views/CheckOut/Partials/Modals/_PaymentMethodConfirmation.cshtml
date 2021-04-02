@@ -1,4 +1,5 @@
-﻿<div class="modal-header">
+﻿@model OECS.Models.OrderModels.PaymentModels.PaymentModel
+<div class="modal-header">
     <h5 class="modal-title">Payment Method Confirmation</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -17,18 +18,24 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="otc" role="tabpanel" aria-labelledby="otc-tab">
-                    <p>
-                        OVER THE COUNTER PAYMENT
-                    </p>
-                    <button class="btn btn-success" type="button">
-                        CONFIRM OVER THE COUNTER PAYMENT
-                    </button>
+                    <p>OVER THE COUNTER PAYMENT</p>
+                    @using (Ajax.BeginForm("ConfirmPayment", "Payment", new AjaxOptions { HttpMethod = "POST", OnSuccess = "FinishedPurchased" }))
+                    {
+                        @Html.HiddenFor(p => p.PaymentTypeID)
+                        @Html.HiddenFor(p => p.Amount)
+                        <div class="form-inline">
+                            <label>Estimated Payment Date:</label>
+                            @Html.TextBoxFor(p => p.PaymentDate, new { @class = "form-control datepicker" })
+                        </div>
+                        <button class="d-none" type="submit" id="BtnConfirmOTC"></button>
+                        <button class="btn btn-success" type="button" id="BtnOTC">
+                            CONFIRM OVER THE COUNTER PAYMENT
+                        </button>
+                    }
                 </div>
                 <div class="tab-pane fade" id="cod" role="tabpanel" aria-labelledby="cod-tab">
-                    <p>
-                        CASH ON DELIVERY PAYMENT
-                    </p>
-                    <button class="btn btn-success" type="button">
+                    <p>CASH ON DELIVERY PAYMENT</p>
+                    <button class="btn btn-success" type="button" id="BtnCOD">
                         CONFIRM CASH ON DELIVERY PAYMENT
                     </button>
                 </div>
@@ -37,9 +44,10 @@
         <div class="col-lg-4 final-order-summary">
             <h5 class="emphasize-text">Order Summary</h5>
             <hr />
-            <p>SubTotal (shipping fee included) <span class="float-right">$00.00</span></p>
-            <p>VAT (12%) <span class="float-right">$00.00</span></p>
-            <p class="emphasize-text">Total <span class="float-right">$00.00</span></p>
+            <p>SubTotal @*(shipping fee included)*@ <span class="float-right" id="checkout-subtotal-amount">@String.Format("{0:C}", 0.00)</span></p>
+            <p>VAT (12%) <span class="float-right" id="checkout-vat">@String.Format("{0:C}", 0.00)</span></p>
+            <p class="emphasize-text">Total <span class="float-right" id="checkout-amount-payable">@String.Format("{0:C}", 0.00)</span></p>
+            <p id="sample-orderno"></p>
         </div>
     </div>
 </div>

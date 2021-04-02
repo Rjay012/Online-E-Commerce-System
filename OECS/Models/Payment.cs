@@ -14,6 +14,12 @@ namespace OECS.Models
     
     public partial class Payment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Payment()
+        {
+            this.OrderPayment = new HashSet<OrderPayment>();
+        }
+    
         public int PaymentID { get; set; }
         public Nullable<int> PaymentTypeID { get; set; }
         public Nullable<decimal> Amount { get; set; }
@@ -21,9 +27,11 @@ namespace OECS.Models
         public Nullable<int> CreditCardNumber { get; set; }
         public Nullable<System.DateTime> CreditCardExpirationDate { get; set; }
         public string CardHoldersName { get; set; }
-        public Nullable<int> OrderNumber { get; set; }
+        public Nullable<int> CustomerID { get; set; }
+        public string Status { get; set; }
     
-        public virtual Order Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderPayment> OrderPayment { get; set; }
         public virtual PaymentType PaymentType { get; set; }
     }
 }

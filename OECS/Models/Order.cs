@@ -18,22 +18,21 @@ namespace OECS.Models
         public Order()
         {
             this.OrderDetail = new HashSet<OrderDetail>();
-            this.Payment = new HashSet<Payment>();
+            this.OrderPayment = new HashSet<OrderPayment>();
         }
     
-        public int OrderNumber { get; set; }
+        public string OrderNumber { get; set; }
         public Nullable<int> CustomerID { get; set; }
-        public Nullable<int> ProductDetailID { get; set; }
+        public Nullable<int> ProductID { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
         public string ShippingAddress { get; set; }
-        public Nullable<System.DateTime> PaymentDate { get; set; }
         public string Status { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual ProductDetail ProductDetail { get; set; }
+        public virtual Product Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Payment> Payment { get; set; }
+        public virtual ICollection<OrderPayment> OrderPayment { get; set; }
     }
 }

@@ -11,5 +11,9 @@ namespace OECS.Services.CartServices
         List<ViewCartItem> LoadCart(int customerID);
         int? CustomerCartLastOrderNo(int customerID);
         void DeleteItem(int customerID, int orderNo);
+        void Checkout(int customerID, int orderNo, int quantity);
+        void Discard(int customerID);
+        void GetCheckoutItem(int customerID);
+        int GetProductQuantity(int productID, int colorID, int sizeID);
     }
 }

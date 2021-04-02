@@ -1,4 +1,5 @@
-﻿<div class="card">
+﻿@model IEnumerable<OECS.Models.CartModels.ViewCartItem>
+<div class="card">
     <div class="card-body">
         <p class="emphasize-text">Shipping Address</p>
         <span>
@@ -12,8 +13,8 @@
         @*<p>Shipping Fee <span class="float-right">$0.00</span></p>*@
         <p class="emphasize-text">All Item(s) <span class="float-right" id="cart-total-amount">@String.Format("{0:C}", 0.00)</span></p>
 
-        <a class="btn btn-warning btn-block" href="@Url.Action("Index", "CheckOut")">
+        <button class="btn btn-warning btn-block" type="button" id="BtnCheckout" @(Model.Count() == 0 ? "disabled" : "")>
             PROCEED TO CHECKOUT
-        </a>
+        </button>
     </div>
 </div>

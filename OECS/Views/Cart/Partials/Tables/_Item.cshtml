@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<OECS.Models.CartModels.ViewCartItem>
 @using OECS.Models;
+@using OECS.Services.CartServices;
+@using OECS.Repository.ProductRepository.ProductDetailRepository;
 @using OECS.Services.ProductServices.ProductGalleryServices;
 @using OECS.Repository.ProductRepository.ProductGalleryRepository;
 
 @{
+    ICartService _cartService = new CartService(new ProductDetailRepository(new oecsEntities()));
     IProductGalleryService _productGalleryService = new ProductGalleryService(new ProductGalleryRepository(new oecsEntities()));
     decimal totalAmount = 0.0m;
 }
@@ -39,6 +42,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    int productQuantity = _cartService.GetProductQuantity(item.ProductID, item.ColorID, item.SizeID);
                     string imagePath = _productGalleryService.GetImageDisplayPath((int)item.ProductID, (int)item.ColorID);
                     <tr>
                         <td>
@@ -48,7 +52,7 @@
                             </div>
                         </td>
                         <td>
-                            <img class="produt-img" src="..\..\@imagePath" />
+                            <img class="product-img" src="..\..\@imagePath" />
                         </td>
                         <td>
                             <p class="emphasize-text">@item.ProductName</p>
@@ -58,7 +62,7 @@
                         <td>
                             <div class="def-number-input number-input safari_only">
                                 <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(), ChangeQuantity(parseFloat(@item.Price), $(this))" class="minus"></button>
-                                @Html.TextBoxFor(c => item.Quantity, new { @class = "quantity", @min = "1", @max = item.Quantity, @type = "number", @disabled = true })
+                                @Html.TextBoxFor(c => item.Quantity, new { @class = "quantity", @min = "1", @max = productQuantity, @type = "number", @disabled = true })
                                 <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(), ChangeQuantity(parseFloat(@item.Price), $(this))" class="plus"></button>
                             </div>
                         </td>

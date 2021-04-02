@@ -167,16 +167,25 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\OrderPurchasedController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Models\Cart.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartModels\CartModel.cs" />
     <Compile Include="Models\CartModels\ViewCartItem.cs" />
+    <Compile Include="Models\CustomerOrder_Result.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Order.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrderDetail.cs">
+      <DependentUpon>oecs.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderModels\OrderModel.cs" />
+    <Compile Include="Models\OrderModels\PaymentModels\PaymentModel.cs" />
+    <Compile Include="Models\OrderPayment.cs">
       <DependentUpon>oecs.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment.cs">
@@ -193,8 +202,14 @@
     <Compile Include="Repository\CartRepository\ICartRepository.cs" />
     <Compile Include="Repository\CategoryRepository\CategoryRepository.cs" />
     <Compile Include="Repository\CategoryRepository\ICategoryRepository.cs" />
+    <Compile Include="Repository\CheckoutRepository\CheckoutRepository.cs" />
+    <Compile Include="Repository\CheckoutRepository\ICheckoutRepository.cs" />
     <Compile Include="Repository\CustomerRepository\CustomerRepository.cs" />
     <Compile Include="Repository\CustomerRepository\ICustomerRepository.cs" />
+    <Compile Include="Repository\OrderRepository\IOrderRepository.cs" />
+    <Compile Include="Repository\OrderRepository\OrderRepository.cs" />
+    <Compile Include="Repository\OrderRepository\PaymentRepository\IPaymentRepository.cs" />
+    <Compile Include="Repository\OrderRepository\PaymentRepository\PaymentRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\ColorRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\ColorRepository\IColorRepository.cs" />
     <Compile Include="Repository\ProductRepository\ProductDetailRepository\SizeRepository\ISizeRepository.cs" />
@@ -211,6 +226,8 @@
     <Compile Include="Services\CartServices\ICartService.cs" />
     <Compile Include="Services\CategoryServices\CategoryService.cs" />
     <Compile Include="Services\CategoryServices\ICategoryService.cs" />
+    <Compile Include="Services\CheckoutServices\CheckoutService.cs" />
+    <Compile Include="Services\CheckoutServices\ICheckoutService.cs" />
     <Compile Include="Services\CustomerServices\CustomerService.cs" />
     <Compile Include="Services\CustomerServices\ICustomerService.cs" />
     <Compile Include="Services\FileMng.cs" />
@@ -329,6 +346,10 @@
     <Compile Include="Models\SupplyModels\SupplyModel.cs" />
     <Compile Include="Models\ViewModuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\OrderServices\IOrderService.cs" />
+    <Compile Include="Services\OrderServices\OrderService.cs" />
+    <Compile Include="Services\OrderServices\PaymentServices\IPaymentService.cs" />
+    <Compile Include="Services\OrderServices\PaymentServices\PaymentService.cs" />
     <Compile Include="Services\ProductServices\IProductService.cs" />
     <Compile Include="Services\ProductServices\ProductDetailServices\ColorServices\ColorService.cs" />
     <Compile Include="Services\ProductServices\ProductDetailServices\ColorServices\IColorService.cs" />
@@ -2418,7 +2439,8 @@
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\CheckOut.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Customer.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Datatable.js" />
-    <Content Include="Scripts\Custom_Scripts\Main_Scripts\OrderPurchased.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\NewOrderPurchased.js" />
+    <Content Include="Scripts\Custom_Scripts\Main_Scripts\Order.js" />
     <Content Include="Scripts\Custom_Scripts\Main_Scripts\Product.js" />
     <Content Include="Scripts\Custom_Scripts\ProductDetail.js" />
     <Content Include="Scripts\Custom_Scripts\Size.js" />
@@ -2494,13 +2516,14 @@
     <Content Include="Views\CheckOut\Partials\Tables\_Package.cshtml" />
     <Content Include="Views\CheckOut\Partials\Cards\_ShippingAndOrderSummary.cshtml" />
     <Content Include="Views\CheckOut\Partials\Modals\_PaymentMethodConfirmation.cshtml" />
-    <Content Include="Views\OrderPurchased\Index.cshtml" />
-    <Content Include="Views\OrderPurchased\Partials\Cards\_PurchasedGreetings.cshtml" />
-    <Content Include="Views\OrderPurchased\Partials\Cards\_OrderDetails.cshtml" />
-    <Content Include="Views\OrderPurchased\Partials\Tables\_PurchasedItem.cshtml" />
-    <Content Include="Views\OrderPurchased\Partials\Accordions\_OrderSummary.cshtml" />
     <Content Include="Views\Cart\Partials\Modals\_AddedItem.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Order\Partials\Accordions\_OrderSummary.cshtml" />
+    <Content Include="Views\Order\Partials\Cards\_OrderDetails.cshtml" />
+    <Content Include="Views\Order\Partials\Tables\_PurchasedItem.cshtml" />
+    <Content Include="Views\Order\NewOrderPurchased.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
